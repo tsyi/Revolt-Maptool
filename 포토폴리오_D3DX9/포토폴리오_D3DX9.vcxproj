@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4F7EBB07-C5A8-4E24-8849-9AE12931F572}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>포토폴리오_D3DX9</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>NxCooking.lib;PhysXLoader.lib;NxCharacter.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>NxCooking.lib;PhysXLoader.lib;NxCharacter.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Asciitok.h" />
+    <ClInclude Include="cAllocateHierarchy.h" />
+    <ClInclude Include="cBox.h" />
+    <ClInclude Include="cCamera.h" />
+    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cCollided.h" />
+    <ClInclude Include="cDeviceManager.h" />
+    <ClInclude Include="cExUnit.h" />
+    <ClInclude Include="cFieldMap.h" />
+    <ClInclude Include="cFontManager.h" />
+    <ClInclude Include="cGrid.h" />
+    <ClInclude Include="cInputManager.h" />
+    <ClInclude Include="cLightManager.h" />
+    <ClInclude Include="cLobby.h" />
+    <ClInclude Include="cMainGame.h" />
+    <ClInclude Include="cMesh.h" />
+    <ClInclude Include="cMeshAnim.h" />
+    <ClInclude Include="cMtlTex.h" />
+    <ClInclude Include="cOBB.h" />
+    <ClInclude Include="cObject.h" />
+    <ClInclude Include="cObjectManager.h" />
+    <ClInclude Include="cObjLoader.h" />
+    <ClInclude Include="cSkill.h" />
+    <ClInclude Include="cSkill_Test.h" />
+    <ClInclude Include="cSkinnedMesh.h" />
+    <ClInclude Include="cSkinnedMeshManager.h" />
+    <ClInclude Include="cSoundManager.h" />
+    <ClInclude Include="cStringUtil.h" />
+    <ClInclude Include="cTc1.h" />
+    <ClInclude Include="cTc1_Wheel.h" />
+    <ClInclude Include="cTextureManager.h" />
+    <ClInclude Include="cTimeManager.h" />
+    <ClInclude Include="cTransform.h" />
+    <ClInclude Include="cUIObject.h" />
+    <ClInclude Include="cUIImage.h" />
+    <ClInclude Include="cUIManager.h" />
+    <ClInclude Include="cUIText.h" />
+    <ClInclude Include="cUITextImage.h" />
+    <ClInclude Include="cUITextBox.h" />
+    <ClInclude Include="DEBUG_RENDERER.h" />
+    <ClInclude Include="fmod\fmod.h" />
+    <ClInclude Include="fmod\fmod.hpp" />
+    <ClInclude Include="fmod\fmod_codec.h" />
+    <ClInclude Include="fmod\fmod_dsp.h" />
+    <ClInclude Include="fmod\fmod_errors.h" />
+    <ClInclude Include="fmod\fmod_memoryinfo.h" />
+    <ClInclude Include="fmod\fmod_output.h" />
+    <ClInclude Include="iCar.h" />
+    <ClInclude Include="iMap.h" />
+    <ClInclude Include="iWheel.h" />
+    <ClInclude Include="cPhysXManager.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Stream.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="포토폴리오_D3DX9.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cAllocateHierarchy.cpp" />
+    <ClCompile Include="cBox.cpp" />
+    <ClCompile Include="cCamera.cpp" />
+    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cCollided.cpp" />
+    <ClCompile Include="cDeviceManager.cpp" />
+    <ClCompile Include="cExUnit.cpp" />
+    <ClCompile Include="cFieldMap.cpp" />
+    <ClCompile Include="cFontManager.cpp" />
+    <ClCompile Include="cGrid.cpp" />
+    <ClCompile Include="cInputManager.cpp" />
+    <ClCompile Include="cLightManager.cpp" />
+    <ClCompile Include="cLobby.cpp" />
+    <ClCompile Include="cMainGame.cpp" />
+    <ClCompile Include="cMesh.cpp" />
+    <ClCompile Include="cMeshAnim.cpp" />
+    <ClCompile Include="cMtlTex.cpp" />
+    <ClCompile Include="cOBB.cpp" />
+    <ClCompile Include="cObject.cpp" />
+    <ClCompile Include="cObjectManager.cpp" />
+    <ClCompile Include="cObjLoader.cpp" />
+    <ClCompile Include="cSkill.cpp" />
+    <ClCompile Include="cSkill_Test.cpp" />
+    <ClCompile Include="cSkinnedMesh.cpp" />
+    <ClCompile Include="cSkinnedMeshManager.cpp" />
+    <ClCompile Include="cStringUtil.cpp" />
+    <ClCompile Include="cTc1.cpp" />
+    <ClCompile Include="cTc1_Wheel.cpp" />
+    <ClCompile Include="cTextureManager.cpp" />
+    <ClCompile Include="cTimeManager.cpp" />
+    <ClCompile Include="cTransform.cpp" />
+    <ClCompile Include="cUIObject.cpp" />
+    <ClCompile Include="cUIImage.cpp" />
+    <ClCompile Include="cUIManager.cpp" />
+    <ClCompile Include="cUIText.cpp" />
+    <ClCompile Include="cUITextImage.cpp" />
+    <ClCompile Include="cUITextBox.cpp" />
+    <ClCompile Include="DEBUG_RENDERER.cpp" />
+    <ClCompile Include="iCar.cpp" />
+    <ClCompile Include="iMap.cpp" />
+    <ClCompile Include="iWheel.cpp" />
+    <ClCompile Include="cPhysXManager.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="cSoundManager.cpp" />
+    <ClCompile Include="Stream.cpp" />
+    <ClCompile Include="포토폴리오_D3DX9.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="포토폴리오_D3DX9.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
+    <Image Include="포토폴리오_D3DX9.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmod\fmodex_vc.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
