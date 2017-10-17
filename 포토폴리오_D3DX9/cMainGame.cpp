@@ -240,14 +240,14 @@ void cMainGame::Setup()
 	//bassUI->AddChild(bass2UI);
 	//bassUI->SetText("ABC");
 
-	//cUIImage* UIWindow = new cUIImage;
-	//UIWindow->SetTag(eUITag::E_UI_WINDOW);
-	//UIWindow->SetTexture("Image/UI_WINDOW.png");
-	//UIWindow->SetScale(1,2);
-	//UIWindow->SetPosition(0, 0, 0);
-	//UIWindow->SetAnchor(0,0,0);
-	//
-	//MgrUI->RegisteredUI(UIWindow);
+	cUIImage* UIWindow = new cUIImage;
+	UIWindow->SetTag(eUITag::E_UI_WINDOW);
+	UIWindow->SetTexture("Image/UI_WINDOW.png");
+	UIWindow->SetScale(1,2);
+	UIWindow->SetPosition(0, 0, 0);
+	UIWindow->SetAnchor(0,0,0);
+	
+	MgrUI->RegisteredUI(UIWindow);
 
 	cUIImage* UITextBox_Pos = new cUIImage;
 	UITextBox_Pos->SetTag(eUITag::E_UI_WINDOW);
