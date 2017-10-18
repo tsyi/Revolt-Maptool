@@ -573,11 +573,12 @@ void cMainGame::SetupUI()
 		cUIButton* pButton = new cUIButton;
 		cUIImage* pButtonImage = new cUIImage;
 		cUIText* pbuttonText = new cUIText;
-	
+		
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(400, 40);
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
-	
+		pButton->SetEvent(this);
+		pButton->SetObjTag(eOBJ::OBJ_CHEESE);
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
 	}
@@ -833,5 +834,6 @@ LRESULT cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 void cMainGame::OnClick(cUIButton * pSender)
 {
 	//CreateCar
-	
+	eOBJ tag = pSender->GetObjTag();
+	MgrObject->AddObj(tag);
 }

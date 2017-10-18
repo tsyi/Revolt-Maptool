@@ -34,6 +34,8 @@ void cUIButton::RegistButtonUI(cUIText * pUiText, cUIImage * pUiImage, std::stri
 	m_pUiImage->SetAnchor(0, 0, 0);
 }
 
+
+
 void cUIButton::Destory()
 {
 	m_pUiText = NULL;
@@ -66,6 +68,7 @@ void cUIButton::Update()
 		else if (MgrInput->IsMouseDown(MOUSE_LEFT))
 		{
 			m_state = E_BUTTON_DOWN;
+			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255 / 4, 255 / 4, 255 / 4));
 		}
 	}break;
 	case E_BUTTON_DOWN:
@@ -73,11 +76,11 @@ void cUIButton::Update()
 		if (!IsMouseOver())
 		{
 			m_state = E_BUTTON_NONE;
-			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255 / 4, 255 / 4, 255 / 4));
 		}
 		else  if (MgrInput->IsMouseUp(MOUSE_LEFT))
 		{
 			m_state = E_BUTTON___UP;
+			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255 / 2, 255 / 2, 255 / 2));
 		}
 	}break;
 	case E_BUTTON___UP:

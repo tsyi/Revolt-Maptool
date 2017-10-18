@@ -4,6 +4,7 @@
 #include "cUIImage.h"
 #include "cUIObject.h"
 #include "cEvent.h"
+#include "cObjectManager.h"
 
 enum eButtonState
 {
@@ -25,7 +26,7 @@ protected:
 
 	SYNTHESIZE(cEvent*, m_isEvent, Event);
 
-//	eObj createObj;
+	SYNTHESIZE(eOBJ, m_createObjEnum, ObjTag);
 
 public:
 	cUIButton();
