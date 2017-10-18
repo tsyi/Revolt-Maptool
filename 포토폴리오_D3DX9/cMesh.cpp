@@ -100,18 +100,19 @@ void cMesh::Destory()
 
 void cMesh::Render()
 {
-	if (!m_mapMtlTex.empty())
+	if (!m_vecMtlTex.empty())
 	{
 		int index = 0;
-		for each (auto pMtlTex in m_mapMtlTex)
+		for each (auto pMtlTex in m_vecMtlTex)
 		{
-
-			MgrD3DDevice->SetMaterial(&(pMtlTex.second->GetMaterial()));
-			if (pMtlTex.second->GetTexture()) MgrD3DDevice->SetTexture(0, pMtlTex.second->GetTexture());
+			MgrD3DDevice->SetMaterial(&(pMtlTex->GetMaterial()));
+			if (pMtlTex->GetTexture())
+				MgrD3DDevice->SetTexture(0, pMtlTex->GetTexture());
 
 			m_pMesh->DrawSubset(index++);
 
-			if (pMtlTex.second->GetTexture()) MgrD3DDevice->SetTexture(0, NULL);
+			if (pMtlTex->GetTexture())
+				MgrD3DDevice->SetTexture(0, NULL);
 		}
 	}
 //	else

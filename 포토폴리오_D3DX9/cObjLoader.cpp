@@ -21,7 +21,7 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	std::vector<D3DXVECTOR3> vecVN;
 	std::vector<ST_PNT_VERTEX> vecVertex;
 	std::vector<DWORD> vecAttribute;         //: <<
-
+	std::map<std::string, cMtlTex*> mapMtlTex;
 
 	std::string sFullPath = szFolder + std::string("/") + szFile;
 
@@ -44,7 +44,7 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 		{
 			char szMtlFile[1024];
 			sscanf_s(szTemp, "%*s %s", szMtlFile, 1024);
-			LoadMtlLib(&(pMesh->m_mapMtlTex), szFolder, szMtlFile);
+			LoadMtlLib(&(mapMtlTex), szFolder, szMtlFile);
 		}
 		else if (szTemp[0] == 'g')
 		{
@@ -98,19 +98,24 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 				vecVertex.push_back(v);
 			}
 
-			vecAttribute.push_back((pMesh->m_mapMtlTex)[sMtlName]->GetMtlTexID());
+			vecAttribute.push_back((mapMtlTex)[sMtlName]->GetMtlTexID());
 		}
 	} // : << while ³¡
 
 	fclose(fp);
 
+	pMesh->m_vecMtlTex.resize(mapMtlTex.size());
+	for each(auto it in mapMtlTex)
+	{
+		pMesh->m_vecMtlTex[it.second->GetMtlTexID()] = it.second;
+	}
 
-	//vecMtlTex.resize((pMesh->m_mapMtlTex).size());
-	//
-	//for each(auto it in (pMesh->m_mapMtlTex))
-	//{
-	//	vecMtlTex[it.second->GetMtlTexID()] = it.second;
-	//}
+	/*vecMtlTex.resize((pMesh->m_mapMtlTex).size());
+	
+	for each(auto it in (pMesh->m_mapMtlTex))
+	{
+		vecMtlTex[it.second->GetMtlTexID()] = it.second;
+	}*/
 
 //	LPD3DXMESH newMesh = NULL;
 	D3DXCreateMeshFVF(vecAttribute.size(),
@@ -151,7 +156,9 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	//	m_mapMtlTex.clear();
 
 
-	//	return pMesh;
+//	return pMesh;
+
+
 }
 
 // >> : vertexbuffer
@@ -194,22 +201,23 @@ void cObjLoader::LoadMtlLib(std::map<std::string, cMtlTex*>* mtlTex,
 		}
 		else if (szTemp[lineCol] == 'n')
 		{
-			char szMtlName[1024];
+			char szMtlName[1024]; 
 			sscanf_s(szTemp, "%*s %s", szMtlName, 1024);
 			sMtlName = std::string(szMtlName);
+
 			if (mtlTex->find(sMtlName) == mtlTex->end())
 			{
 				(*mtlTex)[sMtlName] = new cMtlTex;
 
 				//: >>
 				(*mtlTex)[sMtlName]->SetMtlTexID(nCnt);
-				nCnt++;
+				nCnt++; 
 				// : <<
 			}
 		}
 		else if (szTemp[lineCol] == 'K')
 		{
-			if (szTemp[lineCol + 1] == 'a')
+			if (szTemp[lineCol + 1] == 'a') 
 			{
 				float r, g, b;
 				sscanf_s(szTemp, "%*s %f %f %f", &r, &g, &b);

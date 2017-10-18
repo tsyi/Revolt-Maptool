@@ -7,6 +7,7 @@ class cObjLoader
 {
 private:
 	std::map<std::string, cMtlTex*> m_mapMtlTex;
+	
 
 public:
 	cObjLoader(void);
