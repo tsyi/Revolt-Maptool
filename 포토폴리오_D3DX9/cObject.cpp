@@ -6,26 +6,27 @@ cObject::cObject()
 	: m_ulRefCount(1)
 {
 	// : add
-	MgrObject->AddObject(this);
+//	MgrObject->AddObject(this);
 }
 
 
 cObject::~cObject()
 {
 	// : remove 
-	MgrObject->RemoveObject(this);
+//	MgrObject->RemoveObject(this);
+//
 }
 
 void cObject::AddRef()
 {
 	// : ref count ++
-	++m_ulRefCount;
+//	++m_ulRefCount;
 }
 
 void cObject::Release()
 {
 	// : ref count -- 
-	--m_ulRefCount;
-	if (m_ulRefCount == 0)
-		delete this;
+//	--m_ulRefCount;
+//	if (m_ulRefCount == 0)
+//		delete this;
 }
