@@ -8,6 +8,8 @@ enum eUITag
 
 	E_UI_WINDOW,
 
+	E_UI_TEXTBOX_MAPNAME,
+	E_UI_TEXTBOX_OBJNAME,
 	E_UI_TEXTBOX_POS_X,
 	E_UI_TEXTBOX_POS_Y,
 	E_UI_TEXTBOX_POS_Z,
@@ -17,8 +19,15 @@ enum eUITag
 	E_UI_TEXTBOX_ROT_X,
 	E_UI_TEXTBOX_ROT_Y,
 	E_UI_TEXTBOX_ROT_Z,
+
+	E_UI_OBJLIST_VIEW,
+	E_UI_OBJLIST_TITLE,
+	E_UI_OBJLIST_BUTTONS,
+
 };
 
+
+class cUIButton;
 
 class cUIObject
 {
@@ -50,9 +59,7 @@ public:
 	virtual void Render();
 	virtual void Destory();
 
-	virtual cUIObject* FindChildByTag(eUITag tag);
-
-
+	virtual cUIObject* FindByTag(eUITag tag);
 	virtual bool IsMouseOver()
 	{
 		RECT rc;
@@ -64,5 +71,8 @@ public:
 
 		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}
+
+
+	virtual void AddButton(cUIButton* pButton) {}
 };
 

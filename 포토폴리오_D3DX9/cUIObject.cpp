@@ -99,7 +99,7 @@ void cUIObject::Destory()
 //	this->Release();
 }
 
-cUIObject * cUIObject::FindChildByTag(eUITag tag)
+cUIObject * cUIObject::FindByTag(eUITag tag)
 {
 	if (!m_isShow) return nullptr;
 	if (m_tag == tag)
@@ -108,7 +108,7 @@ cUIObject * cUIObject::FindChildByTag(eUITag tag)
 	}
 	for each(auto c in m_vecChild)
 	{
-		cUIObject* p = c->FindChildByTag(tag);
+		cUIObject* p = c->FindByTag(tag);
 		if (p) return p;
 	}
 	return nullptr;

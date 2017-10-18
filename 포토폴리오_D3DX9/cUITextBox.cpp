@@ -14,21 +14,38 @@ cUITextBox::~cUITextBox()
 {
 }
 
-void cUITextBox::RegistTextBoxUI(cUIText * pUiText, cUIImage * pUiImage)
+void cUITextBox::RegistTextBoxUI(cUIText * pUiText, cUIImage * pUiImage, std::string text, std::string InagePach)
 {
-	this->AddChild(pUiImage);
-	this->AddChild(pUiText);
 	m_pUiText = pUiText;
 	m_pUiImage = pUiImage;
+
+	this->AddChild(m_pUiImage);
+	this->AddChild(m_pUiText);
+
+	m_pUiText->SetOption(eFontType::E_DEFAULT, DT_CENTER | DT_BOTTOM, D3DCOLOR_XRGB(0, 0, 0));
+	m_pUiText->SetPosition(0, 0, 0);
+	m_pUiText->SetSize(this->GetSize());
+	m_pUiText->SetText(text);
+
+	m_pUiImage->SetTexture((char*)InagePach.c_str());
+	D3DXVECTOR2 imageSize = m_pUiImage->GetSize();
+	imageSize = D3DXVECTOR2(this->GetSize().x / imageSize.x, this->GetSize().y / imageSize.y);
+	m_pUiImage->SetScale(imageSize);
+	m_pUiImage->SetAnchor(0, 0, 0);
 }
 
 void cUITextBox::Destory()
 {
+	m_pUiText = NULL;
+	m_pUiImage = NULL;
 	cUIObject::Destory();
 }
 
 void cUITextBox::Update()
 {
+	if (!m_isShow) return;
+	if (IsMouseOver()) { MgrInput->SetHooking(true); }
+
 	switch (m_state)
 	{
 	case eTextBoxState::E_TEXT_BOX_STATE_NONE:
@@ -71,14 +88,48 @@ void cUITextBox::Update()
 				if (m_pUiText->GetUIText()->text.length() > 0)
 					m_pUiText->GetUIText()->text.pop_back();
 			}
+			if (MgrInput->IsKeyPress(VK_BACK))
+			{
+				if (pushTime > 0.5f && m_pUiText->GetUIText()->text.length() > 0)
+				{
+					m_pUiText->GetUIText()->text.pop_back();
+					pushTime -= 0.05f;
+				}
+				else pushTime += MgrTime->GetElapsedTime();
+			}
+			if (MgrInput->IsKeyUp(VK_BACK))
+			{
+				pushTime = 0.0f;
+			}
 			else
 			{
 				char textBuffer = MgrInput->PopKeyBuffer();
-				if ((textBuffer >= '0' && textBuffer <= '9') || textBuffer == -66)
+				if ((textBuffer >= 'A' && textBuffer <= 'Z')) // -65== '/'
 				{
-					if (textBuffer == -66) textBuffer = '.';
+					if (MgrInput->IsKeyPress(VK_LSHIFT))	textBuffer += ('a' - 'A');
 					m_pUiText->GetUIText()->text.push_back(textBuffer);
 				}
+				else if ((textBuffer >= '0' && textBuffer <= '9')) // -66 == .
+				{
+					if (MgrInput->IsKeyPress(VK_LSHIFT))	textBuffer += ('a' - 'A');
+					m_pUiText->GetUIText()->text.push_back(textBuffer);
+				}
+				else
+				{
+					if (textBuffer == -66)
+						m_pUiText->GetUIText()->text.push_back('.');
+					if (textBuffer == -65)
+						m_pUiText->GetUIText()->text.push_back('/');
+					if (textBuffer == -67)
+					{
+						if (MgrInput->IsKeyPress(VK_LSHIFT))
+							m_pUiText->GetUIText()->text.push_back('_');
+						else
+							m_pUiText->GetUIText()->text.push_back('-');
+					}
+				}
+				//	std::cout << (int)textBuffer << std::endl;
+
 			}
 		}
 	}break;

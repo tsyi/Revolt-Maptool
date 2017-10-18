@@ -25,8 +25,8 @@ void cCamera::Setup()
 	D3DXVec3Normalize(&vLookAtDir, &vLookAtDir);
 	cTransform::SetQuaternionToVector(vLookAtDir, true, true);
 
-	RECT rc;
 	GetClientRect(g_hWnd, &rc);
+	SetRect(&rc, 400, 0, APIWidth, APIHeight);
 
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f,
@@ -37,6 +37,8 @@ void cCamera::Setup()
 
 void cCamera::Update(D3DXVECTOR3 target)
 {
+	if (MgrInput->GetHooking()) return;
+
 	if (MgrInput->IsMouseDown(MOUSE_RIGHT))
 	{
 		m_ptPrevMouse = MgrInput->GetMousePos();

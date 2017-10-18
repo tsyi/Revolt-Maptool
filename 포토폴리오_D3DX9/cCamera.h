@@ -23,6 +23,8 @@ class cCamera : public cObject
 	D3DXVECTOR3		m_freePos;
 	bool m_posFree;
 
+
+	RECT rc;
 public:
 	cCamera(void);
 	~cCamera(void);

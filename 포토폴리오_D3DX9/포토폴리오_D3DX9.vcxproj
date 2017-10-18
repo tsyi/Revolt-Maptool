@@ -160,6 +160,7 @@
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="cCollided.h" />
     <ClInclude Include="cDeviceManager.h" />
+    <ClInclude Include="cEvent.h" />
     <ClInclude Include="cExUnit.h" />
     <ClInclude Include="cFieldMap.h" />
     <ClInclude Include="cFontManager.h" />
@@ -186,6 +187,8 @@
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimeManager.h" />
     <ClInclude Include="cTransform.h" />
+    <ClInclude Include="cUIButton.h" />
+    <ClInclude Include="cUIListView.h" />
     <ClInclude Include="cUIObject.h" />
     <ClInclude Include="cUIImage.h" />
     <ClInclude Include="cUIManager.h" />
@@ -217,6 +220,7 @@
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="cCollided.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
+    <ClCompile Include="cEvent.cpp" />
     <ClCompile Include="cExUnit.cpp" />
     <ClCompile Include="cFieldMap.cpp" />
     <ClCompile Include="cFontManager.cpp" />
@@ -242,6 +246,8 @@
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimeManager.cpp" />
     <ClCompile Include="cTransform.cpp" />
+    <ClCompile Include="cUIButton.cpp" />
+    <ClCompile Include="cUIListView.cpp" />
     <ClCompile Include="cUIObject.cpp" />
     <ClCompile Include="cUIImage.cpp" />
     <ClCompile Include="cUIManager.cpp" />

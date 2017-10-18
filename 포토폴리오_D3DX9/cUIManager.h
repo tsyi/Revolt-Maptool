@@ -27,6 +27,7 @@ public:
 	void RegisteredUI(cUIObject* pUI);
 //	void CreateTextUI(OUT cUIText* textUI, int tag, std::string text, eFontType pFontType, DWORD style, D3DCOLOR color);
 	
-	cUIObject* FindChildByTag(eUITag tag);
+	cUIObject* FindByTag(eUITag tag);
+	cUIObject* FindChieldByTag(cUIObject* parent, eUITag tag);
 
 };

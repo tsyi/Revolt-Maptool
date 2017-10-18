@@ -50,7 +50,7 @@ extern HWND g_hWnd;
 
 
 //DefineValue
-#define APIWidth 1000
+#define APIWidth 1300
 #define APIHeight 800
 
 

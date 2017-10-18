@@ -50,6 +50,7 @@ void cUIText::Destory()
 void cUIText::Update()
 {
 	if (!GetShow()) return;
+	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 	cUIObject::Update();
 }
 

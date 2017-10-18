@@ -2,6 +2,7 @@
 #include "cMesh.h"
 #include "cPhysXManager.h"
 #include "cTransform.h"
+#include "cEvent.h"
 
 class cMeshAnim;
 class cTransform;
@@ -18,7 +19,7 @@ struct _USERDATA;
 #define MAINGAME cMainGame::GetInstance()
 
 
-class cMainGame
+class cMainGame : public cEvent
 {
 public:
 	SINGLETONE(cMainGame);
@@ -70,20 +71,16 @@ private:
 public:
 	void Setup();
 	void SetupUI();
-
-
-
+	
 	void Destory();
 	void Update();
 	void Render();
 
-
-
-
-
-
+	
 
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+public:	//EVENT
+	virtual void OnClick(cUIButton* pSender);
 };
 

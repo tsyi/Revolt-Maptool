@@ -58,12 +58,22 @@ void cUIManager::RegisteredUI(cUIObject* pUIObject)
 	}
 }
 
-cUIObject * cUIManager::FindChildByTag(eUITag tag)
+cUIObject * cUIManager::FindByTag(eUITag tag)
 {
 	for each(auto pUI in m_vecUI)
 	{
-		pUI->FindChildByTag(tag);
-		if (pUI) return pUI;
+		cUIObject* p = pUI->FindByTag(tag);
+		if (p) return p;
+	}
+	return nullptr;
+}
+
+cUIObject * cUIManager::FindChieldByTag(cUIObject* parent, eUITag tag)
+{
+	for each(auto pUI in parent->GetChilds())
+	{
+		cUIObject* p = pUI->FindByTag(tag);
+		if (p) return p;
 	}
 	return nullptr;
 }

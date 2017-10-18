@@ -16,12 +16,14 @@ protected:
 	cUIImage* m_pUiImage;
 	
 	eTextBoxState m_state;
+
+	float pushTime;
 public:
 
 	cUITextBox();
 	~cUITextBox();
 
-	void RegistTextBoxUI(cUIText* pUiText, cUIImage* pUiImage);
+	void RegistTextBoxUI(cUIText* pUiText, cUIImage* pUiImage,std::string text, std::string InagePach);
 	void Destory();
 	void Update();
 	void Render();

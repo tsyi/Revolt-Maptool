@@ -43,6 +43,8 @@ public:
 	D3DXVECTOR2 m_deltaMousePos;
 
 	int inputKeyBuffer;
+	SYNTHESIZE(bool, m_Hooking, Hooking);
+
 private:
 	void KeyUpdate()
 	{

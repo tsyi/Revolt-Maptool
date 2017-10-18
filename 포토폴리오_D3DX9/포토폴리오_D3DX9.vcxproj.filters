@@ -231,6 +231,15 @@
     <ClInclude Include="cUITextBox.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="cUIButton.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="cEvent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cUIListView.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMeshAnim.cpp">
@@ -369,6 +378,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cUITextBox.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="cUIButton.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="cEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cUIListView.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
