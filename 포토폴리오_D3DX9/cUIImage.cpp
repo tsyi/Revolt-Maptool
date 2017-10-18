@@ -19,8 +19,7 @@ void cUIImage::SetTexture(char * szFullPath)
 	D3DXIMAGE_INFO stImageInfo;
 	m_pTexture = MgrTexture->GetTexture(szFullPath, &stImageInfo);
 
-	m_stSize.nWidth = stImageInfo.Width;
-	m_stSize.nHeight = stImageInfo.Height;
+	SetSize(stImageInfo.Width, stImageInfo.Height);
 }
 
 void cUIImage::Destory()
@@ -54,11 +53,11 @@ void cUIImage::Render()
 	m_matWorld._43 = _z;
 	MgrUI->GetSprite()->SetTransform(&m_matWorld);
 
-	float a_x = m_anchor.x * m_stSize.nWidth;
-	float a_y = m_anchor.y * m_stSize.nHeight;
+	float a_x = m_anchor.x * GetSize().x;
+	float a_y = m_anchor.y * GetSize().y;
 
 	RECT rc;
-	SetRect(&rc, 0, 0, m_stSize.nWidth, m_stSize.nHeight);
+	SetRect(&rc, 0, 0, GetSize().x, GetSize().y);
 	MgrUI->GetSprite()->Draw(m_pTexture, &rc,
 		&D3DXVECTOR3(a_x, a_y, 0),
 		&D3DXVECTOR3(0, 0, 0),

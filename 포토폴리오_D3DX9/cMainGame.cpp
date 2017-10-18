@@ -208,10 +208,12 @@ void cMainGame::Setup()
 		//}
 
 	}// PhysX_
-	
+
 
 	//SetManager
 	MgrUI->Setup();
+	SetupUI();
+
 	MgrInput->Setup();
 	MgrFont->Setup();
 
@@ -240,35 +242,6 @@ void cMainGame::Setup()
 	//bassUI->AddChild(bass2UI);
 	//bassUI->SetText("ABC");
 
-	cUIImage* UIWindow = new cUIImage;
-	UIWindow->SetTag(eUITag::E_UI_WINDOW);
-	UIWindow->SetTexture("Image/UI_WINDOW.png");
-	UIWindow->SetScale(1,2);
-	UIWindow->SetPosition(0, 0, 0);
-	UIWindow->SetAnchor(0,0,0);
-	
-	MgrUI->RegisteredUI(UIWindow);
-
-	cUIImage* UITextBox_Pos = new cUIImage;
-	UITextBox_Pos->SetTag(eUITag::E_UI_WINDOW);
-	UITextBox_Pos->SetTexture("Image/UI_TEXTBOX.png");
-	UITextBox_Pos->SetScale(0.5, 0.1);
-	UITextBox_Pos->SetPosition(0, 0, 0);
-	UITextBox_Pos->SetAnchor(0, 0, 0);
-
-	cUIText* UIText = new cUIText;
-	UIText->SetText("123");
-	UIText->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
-	UIText->SetSize(UITextBox_Pos->GetSize());
-	UIText->SetPosition(UITextBox_Pos->GetPosition());
-
-	cUITextBox* UITextBox = new cUITextBox;
-	UITextBox->SetPosition(100, 100, 0);
-	UITextBox->RegistTextBoxUI(UIText, UITextBox_Pos);
-
-	MgrUI->RegisteredUI(UITextBox);
-
-
 	MgrSound->Setup();
 	MgrSound->LoadSound("sound", "sound01.mp3", true);
 	MgrSound->LoadSound("sound", "sound02.wav", false);
@@ -289,7 +262,7 @@ void cMainGame::Setup()
 	NxBodyDesc bodyDesc;
 
 	//	NxTriangleMeshShapeDesc mapDesc;
-	
+
 
 	actorDesc.setToDefault();
 	bodyDesc.setToDefault();
@@ -367,6 +340,251 @@ void cMainGame::Setup()
 
 	g_pD3DDevice->SetLight(0, &stLight);
 	g_pD3DDevice->LightEnable(0, true);
+}
+
+void cMainGame::SetupUI()
+{
+	cUIImage* UIWindow = new cUIImage;
+	UIWindow->SetTag(eUITag::E_UI_WINDOW);
+	UIWindow->SetTexture("Image/UI_WINDOW.png");
+	UIWindow->SetScale(1, 2);
+	UIWindow->SetPosition(0, 0, 0);
+	UIWindow->SetAnchor(0, 0, 0);
+
+	MgrUI->RegisteredUI(UIWindow);
+
+
+
+	//PosX
+	{
+		cUITextBox* UITextBox_PosX = new cUITextBox;
+		UITextBox_PosX->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_PosX->SetPosition(100, 30, 0);
+
+		cUIImage* UITextBox_PosX_Image = new cUIImage;
+		UITextBox_PosX_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_PosX_Image->SetScale(0.5, 0.05);
+		UITextBox_PosX_Image->SetAnchor(0, 0, 0);
+
+		cUIText* UITextBox_PosX_TextV = new cUIText;
+		UITextBox_PosX_TextV->SetText("0");
+		UITextBox_PosX_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosX_TextV->SetSize(UITextBox_PosX_Image->GetScaleSize());
+		UITextBox_PosX_TextV->SetPosition(UITextBox_PosX_Image->GetPosition());
+
+		cUIText* UITextBox_PosX_TextT = new cUIText;
+		UITextBox_PosX_TextT->SetText("POS_X");
+		UITextBox_PosX_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosX_TextT->SetSize(UITextBox_PosX_Image->GetScaleSize());
+		UITextBox_PosX_TextT->SetPosition(UITextBox_PosX_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+
+		UITextBox_PosX->RegistTextBoxUI(UITextBox_PosX_TextV, UITextBox_PosX_Image);
+		UITextBox_PosX->AddChild(UITextBox_PosX_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_PosX);
+	}
+	//POsY
+	{
+		cUITextBox*	UITextBox_PosY = new cUITextBox;
+		cUIImage*	UITextBox_PosY_Image = new cUIImage;
+		cUIText*	UITextBox_PosY_TextV = new cUIText;
+		cUIText*	UITextBox_PosY_TextT = new cUIText;
+
+		UITextBox_PosY->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_PosY->SetPosition(100, 60, 0);
+
+		UITextBox_PosY_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_PosY_Image->SetScale(0.5, 0.05);
+		UITextBox_PosY_Image->SetAnchor(0, 0, 0);
+
+		UITextBox_PosY_TextV->SetText("0");
+		UITextBox_PosY_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosY_TextV->SetSize(UITextBox_PosY_Image->GetScaleSize());
+		UITextBox_PosY_TextV->SetPosition(UITextBox_PosY_Image->GetPosition());
+
+		UITextBox_PosY_TextT->SetText("POS_Y");
+		UITextBox_PosY_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosY_TextT->SetSize(UITextBox_PosY_Image->GetScaleSize());
+		UITextBox_PosY_TextT->SetPosition(UITextBox_PosY_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+
+		UITextBox_PosY->RegistTextBoxUI(UITextBox_PosY_TextV, UITextBox_PosY_Image);
+		UITextBox_PosY->AddChild(UITextBox_PosY_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_PosY);
+	}
+	{
+		//PosZ
+		cUITextBox*	UITextBox_PosZ = new cUITextBox;
+		cUIImage*	UITextBox_PosZ_Image = new cUIImage;
+		cUIText*	UITextBox_PosZ_TextV = new cUIText;
+		cUIText*	UITextBox_PosZ_TextT = new cUIText;
+
+		UITextBox_PosZ->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_PosZ->SetPosition(100, 90, 0);
+		UITextBox_PosZ_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_PosZ_Image->SetScale(0.5, 0.05);
+		UITextBox_PosZ_Image->SetAnchor(0, 0, 0);
+		UITextBox_PosZ_TextV->SetText("0");
+		UITextBox_PosZ_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosZ_TextV->SetSize(UITextBox_PosZ_Image->GetScaleSize());
+		UITextBox_PosZ_TextV->SetPosition(UITextBox_PosZ_Image->GetPosition());
+		UITextBox_PosZ_TextT->SetText("POS_Z");
+		UITextBox_PosZ_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_PosZ_TextT->SetSize(UITextBox_PosZ_Image->GetScaleSize());
+		UITextBox_PosZ_TextT->SetPosition(UITextBox_PosZ_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_PosZ->RegistTextBoxUI(UITextBox_PosZ_TextV, UITextBox_PosZ_Image);
+		UITextBox_PosZ->AddChild(UITextBox_PosZ_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_PosZ);
+	}
+	//Size
+	{
+		cUITextBox*	UITextBox_SizeX = new cUITextBox;
+		cUIImage*	UITextBox_SizeX_Image = new cUIImage;
+		cUIText*	UITextBox_SizeX_TextV = new cUIText;
+		cUIText*	UITextBox_SizeX_TextT = new cUIText;
+
+		UITextBox_SizeX->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_SizeX->SetPosition(100, 130, 0);
+		UITextBox_SizeX_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_SizeX_Image->SetScale(0.5, 0.05);
+		UITextBox_SizeX_Image->SetAnchor(0, 0, 0);
+		UITextBox_SizeX_TextV->SetText("0");
+		UITextBox_SizeX_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeX_TextV->SetSize(UITextBox_SizeX_Image->GetScaleSize());
+		UITextBox_SizeX_TextV->SetPosition(UITextBox_SizeX_Image->GetPosition());
+		UITextBox_SizeX_TextT->SetText("SIZE_X");
+		UITextBox_SizeX_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeX_TextT->SetSize(UITextBox_SizeX_Image->GetScaleSize());
+		UITextBox_SizeX_TextT->SetPosition(UITextBox_SizeX_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_SizeX->RegistTextBoxUI(UITextBox_SizeX_TextV, UITextBox_SizeX_Image);
+		UITextBox_SizeX->AddChild(UITextBox_SizeX_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_SizeX);
+	}
+	{
+		cUITextBox*	UITextBox_SizeZ = new cUITextBox;
+		cUIImage*	UITextBox_SizeZ_Image = new cUIImage;
+		cUIText*	UITextBox_SizeZ_TextV = new cUIText;
+		cUIText*	UITextBox_SizeZ_TextT = new cUIText;
+
+		UITextBox_SizeZ->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_SizeZ->SetPosition(100, 160, 0);
+		UITextBox_SizeZ_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_SizeZ_Image->SetScale(0.5, 0.05);
+		UITextBox_SizeZ_Image->SetAnchor(0, 0, 0);
+		UITextBox_SizeZ_TextV->SetText("0");
+		UITextBox_SizeZ_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeZ_TextV->SetSize(UITextBox_SizeZ_Image->GetScaleSize());
+		UITextBox_SizeZ_TextV->SetPosition(UITextBox_SizeZ_Image->GetPosition());
+		UITextBox_SizeZ_TextT->SetText("SIZE_Y");
+		UITextBox_SizeZ_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeZ_TextT->SetSize(UITextBox_SizeZ_Image->GetScaleSize());
+		UITextBox_SizeZ_TextT->SetPosition(UITextBox_SizeZ_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_SizeZ->RegistTextBoxUI(UITextBox_SizeZ_TextV, UITextBox_SizeZ_Image);
+		UITextBox_SizeZ->AddChild(UITextBox_SizeZ_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_SizeZ);
+	}
+	{
+		cUITextBox*	UITextBox_SizeZ = new cUITextBox;
+		cUIImage*	UITextBox_SizeZ_Image = new cUIImage;
+		cUIText*	UITextBox_SizeZ_TextV = new cUIText;
+		cUIText*	UITextBox_SizeZ_TextT = new cUIText;
+
+		UITextBox_SizeZ->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_SizeZ->SetPosition(100, 190, 0);
+		UITextBox_SizeZ_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_SizeZ_Image->SetScale(0.5, 0.05);
+		UITextBox_SizeZ_Image->SetAnchor(0, 0, 0);
+		UITextBox_SizeZ_TextV->SetText("0");
+		UITextBox_SizeZ_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeZ_TextV->SetSize(UITextBox_SizeZ_Image->GetScaleSize());
+		UITextBox_SizeZ_TextV->SetPosition(UITextBox_SizeZ_Image->GetPosition());
+		UITextBox_SizeZ_TextT->SetText("SIZE_Z");
+		UITextBox_SizeZ_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_SizeZ_TextT->SetSize(UITextBox_SizeZ_Image->GetScaleSize());
+		UITextBox_SizeZ_TextT->SetPosition(UITextBox_SizeZ_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_SizeZ->RegistTextBoxUI(UITextBox_SizeZ_TextV, UITextBox_SizeZ_Image);
+		UITextBox_SizeZ->AddChild(UITextBox_SizeZ_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_SizeZ);
+	}
+	{
+		cUITextBox*	UITextBox_RotX = new cUITextBox;
+		cUIImage*	UITextBox_RotX_Image = new cUIImage;
+		cUIText*	UITextBox_RotX_TextV = new cUIText;
+		cUIText*	UITextBox_RotX_TextT = new cUIText;
+
+		UITextBox_RotX->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_RotX->SetPosition(100, 230, 0);
+		UITextBox_RotX_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_RotX_Image->SetScale(0.5, 0.05);
+		UITextBox_RotX_Image->SetAnchor(0, 0, 0);
+		UITextBox_RotX_TextV->SetText("0");
+		UITextBox_RotX_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotX_TextV->SetSize(UITextBox_RotX_Image->GetScaleSize());
+		UITextBox_RotX_TextV->SetPosition(UITextBox_RotX_Image->GetPosition());
+		UITextBox_RotX_TextT->SetText("ROT_X");
+		UITextBox_RotX_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotX_TextT->SetSize(UITextBox_RotX_Image->GetScaleSize());
+		UITextBox_RotX_TextT->SetPosition(UITextBox_RotX_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_RotX->RegistTextBoxUI(UITextBox_RotX_TextV, UITextBox_RotX_Image);
+		UITextBox_RotX->AddChild(UITextBox_RotX_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_RotX);
+	}
+	{
+		cUITextBox*	UITextBox_RotY = new cUITextBox;
+		cUIImage*	UITextBox_RotY_Image = new cUIImage;
+		cUIText*	UITextBox_RotY_TextV = new cUIText;
+		cUIText*	UITextBox_RotY_TextT = new cUIText;
+
+		UITextBox_RotY->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_RotY->SetPosition(100, 260, 0);
+		UITextBox_RotY_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_RotY_Image->SetScale(0.5, 0.05);
+		UITextBox_RotY_Image->SetAnchor(0, 0, 0);
+		UITextBox_RotY_TextV->SetText("0");
+		UITextBox_RotY_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotY_TextV->SetSize(UITextBox_RotY_Image->GetScaleSize());
+		UITextBox_RotY_TextV->SetPosition(UITextBox_RotY_Image->GetPosition());
+		UITextBox_RotY_TextT->SetText("ROT_Y");
+		UITextBox_RotY_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotY_TextT->SetSize(UITextBox_RotY_Image->GetScaleSize());
+		UITextBox_RotY_TextT->SetPosition(UITextBox_RotY_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_RotY->RegistTextBoxUI(UITextBox_RotY_TextV, UITextBox_RotY_Image);
+		UITextBox_RotY->AddChild(UITextBox_RotY_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_RotY);
+	}
+	{
+		cUITextBox*	UITextBox_RotZ = new cUITextBox;
+		cUIImage*	UITextBox_RotZ_Image = new cUIImage;
+		cUIText*	UITextBox_RotZ_TextV = new cUIText;
+		cUIText*	UITextBox_RotZ_TextT = new cUIText;
+
+		UITextBox_RotZ->SetTag(eUITag::E_UI_TEXTBOX_POS_X);
+		UITextBox_RotZ->SetPosition(100, 290, 0);
+		UITextBox_RotZ_Image->SetTexture("Image/UI_TEXTBOX.png");
+		UITextBox_RotZ_Image->SetScale(0.5, 0.05);
+		UITextBox_RotZ_Image->SetAnchor(0, 0, 0);
+		UITextBox_RotZ_TextV->SetText("0");
+		UITextBox_RotZ_TextV->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotZ_TextV->SetSize(UITextBox_RotZ_Image->GetScaleSize());
+		UITextBox_RotZ_TextV->SetPosition(UITextBox_RotZ_Image->GetPosition());
+		UITextBox_RotZ_TextT->SetText("ROT_Z");
+		UITextBox_RotZ_TextT->SetOption(eFontType::E_DEFAULT, DT_LEFT | DT_VCENTER, D3DCOLOR_XRGB(0, 0, 0));
+		UITextBox_RotZ_TextT->SetSize(UITextBox_RotZ_Image->GetScaleSize());
+		UITextBox_RotZ_TextT->SetPosition(UITextBox_RotZ_Image->GetPosition() + D3DXVECTOR3(-60, 0, 0));
+		UITextBox_RotZ->RegistTextBoxUI(UITextBox_RotZ_TextV, UITextBox_RotZ_Image);
+		UITextBox_RotZ->AddChild(UITextBox_RotZ_TextT);
+
+		MgrUI->RegisteredUI(UITextBox_RotZ);
+	}
+
+
+
 }
 
 void cMainGame::Destory()

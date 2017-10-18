@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "cUITextBox.h"
-
+#include "cStringUtil.h"
 
 cUITextBox::cUITextBox()
 	: m_pUiText(NULL)
@@ -45,10 +45,6 @@ void cUITextBox::Update()
 	} break;
 	case eTextBoxState::E_TEXT_BOX_STATE_SELECT:
 	{
-		if (MgrInput->IsKeyDown(VK_DELETE))
-		{
-			//삭제
-		}
 		if (MgrInput->IsKeyDown(VK_RETURN))
 		{
 			//확인
@@ -64,6 +60,27 @@ void cUITextBox::Update()
 				m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
 			}
 		}
+		if (m_state == eTextBoxState::E_TEXT_BOX_STATE_SELECT)
+		{
+			if (MgrInput->IsKeyDown(VK_DELETE))
+			{
+				m_pUiText->GetUIText()->text = "";
+			}
+			if (MgrInput->IsKeyDown(VK_BACK))
+			{
+				if (m_pUiText->GetUIText()->text.length() > 0)
+					m_pUiText->GetUIText()->text.pop_back();
+			}
+			else
+			{
+				char textBuffer = MgrInput->PopKeyBuffer();
+				if ((textBuffer >= '0' && textBuffer <= '9') || textBuffer == -66)
+				{
+					if (textBuffer == -66) textBuffer = '.';
+					m_pUiText->GetUIText()->text.push_back(textBuffer);
+				}
+			}
+		}
 	}break;
 	}
 	cUIObject::Update();
@@ -73,3 +90,34 @@ void cUITextBox::Render()
 {
 	cUIObject::Render();
 }
+
+std::string cUITextBox::GetData_String()
+{
+	return m_pUiText->GetUIText()->text;
+}
+
+int cUITextBox::GetData_Int()
+{
+	return cStringUtil::ToInt(GetData_String());
+}
+
+float cUITextBox::GetData_Float()
+{
+	return cStringUtil::ToFloat(GetData_String());
+}
+
+void cUITextBox::SetData_ToString(std::string text)
+{
+	m_pUiText->GetUIText()->text = text;
+}
+
+void cUITextBox::SetData_ToString(float value)
+{
+	cStringUtil::ToString(value);
+}
+
+void cUITextBox::SetData_ToString(int value)
+{
+	cStringUtil::ToString(value);
+}
+

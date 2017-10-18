@@ -6,8 +6,17 @@ enum eUITag
 	E_UI_TEXT1,
 	E_UI_TEXT2,
 
+	E_UI_WINDOW,
 
-	E_UI_WINDOW
+	E_UI_TEXTBOX_POS_X,
+	E_UI_TEXTBOX_POS_Y,
+	E_UI_TEXTBOX_POS_Z,
+	E_UI_TEXTBOX_SIZE_X,
+	E_UI_TEXTBOX_SIZE_Y,
+	E_UI_TEXTBOX_SIZE_Z,
+	E_UI_TEXTBOX_ROT_X,
+	E_UI_TEXTBOX_ROT_Y,
+	E_UI_TEXTBOX_ROT_Z,
 };
 
 
@@ -22,7 +31,7 @@ protected:
 	SYNTHESIZE(bool, m_isShow, Show);
 
 	SYNTHESIZE(D3DXVECTOR3, m_position, Position);
-	SYNTHESIZE(ST_SIZE, m_stSize, Size);
+	SYNTHESIZE(D3DXVECTOR2, m_stSize, Size);
 	SYNTHESIZE(cUIObject*, m_pParent, Parent);
 
 	D3DXMATRIXA16 m_matWorld;
@@ -50,8 +59,8 @@ public:
 		SetRect(&rc,
 			(int)m_matWorld._41,
 			(int)m_matWorld._42,
-			(int)m_matWorld._41 + (int)m_stSize.nWidth,
-			(int)m_matWorld._42 + (int)m_stSize.nHeight);
+			(int)m_matWorld._41 + (int)GetSize().x,
+			(int)m_matWorld._42 + (int)GetSize().y);
 
 		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}

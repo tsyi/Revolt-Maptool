@@ -25,12 +25,26 @@ public:
 	virtual void Render();
 
 	void SetScale(float x, float y) { m_scale.x = x; m_scale.y = y; }
+
+	D3DXVECTOR2 GetScaleSize() { return D3DXVECTOR2(m_stSize.x*m_scale.x, m_stSize.y*m_scale.y); }
 	void SetBassColor(D3DCOLOR c) { bassColor = c; }
 	virtual void cUIImage::SetAnchor(float x, float y, float z)
 	{
 		m_anchor.x = x;
 		m_anchor.y = y;
 		m_anchor.z = z;
+	}
+
+	virtual bool IsMouseOver()
+	{
+		RECT rc;
+		SetRect(&rc,
+			(int)m_matWorld._41,
+			(int)m_matWorld._42,
+			(int)m_matWorld._41 + (int)GetSize().x * GetScale().x,
+			(int)m_matWorld._42 + (int)GetSize().y * GetScale().y);
+
+		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}
 
 };

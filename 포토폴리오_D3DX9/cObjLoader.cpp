@@ -206,7 +206,6 @@ void cObjLoader::LoadMtlLib(std::map<std::string, cMtlTex*>* mtlTex,
 				nCnt++;
 				// : <<
 			}
-
 		}
 		else if (szTemp[lineCol] == 'K')
 		{

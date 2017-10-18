@@ -69,9 +69,20 @@ private:
 
 public:
 	void Setup();
+	void SetupUI();
+
+
+
 	void Destory();
 	void Update();
 	void Render();
+
+
+
+
+
+
+
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };

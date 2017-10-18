@@ -58,8 +58,8 @@ void cUIText::Render()
 	if (!GetShow()) return;
 
 	pText->SetUIRect((int)m_matWorld._41, (int)m_matWorld._42,
-		(int)m_matWorld._41 + (int)m_stSize.nWidth,
-		(int)m_matWorld._42 + (int)m_stSize.nHeight);
+		(int)m_matWorld._41 + (int)GetSize().x,
+		(int)m_matWorld._42 + (int)GetSize().y);
 	pText->Draw();
 	cUIObject::Render();
 }

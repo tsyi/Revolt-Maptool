@@ -29,5 +29,12 @@ public:
 	cUIText* GetText() { return m_pUiText; }
 	cUIImage* GetImage() { return m_pUiImage; }
 
+	std::string GetData_String();
+	float GetData_Float();
+	int GetData_Int();
+
+	void SetData_ToString(std::string text);
+	void SetData_ToString(float value);
+	void SetData_ToString(int value);
 };
 

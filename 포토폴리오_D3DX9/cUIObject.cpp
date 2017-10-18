@@ -19,7 +19,7 @@ cUIObject::~cUIObject()
 
 void cUIObject::SetSize(float x, float y)
 {
-	SetSize(ST_SIZE(x, y));
+	SetSize(D3DXVECTOR2(x, y));
 }
 
 void cUIObject::SetPosition(float x, float y, float z)

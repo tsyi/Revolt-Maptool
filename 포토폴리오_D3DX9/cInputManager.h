@@ -42,6 +42,7 @@ public:
 	D3DXVECTOR2 m_prevMousePos;
 	D3DXVECTOR2 m_deltaMousePos;
 
+	int inputKeyBuffer;
 private:
 	void KeyUpdate()
 	{
@@ -53,7 +54,9 @@ private:
 				switch (m_keyState[i])
 				{
 				case INPUT_STATE_UP: m_keyState[i] = INPUT_STATE_DOWN; break;
-				case INPUT_STATE_NONE: m_keyState[i] = INPUT_STATE_DOWN; break;
+				case INPUT_STATE_NONE: 
+					m_keyState[i] = INPUT_STATE_DOWN; 
+					inputKeyBuffer = i; break;
 				case INPUT_STATE_DOWN: m_keyState[i] = INPUT_STATE_PRESS; break;
 				case INPUT_STATE_PRESS: m_keyState[i] = INPUT_STATE_PRESS; break;
 				case INPUT_STATE_DRAG: m_keyState[i] = INPUT_STATE_PRESS; break;
@@ -184,6 +187,8 @@ public:
 	D3DXVECTOR2 GetMouseDelta() { return m_deltaMousePos; }
 	float GetMouseWheelDelta() { return wheelDistance; }
 
+	char PopKeyBuffer() { char pop = inputKeyBuffer; inputKeyBuffer = -1; return pop; }
+
 	bool IsKeyUp(int key) { return GetKeyState(key) == INPUT_STATE_UP; }
 	bool IsKeyNone(int key) { return GetKeyState(key) == INPUT_STATE_NONE; }
 	bool IsKeyDown(int key) { return GetKeyState(key) == INPUT_STATE_DOWN; }
@@ -197,7 +202,7 @@ public:
 	bool IsMousePress(MOUSE_BUTTON btn) { return GetMouseState(btn) == INPUT_STATE_PRESS; }
 	bool IsMouseDrag(MOUSE_BUTTON btn) { return GetMouseState(btn) == INPUT_STATE_DRAG; }
 	bool IsMouseOn(MOUSE_BUTTON btn) { return  !IsMouseOff(btn); }
-	bool IsMouseOff(MOUSE_BUTTON btn) { return IsMouseUp(btn) || IsMouseDown(btn);}
+	bool IsMouseOff(MOUSE_BUTTON btn) { return IsMouseUp(btn) || IsMouseDown(btn); }
 
 	bool IsMouseWheel() { return (wheelDistance != 0.f); }
 	bool IsMouseWheelUp() { return (wheelDistance > 0.0f); }
