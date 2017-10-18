@@ -211,7 +211,7 @@ void cMainGame::Setup()
 
 	}// PhysX_
 
-
+	MgrObject->Setup();
 	//SetManager
 	MgrUI->Setup();
 	SetupUI();

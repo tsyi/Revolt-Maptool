@@ -36,7 +36,12 @@ void cObjectManager::AddObj(eOBJ eObj)
 	cMesh* mesh = new cMesh; // 매쉬 생성
 	if (mesh)
 	{
-		*mesh = *m_vecObjList[eObj];
+		LPD3DXMESH meshP;
+
+
+		*(mesh->m_pMesh) = *(m_vecObjList[eObj]->m_pMesh);
+
+		//*mesh = *m_vecObjList[eObj];
 	}
 
 	m_vecCreatedObj.push_back(mesh);
