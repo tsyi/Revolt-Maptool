@@ -153,6 +153,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_KEYDOWN:
+	{
+		if (wParam == VK_ESCAPE)
+		{
+			DestroyWindow(hWnd);
+		}
+	}
 	case WM_COMMAND:
 	{
 		int wmId = LOWORD(wParam);
