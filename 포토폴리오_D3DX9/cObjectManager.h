@@ -16,7 +16,6 @@ enum eOBJ
 
 const std::string strObjName[OBJ_MAX]
 {
-
 	"",
 	"cheese",
 	"chicken",
@@ -35,8 +34,6 @@ private:
 	SINGLETONE(cObjectManager);
 
 private:
-	std::set<cObject*>	m_setObject;			//-
-	std::map<eOBJ, cObject*> m_mapObjList;		//-
 	std::vector<cMesh*> m_vecObjList;			// setup
 	std::vector<cMesh*> m_vecCreatedObj;		// create
 
