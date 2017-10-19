@@ -16,34 +16,13 @@ void cObjectManager::Setup()
 	//모든 오브젝트를 불러와서 벡터에 담는다.
 
 	//오브젝트 번호에따라 순서대로 불러와서 매쉬리스트 만든다.
-	std::string strFolder;
-	std::string strFileName;
 
-	for (int i = 0; i < OBJ_MAX; i++)
-	{
-		strFolder = "Object/Objects/" + strObjName[i];
-		strFileName = strObjName[i] + ".obj";
-
-		cMesh* mesh = new cMesh; // 매쉬 생성
-		if (i == 0)
-		{
-			mesh->m_pMesh = NULL;
-		}
-		else
-		{
-			mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
-		}
-
-		m_vecObjList.push_back(mesh); // 매쉬벡터에 넣어준다.
-	}
 }
 
 void cObjectManager::AddObj(eOBJ_TAG eObj)
 {
-
 	std::string strFolder;
 	std::string strFileName;
-
 
 	strFolder = "Object/Objects/" + strObjName[eObj];
 	strFileName = strObjName[eObj] + ".obj";
@@ -52,6 +31,7 @@ void cObjectManager::AddObj(eOBJ_TAG eObj)
 	if (eObj == 0)
 	{
 		mesh->m_pMesh = NULL;
+		mesh->m_vecMtlTex.clear();
 	}
 	else
 	{
@@ -60,12 +40,7 @@ void cObjectManager::AddObj(eOBJ_TAG eObj)
 
 	m_vecCreatedObj.push_back(mesh); // 매쉬벡터에 넣어준다.
 	
-	//// 매쉬 생성
-
-	//cMesh* mesh = new cMesh(m_vecObjList[eObj]);
-
-	//m_vecCreatedObj.push_back(mesh);
-	//std::cout << m_vecCreatedObj.size() << std::endl;
+	std::cout << m_vecCreatedObj.size() << std::endl; // 벡터 사이즈 출력
 }
 
 void cObjectManager::DeleteObj()

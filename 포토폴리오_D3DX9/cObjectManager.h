@@ -35,8 +35,6 @@ private:
 	SINGLETONE(cObjectManager);
 
 private:
-	std::set<cObject*>	m_setObject;			//-
-	std::map<eOBJ_TAG, cObject*> m_mapObjList;		//-
 	std::vector<cMesh*> m_vecObjList;			// setup
 	std::vector<cMesh*> m_vecCreatedObj;		// create
 
