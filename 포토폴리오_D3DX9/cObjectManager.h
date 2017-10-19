@@ -16,7 +16,7 @@ enum eOBJ
 
 const std::string strObjName[OBJ_MAX]
 {
-	"",
+	"",	//default -> mesh 사용 하지 않음(cTransform 정보만 가지고 있는 경우)
 	"cheese",
 	"chicken",
 	"fabric",
@@ -29,6 +29,7 @@ class cObjectManager
 	//public:
 	//	cObjectManager();
 	//	~cObjectManager();
+	const std::string OBJECTS_PACH = "Object/Objects/";
 
 private:
 	SINGLETONE(cObjectManager);

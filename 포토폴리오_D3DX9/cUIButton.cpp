@@ -6,12 +6,17 @@ cUIButton::cUIButton()
 	, m_pUiImage(NULL)
 	, m_state(eButtonState::E_BUTTON_NONE)
 	, m_isOn(false)
-	, m_isEvent(nullptr)
+	, OnClick(NULL)
 {
 }
 
 cUIButton::~cUIButton()
 {
+}
+
+void cUIButton::SetOnClick(Event function)
+{
+	OnClick = std::move(function);
 }
 
 void cUIButton::RegistButtonUI(cUIText * pUiText, cUIImage * pUiImage, std::string text, std::string InagePach)
@@ -85,7 +90,8 @@ void cUIButton::Update()
 	}break;
 	case E_BUTTON___UP:
 	{
-		if (m_isEvent) m_isEvent->OnClick(this);
+		int a = 10;
+		if (OnClick) OnClick(a);
 		m_state = E_BUTTON_OVER;
 	}break;
 	}
