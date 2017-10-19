@@ -3,6 +3,7 @@
 #include "cPhysXManager.h"
 #include "cTransform.h"
 #include "cEvent.h"
+#include "cMap.h"
 
 class cMeshAnim;
 class cTransform;

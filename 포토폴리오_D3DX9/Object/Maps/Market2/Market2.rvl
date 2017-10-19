@@ -1,0 +1,64 @@
+Map Market2
+
+Object
+Attribute 1
+Position 0 0 0
+Scale 1 1 1
+Rotation 0 0 0
+NxTrue false
+
+#
+
+Object
+Attribute 2
+Position 1 1 1
+Scale 1 1 1
+Rotation 0 0 0
+NxTrue false
+#
+
+Object
+Attribute 3
+Position 2 2 2
+Scale 2 2 2
+Rotation 0.1 0.2 0.3
+NxTrue false
+#
+
+Camera
+Number 0
+Position 0 0 0
+Direction 0 0 0
+#
+
+Camera
+Number 1
+Position 1 1 1
+Direction 0 0 0
+#
+
+Box
+Number 0
+Position 0 0 0
+Scale 1 1 1
+Rotation 1 1 1
+#
+
+Box
+Number 1
+Position 0 0 0
+Scale 10 10 10
+Rotation 1 1 1
+#
+
+FollowPoint
+Number 0
+Position 0 0 0
+Scale 1 1 1
+#
+
+FollowPoint
+Number 1
+Position 10 10 10
+Scale 1 1 1
+#
