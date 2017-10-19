@@ -16,9 +16,9 @@
 // Windows 헤더 파일:
 #define NOMINMAX	//<windows.h>와 PhysX내부의 <nxmath.h> 에서 max 와 min을 중복으로 사용중이기에 오류가 발생한다.
 #ifdef max			//이를 위해 {#define NOMINMAX ~ } 를 이용해 중복사용을 막아준다. 
-	#undef max		//
+#undef max		//
 #endif min			//
-	#undef min		//
+#undef min		//
 #include <windows.h>
 
 
@@ -183,6 +183,12 @@ struct ST_SPHERE
 		fRaidus = raidus;
 		isSelect = false;
 	}
+};
+struct ST_RAYCAST
+{
+	D3DXVECTOR3  p;
+	D3DCOLOR	c;
+	enum { FVF = D3DFVF_XYZ | D3DFVF_DIFFUSE };
 };
 
 #define SYNTHESIZE( varType , varName , funName) \

@@ -55,6 +55,11 @@ D3DXVECTOR3 cTransform::GetUpVec()
 //
 //}
 
+void cTransform::SetPosition(NxVec3 NxPos)
+{
+	m_position.x = NxPos.x; m_position.y = NxPos.y; m_position.z = NxPos.z;
+}
+
 void cTransform::ChangeMatrix()
 {
 }

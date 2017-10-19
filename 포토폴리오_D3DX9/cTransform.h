@@ -1,4 +1,7 @@
 #pragma once
+
+class NxVec3;
+
 class cTransform
 {
 protected:
@@ -60,6 +63,8 @@ public:
 	void SetQuaternion(float x, float y, float z, float w) { m_Quaternion = D3DXQUATERNION(x, y, z, w); ArrowVector(); }
 	void SetQuaternion(D3DXMATRIX matR) { D3DXQuaternionRotationMatrix(&m_Quaternion, &matR); ArrowVector(); }
 	void SetPosition(D3DXMATRIX matT) { m_position.x = matT._41; m_position.y = matT._42; m_position.z = matT._43; }
+	void SetPosition(NxVec3 NxPos);
+
 
 	void ChangeMatrix();
 	void ArrowVector();

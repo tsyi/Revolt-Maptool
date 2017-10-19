@@ -48,6 +48,7 @@ private:
 	//박스
 	ID3DXMesh* pMeshTest;
 	D3DXMATRIXA16 matMeshTest;
+	USERDATA pMeshTextUserData;
 	std::string TestName;
 
 	//주전자
@@ -67,6 +68,11 @@ private:
 	std::string strCarName;
 	cTransform carTr;
 	NxActor* pCarActor;
+
+
+
+	//Rat
+	NxRay worldRay;
 
 public:
 	void Setup();

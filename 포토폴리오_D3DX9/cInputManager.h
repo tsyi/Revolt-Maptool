@@ -25,6 +25,9 @@ enum MOUSE_BUTTON
 #define MOUSE_EPSILON	1.f			//MoueMove가 true를 반환 하기 위한 최소 거리
 #define WHEEL_DETAIL	50.f		//Wheel 값이 높을 수록 조금씩 움직.
 #define WHEEL_SPEED_DECREASE 0.5f	//Wheel 속도 감소 정도,	
+
+class cCamera;
+
 class cInputManager
 {
 	SINGLETONE(cInputManager);
@@ -46,107 +49,11 @@ public:
 	SYNTHESIZE(bool, m_Hooking, Hooking);
 
 private:
-	void KeyUpdate()
-	{
-		for (int i = 0; i < KEY_COUNT; i++)
-		{
-			bool isPressed = GetAsyncKeyState(i) & 0x8000;
-			if (isPressed)
-			{
-				switch (m_keyState[i])
-				{
-				case INPUT_STATE_UP: m_keyState[i] = INPUT_STATE_DOWN; break;
-				case INPUT_STATE_NONE: 
-					m_keyState[i] = INPUT_STATE_DOWN; 
-					inputKeyBuffer = i; break;
-				case INPUT_STATE_DOWN: m_keyState[i] = INPUT_STATE_PRESS; break;
-				case INPUT_STATE_PRESS: m_keyState[i] = INPUT_STATE_PRESS; break;
-				case INPUT_STATE_DRAG: m_keyState[i] = INPUT_STATE_PRESS; break;
-				}
-			}
-			else
-			{
-				switch (m_keyState[i])
-				{
-				case INPUT_STATE_UP: m_keyState[i] = INPUT_STATE_NONE; break;
-				case INPUT_STATE_NONE: m_keyState[i] = INPUT_STATE_NONE; break;
-				case INPUT_STATE_DOWN: m_keyState[i] = INPUT_STATE_UP; break;
-				case INPUT_STATE_PRESS: m_keyState[i] = INPUT_STATE_UP; break;
-				case INPUT_STATE_DRAG: m_keyState[i] = INPUT_STATE_UP; break;
-				}
-			}
-		}
-	}
+	void KeyUpdate();
 
-	void MouseUpdate()
-	{
-		bool checkMouseMove = CheckMouseMove();
-		for (int i = 0; i < MOUSE_COUNT; i++)
-		{
-			int vKey = 0;
-			switch (i)
-			{
-			case MOUSE_LEFT: vKey = VK_LBUTTON; break;
-			case MOUSE_RIGHT: vKey = VK_RBUTTON; break;
-			case MOUSE_CENTER: vKey = VK_MBUTTON; break;
-			}
-			bool isPressed = GetAsyncKeyState(vKey) & 0x8000;
-			if (isPressed)
-			{
-				switch (m_mouseState[i])
-				{
-				case INPUT_STATE_UP: m_mouseState[i] = INPUT_STATE_DOWN; break;
-				case INPUT_STATE_NONE: m_mouseState[i] = INPUT_STATE_DOWN; break;
-				case INPUT_STATE_DOWN: m_mouseState[i] = (checkMouseMove ? INPUT_STATE_DRAG : INPUT_STATE_PRESS); break;
-				case INPUT_STATE_PRESS: m_mouseState[i] = (checkMouseMove ? INPUT_STATE_DRAG : INPUT_STATE_PRESS); break;
-				case INPUT_STATE_DRAG: m_mouseState[i] = (checkMouseMove ? INPUT_STATE_DRAG : INPUT_STATE_PRESS); break;
-				}
-			}
-			else
-			{
-				switch (m_mouseState[i])
-				{
-				case INPUT_STATE_UP: m_mouseState[i] = INPUT_STATE_NONE; break;
-				case INPUT_STATE_NONE: m_mouseState[i] = INPUT_STATE_NONE; break;
-				case INPUT_STATE_DOWN: m_mouseState[i] = INPUT_STATE_UP; break;
-				case INPUT_STATE_PRESS: m_mouseState[i] = INPUT_STATE_UP; break;
-				case INPUT_STATE_DRAG: m_mouseState[i] = INPUT_STATE_UP; break;
-				}
-			}
-		}
+	void MouseUpdate();
 
-		if (IsMouseWheelUp())
-		{
-			wheelDistance -= (WHEEL_SPEED_DECREASE);
-			if (wheelDistance <= 0) wheelDistance = 0;
-		}
-		else
-		{
-			wheelDistance += (WHEEL_SPEED_DECREASE);
-			if (wheelDistance >= 0) wheelDistance = 0;
-		}
-	}
-
-	bool CheckMouseMove()
-	{
-		POINT point;
-		GetCursorPos(&point);
-		ScreenToClient(g_hWnd, &point);
-		m_mousePos.x = point.x;
-		m_mousePos.y = point.y;
-		m_deltaMousePos = m_mousePos - m_prevMousePos;
-		float length = D3DXVec2Length(&m_deltaMousePos);
-
-		if (length < MOUSE_EPSILON && length > -MOUSE_EPSILON)
-		{
-			return false;
-		}
-		else
-		{
-			m_prevMousePos = m_mousePos;
-			return true;
-		}
-	}
+	bool CheckMouseMove();
 
 public:
 	void Setup()
@@ -210,6 +117,10 @@ public:
 	bool IsMouseWheelUp() { return (wheelDistance > 0.0f); }
 	bool IsMouseWheelDown() { return (wheelDistance < 0.0f); }
 
+
+
+
+	D3DXVECTOR3 MousePosToViewDir(cCamera* cCamera);
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{

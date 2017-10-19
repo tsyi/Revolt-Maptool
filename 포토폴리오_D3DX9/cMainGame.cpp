@@ -20,6 +20,9 @@
 #include "DEBUG_RENDERER.h"
 
 
+//#include "cPhysXManager.h"
+
+
 static DEBUG_RENDERER* m_pDebugRenderer = NULL;
 
 
@@ -82,6 +85,7 @@ void cMainGame::Setup()
 
 			//충돌 검사를 위한 userData 추가
 			pPlaneUserData.ContactPairFlag = 0;
+			pPlaneUserData.RatcastHit = NX_FALSE;
 			actorDesc.userData = &pPlaneUserData;
 
 			//씬에 엑터를 생성/추가
@@ -140,12 +144,15 @@ void cMainGame::Setup()
 			actorDesc.globalPose.M.setColumnMajor(mtl);
 			actorDesc.name = TestName.c_str();
 
+			pMeshTextUserData.RatcastHit = NX_FALSE;
+			actorDesc.userData = &pMeshTextUserData;
+
 			MgrPhysXScene->createActor(actorDesc);
 		}
 		//Mesh 정보를 이용해 주전자 생성 (TriangleMwsh) //지형이나 복잡한매쉬의 물리값을 알고 싶을 경우 -> 비용이 많이드니 남발 금지
 		D3DXCreateTeapot(g_pD3DDevice, &pMeshTeapot, NULL);
 		TeapotTr.SetPosition(D3DXVECTOR3(1, 2, 0));
-		TeapotTr.SetSize(D3DXVECTOR3(1.0f, 0.5f, 0.5f));
+		TeapotTr.SetSize(D3DXVECTOR3(10.0f, 10.f, 10.f));
 		TeapotTr.SetQuaternionToVector(D3DXVECTOR3(1, 2, 0), true, true);
 		pTeapotActor = NULL;
 		TeapotName = std::string("티포트");
@@ -181,6 +188,7 @@ void cMainGame::Setup()
 			actorDesc.name = TeapotName.c_str();
 
 			pTeapotUserData.ContactPairFlag = 0;
+			pTeapotUserData.RatcastHit = NX_FALSE;
 			actorDesc.userData = &pTeapotUserData;
 
 			pTeapotActor = MgrPhysXScene->createActor(actorDesc);
@@ -611,7 +619,6 @@ void cMainGame::SetupUI()
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
 	}
-
 }
 
 
@@ -638,6 +645,7 @@ void cMainGame::Update()
 	MgrTime->Update();		//시간 계산
 	MgrInput->Update();		//키보드 입력과 마우스 입력을 검사한다.
 	MgrInput->SetHooking(false);
+
 	//업데이트====================================================
 
 	//태그를 이용해 메니저에서 호출하기
@@ -647,6 +655,7 @@ void cMainGame::Update()
 	//
 	//	MgrSound->Play_BGM("sound01.mp3", 1.f);//, pText->GetPosition());
 	//	
+
 	if (MgrInput->IsKeyDown('Q'))
 	{
 		MgrSound->Play("sound02.wav", 1.0f);
@@ -664,9 +673,46 @@ void cMainGame::Update()
 	}
 	//지정된 프레임을 이용해서 계산을 진행하는 부분
 	{//->> PhysSimul
-		MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
-		MgrPhysXScene->flushStream();
-		MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+
+
+
+		//	ContactCallBack raadfg;
+
+//		RaycastCallBack raycastCallback;
+//		MgrPhysXScene->raycastAllShapes(worldRay, raycastCallback, NX_ALL_SHAPES);
+
+
+		if (MgrInput->IsKeyPress('O'))
+		{
+			MgrPhysX->D3DVecToNxVec(worldRay.orig, m_camera->GetPosition());
+			MgrPhysX->D3DVecToNxVec(worldRay.dir, MgrInput->MousePosToViewDir(m_camera));
+
+			NxRaycastHit raycastHit;
+			MgrPhysXScene->raycastClosestShape(worldRay, NX_ALL_SHAPES, raycastHit, 0xffffffff, NX_MAX_F32, 0xffffffff, NULL, NULL);
+
+			NxVec3 ratcastHitPosition = raycastHit.worldImpact;
+			TeapotTr.SetPosition(ratcastHitPosition);
+
+			std::cout << worldRay.dir.x << "\t";
+			std::cout << worldRay.dir.y << "\t";
+			std::cout << worldRay.dir.z << std::endl;
+		}
+
+		//ratcastHitPosition = NxVec3(2, 2, 0);
+		//NxMat34 pose = pCarActor->getGlobalPose();
+		//std::cout << pose.t.x << std::endl;
+		//std::cout << pose.t.y << std::endl;
+		//std::cout << pose.t.z << std::endl;
+		//
+		//pose.t.x = 2;
+		//pose.t.y = 2;
+		//pose.t.z = 2;
+		//pCarActor->setGlobalPose(pose);
+
+		//NxVec3 ratcastHitPosition = raycastHit.worldImpact;
+		//ratcastHitPosition = NxVec3(2, 2, 0);
+		//
+		//pCarActor->setGlobalPosition(ratcastHitPosition);
 
 		NxU32 ContactPairFlag = 0;
 		NxU32 actorCount = MgrPhysXScene->getNbActors();
@@ -729,11 +775,12 @@ void cMainGame::Update()
 					matWorld._32 = mtl[7];
 					matWorld._33 = mtl[8];
 
-					TeapotTr.SetQuaternion(matWorld);
-					TeapotTr.SetPosition(matWorld);
+					//		TeapotTr.SetQuaternion(matWorld);
+					//		TeapotTr.SetPosition(matWorld);
 				}
 				if (pActor->getName() == strCarName)
 				{
+
 					D3DXMATRIXA16 matWorld;
 					D3DXMatrixIdentity(&matWorld);
 
@@ -753,11 +800,13 @@ void cMainGame::Update()
 					matWorld._32 = mtl[7];
 					matWorld._33 = mtl[8];
 
+
 					carTr.SetQuaternion(matWorld);
 					carTr.SetPosition(matWorld);
 				}
 			}
 		}
+
 		if (ContactPairFlag == NX_NOTIFY_ON_START_TOUCH)
 		{
 			ContactPairFlag = 0;
@@ -769,6 +818,38 @@ void cMainGame::Update()
 	//후순위 업데이트=============================================
 	MgrUI->Update();
 	MgrSound->Update();
+
+	{
+		NxVec3 ratcastHitPosition = NxVec3(2, 2, 0);
+		NxMat34 pose = pCarActor->getGlobalPose();
+		//std::cout << pose.t.x << std::endl;
+		//std::cout << pose.t.y << std::endl;
+		//std::cout << pose.t.z << std::endl;
+
+		pose.t.x = 2;
+		pose.t.y = 2;
+		pose.t.z = 2;
+		pCarActor->setGlobalPose(pose);
+	}
+
+	//	MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
+	//	MgrPhysXScene->flushStream();
+	//	MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+
+	//	{
+	//		NxVec3 ratcastHitPosition = NxVec3(2, 2, 0);
+	//		NxMat34 pose = pCarActor->getGlobalPose();
+	//		std::cout << pose.t.x << std::endl;
+	//		std::cout << pose.t.y << std::endl;
+	//		std::cout << pose.t.z << std::endl;
+	//
+	//		pose.t.x = 2;
+	//		pose.t.y = 2;
+	//		pose.t.z = 2;
+	//		pCarActor->setGlobalPose(pose);
+	//	}
+
+		//	raycastClosestShape
 	if (m_camera) m_camera->Update(carTr.GetPosition());
 }
 
@@ -806,7 +887,9 @@ void cMainGame::Render()
 	MgrD3DDevice->SetTexture(0, NULL);
 	pMeshTeapot->DrawSubset(0);
 
-	TeapotTr.Render();
+
+	//TeapotTr.Render();
+
 	//	//LigthOff
 	MgrD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	if (m_grid0) m_grid0->Render();
@@ -821,6 +904,12 @@ void cMainGame::Render()
 
 	MgrD3DDevice->SetTransform(D3DTS_WORLD, &carTr.GetMatrixWorld());
 	pMeshCarTest->Render();
+
+
+
+
+
+
 
 	MgrObject->Render();
 

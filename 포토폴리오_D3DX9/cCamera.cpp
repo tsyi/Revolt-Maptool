@@ -97,7 +97,7 @@ void cCamera::Update(D3DXVECTOR3 target)
 	{
 		D3DXMATRIXA16 matProj;
 		MgrD3DDevice->GetTransform(D3DTS_PROJECTION, &matProj);
-		matProj._41 = m_fCameraDistance / 4;
+	//	matProj._41 = m_fCameraDistance / 4;
 		MgrD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 	}
 

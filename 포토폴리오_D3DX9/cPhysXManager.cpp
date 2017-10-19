@@ -145,34 +145,3 @@ NxTriangleMeshShapeDesc cPhysXManager::CreateTringleMesh(ID3DXMesh* pMesh, D3DXM
 	}
 	return meshShapeDesc;
 }
-
-void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
-{
-	USERDATA* pUserData0 = NULL;
-	USERDATA* pUserData1 = NULL;
-	switch (_event)
-	{
-	case NX_NOTIFY_ON_START_TOUCH:
-	{
-		pUserData0 = (USERDATA*)pair.actors[0]->userData;
-		pUserData1 = (USERDATA*)pair.actors[1]->userData;
-
-		pUserData0->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
-		pUserData1->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
-
-		std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
-
-	}break;
-	case NX_NOTIFY_ON_END_TOUCH:
-	{
-		pUserData0 = (USERDATA*)pair.actors[0]->userData;
-		pUserData1 = (USERDATA*)pair.actors[1]->userData;
-
-		pUserData0->ContactPairFlag = 0;
-		pUserData1->ContactPairFlag = 0;
-
-		std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
-
-	}break;
-	}
-}
