@@ -6,6 +6,9 @@
 #include "cEvent.h"
 #include "cObjectManager.h"
 
+
+#include <functional>
+
 enum eButtonState
 {
 	E_BUTTON_NONE,
@@ -17,6 +20,7 @@ enum eButtonState
 
 class cUIButton : public cUIObject
 {
+	typedef std::function<void(int)> Event;
 protected:
 	cUIText* m_pUiText;
 	cUIImage* m_pUiImage;
@@ -24,18 +28,19 @@ protected:
 	eButtonState m_state;
 	bool m_isOn;
 
-	SYNTHESIZE(cEvent*, m_isEvent, Event);
 
-	SYNTHESIZE(eOBJ, m_createObjEnum, ObjTag);
+	Event OnClick;
 
 public:
 	cUIButton();
 	~cUIButton();
+	void SetOnClick(Event function);
 
 	void RegistButtonUI(cUIText* pUiText, cUIImage* pUiImage, std::string text, std::string InagePach);
 	void Destory();
 	void Update();
 	void Render();
 
+//	void EventSet()
 
 };

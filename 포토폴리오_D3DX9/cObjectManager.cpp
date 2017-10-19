@@ -21,7 +21,7 @@ void cObjectManager::Setup()
 
 	for (int i = 0; i < OBJ_MAX; i++)
 	{
-		strFolder = "Objects/" + strObjName[i];
+		strFolder = OBJECTS_PACH + strObjName[i];
 		strFileName = strObjName[i] + ".obj";
 
 		cMesh* mesh = new cMesh; // 매쉬 생성

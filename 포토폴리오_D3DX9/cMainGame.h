@@ -81,6 +81,13 @@ public:
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 public:	//EVENT
-	virtual void OnClick(cUIButton* pSender);
+	virtual void OnClick(cUIButton* pSender, eEventTag eventTag);
+	virtual void OnCilck(void* pvoid);
+
+	void Test(int a)
+	{
+		std::cout << a << std::endl;
+	}
+
 };
 

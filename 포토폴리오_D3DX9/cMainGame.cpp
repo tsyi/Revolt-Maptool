@@ -211,7 +211,7 @@ void cMainGame::Setup()
 
 	}// PhysX_
 
-	MgrObject->Setup();
+//	MgrObject->Setup();
 	//SetManager
 	MgrUI->Setup();
 	SetupUI();
@@ -577,8 +577,11 @@ void cMainGame::SetupUI()
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(400, 40);
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
-		pButton->SetEvent(this);
-		pButton->SetObjTag(eOBJ::OBJ_CHEESE);
+//		pButton->SetEvent(this)
+		pButton->SetOnClick(std::bind(&cMainGame::Test, this, std::placeholders::_1));
+	//	pButton->SetEvent(this);
+	//	pButton->SetEventTag(eEventTag::E_CREATE_OBJECT);
+	//	pButton->SetEventKey("");
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
 	}
@@ -831,9 +834,15 @@ LRESULT cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	return 0;
 }
 
-void cMainGame::OnClick(cUIButton * pSender)
+void cMainGame::OnClick(cUIButton * pSender, eEventTag eventTag)
 {
 	//CreateCar
-	eOBJ tag = pSender->GetObjTag();
-	MgrObject->AddObj(tag);
+
+//	eOBJ tag = pSender->GetObjTag();
+//	MgrObject->AddObj(tag);
+}
+
+void cMainGame::OnCilck(void * pvoid)
+{
+
 }

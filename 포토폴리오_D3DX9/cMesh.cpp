@@ -90,11 +90,11 @@ void cMesh::LoadMeshObjLoder(std::string folder, std::string name)
 void cMesh::Destory()
 {
 	//m_mapMtlTex.clear();
-	for each (auto pMtlTex in m_mapMtlTex)
+	for each (auto pMtlTex in m_vecMtlTex)
 	{
-		if(pMtlTex.second) pMtlTex.second->~cMtlTex();
+		pMtlTex->~cMtlTex();
 	}
-	m_mapMtlTex.clear();
+	m_vecMtlTex.clear();
 	SAFE_RELEASE(m_pMesh);
 }
 
