@@ -25,7 +25,14 @@ void cObjectManager::Setup()
 		strFileName = strObjName[i] + ".obj";
 
 		cMesh* mesh = new cMesh; // 매쉬 생성
-		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		if (i == 0)
+		{
+			mesh->m_pMesh = NULL;
+		}
+		else
+		{
+			mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		}
 
 		m_vecObjList.push_back(mesh); // 매쉬벡터에 넣어준다.
 	}

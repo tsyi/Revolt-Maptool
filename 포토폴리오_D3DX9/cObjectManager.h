@@ -6,7 +6,7 @@ class cObject;
 
 enum eOBJ
 {
-	//OBJ_NONE,
+	OBJ_NONE,
 	OBJ_CHEESE,
 	OBJ_CHICKEN,
 	OBJ_FABRIC,
@@ -16,7 +16,8 @@ enum eOBJ
 
 const std::string strObjName[OBJ_MAX]
 {
-	//"",
+
+	"",
 	"cheese",
 	"chicken",
 	"fabric",
