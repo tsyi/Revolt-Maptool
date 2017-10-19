@@ -211,7 +211,7 @@ void cMainGame::Setup()
 
 	}// PhysX_
 
-//	MgrObject->Setup();
+	MgrObject->Setup();
 	//SetManager
 	MgrUI->Setup();
 	SetupUI();
@@ -334,7 +334,7 @@ void cMainGame::SetupUI()
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_MAPNAME);
 		UITextBox->SetPosition(0, 0, 0);
 		UITextBox->SetSize(400, 30);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image,"MapName", "Image/UI_TEXTBOX.png");
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "MapName", "Image/UI_TEXTBOX.png");
 
 		MgrUI->RegisteredUI(UITextBox);
 	}
@@ -364,7 +364,7 @@ void cMainGame::SetupUI()
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 
 		cUIText* UITextBox_TextT = new cUIText;
-		UITextBox_TextT->SetPosition( D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
 		UITextBox_TextT->SetSize(50, 30);
 		UITextBox_TextT->SetText("POS_X");
 		UITextBox_TextT->GetUIText()->color = D3DCOLOR_XRGB(0, 0, 0);
@@ -573,15 +573,13 @@ void cMainGame::SetupUI()
 		cUIButton* pButton = new cUIButton;
 		cUIImage* pButtonImage = new cUIImage;
 		cUIText* pbuttonText = new cUIText;
-		
+
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(400, 40);
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
-//		pButton->SetEvent(this)
-		pButton->SetOnClick(std::bind(&cMainGame::Test, this, std::placeholders::_1));
-	//	pButton->SetEvent(this);
-	//	pButton->SetEventTag(eEventTag::E_CREATE_OBJECT);
-	//	pButton->SetEventKey("");
+		pButton->SetOnClick(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
+
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
 	}
@@ -589,11 +587,13 @@ void cMainGame::SetupUI()
 		cUIButton* pButton = new cUIButton;
 		cUIImage* pButtonImage = new cUIImage;
 		cUIText* pbuttonText = new cUIText;
-	
+
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(400, 40);
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button2", "Image/UI_TEXTBOX.png");
-	
+		pButton->SetOnClick(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+		pButton->SetEventID(eOBJ_TAG::OBJ_CHEESE);
+
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
 	}
@@ -605,6 +605,8 @@ void cMainGame::SetupUI()
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(400, 40);
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button3", "Image/UI_TEXTBOX.png");
+		pButton->SetOnClick(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+		pButton->SetEventID(eOBJ_TAG::OBJ_CHICKEN);
 
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
 		ui->AddButton(pButton);
@@ -819,6 +821,9 @@ void cMainGame::Render()
 
 	MgrD3DDevice->SetTransform(D3DTS_WORLD, &carTr.GetMatrixWorld());
 	pMeshCarTest->Render();
+
+	MgrObject->Render();
+
 	//UI
 	MgrUI->Render();
 	//===========EndRender==========
@@ -838,11 +843,17 @@ void cMainGame::OnClick(cUIButton * pSender, eEventTag eventTag)
 {
 	//CreateCar
 
-//	eOBJ tag = pSender->GetObjTag();
+//	eOBJ_TAG tag = pSender->GetObjTag();
 //	MgrObject->AddObj(tag);
 }
 
 void cMainGame::OnCilck(void * pvoid)
 {
 
+}
+
+void cMainGame::OnCreateObject(int eventID)
+{
+	if (eOBJ_TAG::OBJ_MAX <= eventID) eventID = 0;
+	MgrObject->AddObj((eOBJ_TAG)eventID);
 }

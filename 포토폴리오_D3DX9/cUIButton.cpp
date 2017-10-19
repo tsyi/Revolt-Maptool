@@ -90,8 +90,8 @@ void cUIButton::Update()
 	}break;
 	case E_BUTTON___UP:
 	{
-		int a = 10;
-		if (OnClick) OnClick(a);
+	//	int a = 10;
+		if (OnClick) OnClick(GetEventID());
 		m_state = E_BUTTON_OVER;
 	}break;
 	}

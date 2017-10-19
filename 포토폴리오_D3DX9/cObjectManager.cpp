@@ -38,18 +38,34 @@ void cObjectManager::Setup()
 	}
 }
 
-void cObjectManager::AddObj(eOBJ eObj)
+void cObjectManager::AddObj(eOBJ_TAG eObj)
 {
-	cMesh* mesh = new cMesh; // 매쉬 생성
 
-	if (mesh)
+	std::string strFolder;
+	std::string strFileName;
+
+
+	strFolder = "Object/Objects/" + strObjName[eObj];
+	strFileName = strObjName[eObj] + ".obj";
+
+	cMesh* mesh = new cMesh; // 매쉬 생성
+	if (eObj == 0)
 	{
-		*mesh = *m_vecObjList[eObj];
-	//	memcpy_s(mesh, sizeof(cMesh), m_vecObjList[eObj], sizeof(cMesh));	
+		mesh->m_pMesh = NULL;
+	}
+	else
+	{
+		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 	}
 
-	m_vecCreatedObj.push_back(mesh);
-	std::cout << m_vecCreatedObj.size() << std::endl;
+	m_vecCreatedObj.push_back(mesh); // 매쉬벡터에 넣어준다.
+	
+	//// 매쉬 생성
+
+	//cMesh* mesh = new cMesh(m_vecObjList[eObj]);
+
+	//m_vecCreatedObj.push_back(mesh);
+	//std::cout << m_vecCreatedObj.size() << std::endl;
 }
 
 void cObjectManager::DeleteObj()
@@ -91,4 +107,14 @@ void cObjectManager::Destroy()
 		SAFE_DELETE(p);
 	}
 	m_vecObjList.clear();
+}
+
+void cObjectManager::Render()
+{
+	for each(cMesh* pMesh in m_vecCreatedObj)
+	{
+	//	pMesh->SetPosition(D3DXVECTOR3(0, 1, 0));
+		pMesh->Render();
+	}
+
 }

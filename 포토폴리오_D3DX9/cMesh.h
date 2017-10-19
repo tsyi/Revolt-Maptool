@@ -24,23 +24,7 @@ public:
 
 	cMesh();
 	cMesh(cMesh* pMesh)
-	{
-		cTransform::SetTransform(pMesh->GetTransform());
-
-		D3DXCreateMeshFVF(
-			pMesh->m_pMesh->GetNumFaces(),
-			pMesh->m_pMesh->GetNumVertices(),
-			pMesh->m_pMesh->GetOptions(),
-			pMesh->m_pMesh->GetFVF(),
-			MgrD3DDevice, &m_pMesh);
-
-		m_vecMtlTex.resize(pMesh->m_vecMtlTex.size());
-		for (size_t i = 0; i < m_vecMtlTex.size(); i++)
-		{
-			m_vecMtlTex[i] = pMesh->m_vecMtlTex[i];
-		}
-		m_eState = pMesh->m_eState;
-	}
+	{}
 	~cMesh();
 
 	void LoadMeshObjLoder(std::string folder, std::string name);

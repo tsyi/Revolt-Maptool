@@ -4,7 +4,7 @@
 
 class cObject;
 
-enum eOBJ
+enum eOBJ_TAG
 {
 	OBJ_NONE,
 	OBJ_CHEESE,
@@ -36,17 +36,20 @@ private:
 
 private:
 	std::set<cObject*>	m_setObject;			//-
-	std::map<eOBJ, cObject*> m_mapObjList;		//-
+	std::map<eOBJ_TAG, cObject*> m_mapObjList;		//-
 	std::vector<cMesh*> m_vecObjList;			// setup
 	std::vector<cMesh*> m_vecCreatedObj;		// create
 
 public:
 	void Setup();
-	void AddObj(eOBJ eObj);
+	void AddObj(eOBJ_TAG eObj);
 	void DeleteObj();
 	//void AddObject(cObject* pObject);
 	//void RemoveObject(cObject* pObject);
 	void Destroy();
 	// << : 
+
+
+	void Render();
 };
 

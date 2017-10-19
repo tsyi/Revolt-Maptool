@@ -115,6 +115,9 @@ void cMesh::Render()
 				MgrD3DDevice->SetTexture(0, NULL);
 		}
 	}
+	cTransform::DebugTr = true;
+	cTransform::Render();
+
 //	else
 //	{
 //		MgrD3DDevice->SetMaterial(&m_material);

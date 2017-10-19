@@ -30,6 +30,7 @@ protected:
 
 
 	Event OnClick;
+	SYNTHESIZE(int, m_eventId, EventID);
 
 public:
 	cUIButton();
