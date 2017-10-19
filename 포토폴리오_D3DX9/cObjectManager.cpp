@@ -57,6 +57,27 @@ void cObjectManager::DeleteObj()
 	}
 }
 
+cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
+{
+	std::string strFolder;
+	std::string strFileName;
+
+	strFolder = "Object/Objects/" + strObjName[eObj];
+	strFileName = strObjName[eObj] + ".obj";
+
+	cMesh* mesh = new cMesh; // 매쉬 생성
+	if (eObj == 0)
+	{
+		mesh->m_pMesh = NULL;
+		mesh->m_vecMtlTex.clear();
+	}
+	else
+	{
+		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+	}
+	return mesh;;
+}
+
 //void cObjectManager::AddObject(cObject * pObject)
 //{
 //	

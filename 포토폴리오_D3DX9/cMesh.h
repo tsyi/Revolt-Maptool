@@ -18,6 +18,8 @@ public:
 
 	eMESH_STATE m_eState;
 
+	bool m_isActor;
+
 public:
 	void Destory();
 	void Render();

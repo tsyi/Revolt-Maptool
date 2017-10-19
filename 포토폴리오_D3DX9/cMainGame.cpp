@@ -297,7 +297,6 @@ void cMainGame::Setup()
 
 
 
-
 	D3DLIGHT9 stLight;
 	ZeroMemory(&stLight, sizeof(D3DLIGHT9));
 	stLight.Type = D3DLIGHT_DIRECTIONAL;

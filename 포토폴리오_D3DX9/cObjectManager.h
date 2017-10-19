@@ -42,6 +42,7 @@ public:
 	void Setup();
 	void AddObj(eOBJ_TAG eObj);
 	void DeleteObj();
+	cMesh* LoadObj(eOBJ_TAG fileName);
 	//void AddObject(cObject* pObject);
 	//void RemoveObject(cObject* pObject);
 	void Destroy();
