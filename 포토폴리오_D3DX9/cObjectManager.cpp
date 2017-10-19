@@ -21,7 +21,7 @@ void cObjectManager::Setup()
 
 	for (int i = 0; i < OBJ_MAX; i++)
 	{
-		strFolder = "Objects/" + strObjName[i];
+		strFolder = "Object/Objects/" + strObjName[i];
 		strFileName = strObjName[i] + ".obj";
 
 		cMesh* mesh = new cMesh; // 古習 持失
@@ -34,12 +34,15 @@ void cObjectManager::Setup()
 void cObjectManager::AddObj(eOBJ eObj)
 {
 	cMesh* mesh = new cMesh; // 古習 持失
+
 	if (mesh)
 	{
 		*mesh = *m_vecObjList[eObj];
+	//	memcpy_s(mesh, sizeof(cMesh), m_vecObjList[eObj], sizeof(cMesh));	
 	}
 
 	m_vecCreatedObj.push_back(mesh);
+	std::cout << m_vecCreatedObj.size() << std::endl;
 }
 
 void cObjectManager::DeleteObj()
