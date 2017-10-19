@@ -21,11 +21,18 @@ void cObjectManager::Setup()
 
 	for (int i = 0; i < OBJ_MAX; i++)
 	{
-		strFolder = OBJECTS_PACH + strObjName[i];
+		strFolder = "Object/Objects/" + strObjName[i];
 		strFileName = strObjName[i] + ".obj";
 
 		cMesh* mesh = new cMesh; // 매쉬 생성
-		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		if (i == 0)
+		{
+			mesh->m_pMesh = NULL;
+		}
+		else
+		{
+			mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		}
 
 		m_vecObjList.push_back(mesh); // 매쉬벡터에 넣어준다.
 	}
@@ -34,17 +41,15 @@ void cObjectManager::Setup()
 void cObjectManager::AddObj(eOBJ eObj)
 {
 	cMesh* mesh = new cMesh; // 매쉬 생성
+
 	if (mesh)
 	{
-		LPD3DXMESH meshP;
-
-
-		*(mesh->m_pMesh) = *(m_vecObjList[eObj]->m_pMesh);
-
-		//*mesh = *m_vecObjList[eObj];
+		*mesh = *m_vecObjList[eObj];
+	//	memcpy_s(mesh, sizeof(cMesh), m_vecObjList[eObj], sizeof(cMesh));	
 	}
 
 	m_vecCreatedObj.push_back(mesh);
+	std::cout << m_vecCreatedObj.size() << std::endl;
 }
 
 void cObjectManager::DeleteObj()
