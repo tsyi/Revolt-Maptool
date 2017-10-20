@@ -14,7 +14,6 @@ public:
 	cLight();
 	~cLight();
 
-	void LoadLight();
 
 };
 

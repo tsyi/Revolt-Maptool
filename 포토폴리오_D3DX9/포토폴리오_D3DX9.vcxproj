@@ -163,6 +163,7 @@
     <ClInclude Include="cLight.h" />
     <ClInclude Include="cLightManager.h" />
     <ClInclude Include="cMainGame.h" />
+    <ClInclude Include="cMap.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cMtlTex.h" />
     <ClInclude Include="cObject.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="cLight.cpp" />
     <ClCompile Include="cLightManager.cpp" />
     <ClCompile Include="cMainGame.cpp" />
+    <ClCompile Include="cMap.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
     <ClCompile Include="cObject.cpp" />

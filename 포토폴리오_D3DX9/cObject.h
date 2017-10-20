@@ -28,9 +28,5 @@ protected :
 	bool m_isActor;
 public:
 
-	void ObjectLoad(eOBJECT_TAG tag)
-	{
-	//	MgrObject->
-	}
 };
 

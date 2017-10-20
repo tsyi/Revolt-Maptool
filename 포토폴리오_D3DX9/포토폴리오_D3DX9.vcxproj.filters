@@ -192,6 +192,9 @@
     <ClInclude Include="cPhysXManager.h">
       <Filter>PhysX</Filter>
     </ClInclude>
+    <ClInclude Include="cMap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="포토폴리오_D3DX9.cpp">
@@ -295,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="cPhysXManager.cpp">
       <Filter>PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="cMap.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

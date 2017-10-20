@@ -10,7 +10,7 @@
 #define CAMERA_OPTION_MOVE_V 1;
 #define CAMERA_OPTION_MOVE_H -1;
 
-class cCamera : public cObject
+class cCamera : public cTransform
 {
 	D3DXVECTOR3		m_vUp;
 	D3DXVECTOR3		m_target;
