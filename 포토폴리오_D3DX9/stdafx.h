@@ -235,7 +235,6 @@ enum ButtonState { None, Overlap, Down, Up };
 #include "cSoundManager.h"
 #include "cInputManager.h"
 #include "cTimeManager.h"
-#include "cSkinnedMeshManager.h"
 
 #include "cPhysXManager.h"
 

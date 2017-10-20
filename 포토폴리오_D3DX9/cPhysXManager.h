@@ -94,6 +94,9 @@ public:
 
 	NxTriangleMeshShapeDesc CreateTringleMesh(ID3DXMesh* pMesh, D3DXMATRIXA16* matS = NULL);
 
+
+	void Update();
+
 	void D3DVecToNxVec(NxVec3& vec, D3DXVECTOR3& Dvec3)
 	{
 		vec.x = Dvec3.x;

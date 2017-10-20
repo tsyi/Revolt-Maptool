@@ -35,7 +35,7 @@ void cObjectManager::AddObj(eOBJ_TAG eObj)
 	}
 	else
 	{
-		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 	}
 
 	m_vecCreatedObj.push_back(mesh); // 매쉬벡터에 넣어준다.
@@ -45,16 +45,16 @@ void cObjectManager::AddObj(eOBJ_TAG eObj)
 
 void cObjectManager::DeleteObj()
 {
-	for (int i = 0; i < m_vecCreatedObj.size(); i++)
-	{
-		if (m_vecCreatedObj[i]->GetState() == MESH_STATE_SELET)
-		{
-			m_vecCreatedObj[i]->Destory();
-			SAFE_DELETE(m_vecCreatedObj[i]);
-
-			m_vecCreatedObj.erase(m_vecCreatedObj.begin() + i);
-		}
-	}
+	//for (int i = 0; i < m_vecCreatedObj.size(); i++)
+	//{
+	//	if (m_vecCreatedObj[i]->GetState() == MESH_STATE_SELET)
+	//	{
+	//		m_vecCreatedObj[i]->Destory();
+	//		SAFE_DELETE(m_vecCreatedObj[i]);
+	//
+	//		m_vecCreatedObj.erase(m_vecCreatedObj.begin() + i);
+	//	}
+	//}
 }
 
 cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
@@ -73,7 +73,7 @@ cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
 	}
 	else
 	{
-		mesh->LoadMeshObjLoder(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 	}
 	return mesh;;
 }

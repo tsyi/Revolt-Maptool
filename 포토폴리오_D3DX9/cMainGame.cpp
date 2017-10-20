@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "cMainGame.h"
 
-#include "cMeshAnim.h"
 
 #include "cUIText.h"
 #include "cUIImage.h"
@@ -14,8 +13,6 @@
 #include "cCamera.h"
 #include "cMesh.h"
 
-#include "cExUnit.h"
-#include "cCharacter.h"
 
 #include "DEBUG_RENDERER.h"
 
@@ -141,6 +138,9 @@ void cMainGame::Setup()
 			NxF32 mtl[] = { cosf(D3DXToRadian(r)), sin(D3DXToRadian(r)),0.0f,
 							-sinf(D3DXToRadian(r)), cos(D3DXToRadian(r)),0.0f,
 							0.0f,0.0f,1.0f };
+			//NxMat33 mtl;
+			//NxMat34 a;
+			
 			actorDesc.globalPose.M.setColumnMajor(mtl);
 			actorDesc.name = TestName.c_str();
 
@@ -152,7 +152,7 @@ void cMainGame::Setup()
 		//Mesh 정보를 이용해 주전자 생성 (TriangleMwsh) //지형이나 복잡한매쉬의 물리값을 알고 싶을 경우 -> 비용이 많이드니 남발 금지
 		D3DXCreateTeapot(g_pD3DDevice, &pMeshTeapot, NULL);
 		TeapotTr.SetPosition(D3DXVECTOR3(1, 2, 0));
-		TeapotTr.SetSize(D3DXVECTOR3(10.0f, 10.f, 10.f));
+		TeapotTr.SetSize(D3DXVECTOR3(2.0f, 2.f, 2.f));
 		TeapotTr.SetQuaternionToVector(D3DXVECTOR3(1, 2, 0), true, true);
 		pTeapotActor = NULL;
 		TeapotName = std::string("티포트");
@@ -248,7 +248,7 @@ void cMainGame::Setup()
 
 	//================================================
 	pMeshMapTest = new cMesh;
-	pMeshMapTest->LoadMeshObjLoder("Object/Maps/Market2", "Market2.obj");
+	pMeshMapTest->LoadMesh("Object/Maps/Market2", "Market2.obj");
 	strMapName = "Market2";
 
 	NxTriangleMeshShapeDesc mapDesc = MgrPhysX->CreateTringleMesh(pMeshMapTest->m_pMesh);
@@ -256,6 +256,10 @@ void cMainGame::Setup()
 
 	actorDesc.shapes.pushBack(&mapDesc);
 	actorDesc.name = strMapName.c_str();
+
+
+	bodyDesc.flags |= NX_BF_KINEMATIC;
+	actorDesc.body = &bodyDesc;
 
 	MgrPhysXScene->createActor(actorDesc);
 
@@ -265,7 +269,7 @@ void cMainGame::Setup()
 
 	//===============================================
 	pMeshCarTest = new cMesh;
-	pMeshCarTest->LoadMeshObjLoder("Object/Cars/tc2", "tc2.obj");
+	pMeshCarTest->LoadMesh("Object/Cars/tc2", "tc2.obj");
 	carTr.SetPosition(D3DXVECTOR3(0, 1, 0));
 	strCarName = "tc2";
 
@@ -677,8 +681,8 @@ void cMainGame::Update()
 
 		//	ContactCallBack raadfg;
 
-//		RaycastCallBack raycastCallback;
-//		MgrPhysXScene->raycastAllShapes(worldRay, raycastCallback, NX_ALL_SHAPES);
+	//	RaycastCallBack raycastCallback;
+	//	MgrPhysXScene->raycastAllShapes(worldRay, raycastCallback, NX_ALL_SHAPES);
 
 
 		if (MgrInput->IsKeyPress('O'))
@@ -689,6 +693,8 @@ void cMainGame::Update()
 			NxRaycastHit raycastHit;
 			MgrPhysXScene->raycastClosestShape(worldRay, NX_ALL_SHAPES, raycastHit, 0xffffffff, NX_MAX_F32, 0xffffffff, NULL, NULL);
 
+			USERDATA* userData = (USERDATA*)raycastHit.shape->getActor().userData;
+			userData->RatcastHit = NX_TRUE;
 			NxVec3 ratcastHitPosition = raycastHit.worldImpact;
 			TeapotTr.SetPosition(ratcastHitPosition);
 
@@ -719,6 +725,11 @@ void cMainGame::Update()
 		{
 			NxActor* pActor = MgrPhysXScene->getActors()[i];
 			if (pActor == NULL) continue;
+
+			std::string a = cStringUtil::ToString((int)this);
+			pActor->setName(a.c_str());
+			std::string name_= pActor->getName();
+
 			if (!ContactPairFlag)
 			{
 				USERDATA* UserData = (USERDATA*)pActor->userData;
@@ -774,8 +785,8 @@ void cMainGame::Update()
 					matWorld._32 = mtl[7];
 					matWorld._33 = mtl[8];
 
-					//		TeapotTr.SetQuaternion(matWorld);
-					//		TeapotTr.SetPosition(matWorld);
+					//TeapotTr.SetQuaternion(matWorld);
+					//TeapotTr.SetPosition(matWorld);
 				}
 				if (pActor->getName() == strCarName)
 				{

@@ -9,9 +9,7 @@ enum eEventTag
 };
 class cEvent
 {
-//	void* pvoid;
 public:
 	virtual void OnClick(cUIButton* pClass, eEventTag eventTag) = 0;
-//	virtual void OnClick(void* vpoint) = 0;
 };
 

@@ -31,7 +31,6 @@ char ansichar[10];
 ansichar = W2A(widechar);
 }
 
-
 ATL 7.0 문자열 변환
 CA2AEX		이 클래스를 사용 하 여 문자열 변환 매크로에서 CA2TEX 및 CT2AEX, 및 typedef CA2A.
 CA2CAEX		이 클래스를 사용 하 여 문자열 변환 매크로에서 CA2CTEX 및 CT2CAEX, 및 typedef CA2CA.
@@ -45,7 +44,6 @@ CComBSTR		에 대 한 래퍼 클래스인 BSTRs.
 _U_STRINGorID	이 인수 어댑터 클래스 두 리소스 이름이 있습니다 
 				(LPCTSTRs) 또는 리소스 Id (UINTs) 호출자 ID를 사용 하여
 				문자열에 변환할 필요 없이 함수에 전달 하는 MAKEINTRESOURCE 매크로.
-
 */
 
 class cStringUtil
