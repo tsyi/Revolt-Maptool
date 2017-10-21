@@ -3,8 +3,8 @@ class cObject;
 
 class cScene
 {
-	cObject* m_pMap;
-	std::vector<cObject*> m_vecObject;
+	SYNTHESIZE(cObject*, m_pMap, Map);
+	SYNTHESIZE(std::vector<cObject*>, m_vecObject, Objcets);
 
 
 	//임시변수;

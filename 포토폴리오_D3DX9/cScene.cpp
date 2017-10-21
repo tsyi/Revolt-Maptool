@@ -130,5 +130,4 @@ void cScene::OnChangeValue(int eventID)
 	nxMat.setColumnMajor(nxF);
 	m_selectobj->GetActor()->setGlobalOrientation(nxMat);
 
-//	m_selectobj->GetActor()->
 }

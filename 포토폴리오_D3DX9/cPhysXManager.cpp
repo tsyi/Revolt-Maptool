@@ -62,7 +62,7 @@ void cPhysXManager::Destory()
 		if (m_pNxScene != NULL)
 		{
 			NxU32 actorCount = m_pNxScene->getNbActors();
-			for (NxU32 i = 0; i < actorCount ; i++)
+			for (NxU32 i = 0; i < actorCount; i++)
 			{
 				NxActor* p = m_pNxScene->getActors()[i];
 				m_pNxScene->releaseActor(*p);
@@ -247,4 +247,34 @@ void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
 
 	}break;
 	}
+}
+
+void TriggerCallback::onTrigger(NxShape & triggerShape, NxShape & otherShape, NxTriggerFlag status)
+{
+
+	// other actor is a trigger too?
+	if ((NxI32)(otherShape.getActor().userData) < 0)
+		return;
+
+	NxActor& triggerActor = triggerShape.getActor();
+	NxI32 triggerNumber = -(NxI32)triggerActor.userData;
+	NxI32 triggerIndex = triggerNumber - 1;
+
+	std::cout << "onTrigger ";
+	if (status & NX_TRIGGER_ON_LEAVE)
+	{
+		std::cout << "NX_TRIGGER_ON_LEAVE";
+	}
+	if (status & NX_TRIGGER_ON_ENTER)
+	{
+		std::cout << "NX_TRIGGER_ON_ENTER";
+	}
+	if (status & NX_TRIGGER_ON_STAY)
+	{
+		std::cout << "NX_TRIGGER_ON_STAY";
+	}
+
+
+
+	std::cout << std::endl;
 }

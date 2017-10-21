@@ -29,7 +29,7 @@ struct USERDATA
 	NX_BOOL RaycastAllShape;
 	NxVec3	RayHitPos;
 	USERDATA() { Init(); }
-	void Init() 
+	void Init()
 	{
 		ContactPairFlag = 0;
 		RaycastClosestShape = NX_FALSE;
@@ -38,10 +38,21 @@ struct USERDATA
 	}
 };
 
+struct KinematicActor {
+	NxActor* actor;
+	NxVec3 vel;
+};
+//NxArray<KinematicActor>	gKinematicActors;
+
 class ContactCallBack : public NxUserContactReport
 {
 	//충돌확인
 	void onContactNotify(NxContactPair& pair, NxU32 _event);
+};
+class TriggerCallback : public NxUserTriggerReport
+{
+	//충돌확인
+	void onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTriggerFlag status);
 };
 
 class RaycastCallBack : public NxUserRaycastReport
@@ -145,9 +156,11 @@ public:
 	//density							:	밀도 정보 (크기가 커지면 당연이 총 무게는 증가한다.)
 	//6	
 	//trMatrix							:	엑터의 Matrix정보 ( = matR * matT) 
-	NxActor* CreateActor(NxShapeType type, NxU32 bodyFlag, USERDATA* pUserData, NxVec3 sizeValue, int materialIndex, float density
+	NxActor* CreateActor(NxShapeType type, NxU32 shapeFlag, NxU32 bodyFlag, bool isStatic,
+		USERDATA* pUserData, NxVec3 sizeValue, int materialIndex, float density
 		, D3DXMATRIX trMatrix)
 	{
+
 		NxActorDesc actorDesc;	actorDesc.setToDefault();
 		NxBodyDesc bodyDesc;	bodyDesc.setToDefault();
 		NxShapeDesc* shapeDesc = NULL;
@@ -167,6 +180,7 @@ public:
 			NxBoxShapeDesc desc; desc.setToDefault();
 			desc.materialIndex = materialIndex;
 			desc.dimensions = sizeValue;
+			desc.shapeFlags |= shapeFlag;
 			shapeDesc = &desc;
 			break;
 		}
@@ -209,18 +223,17 @@ public:
 		default:
 			break;
 		}
-
 		actorDesc.shapes.pushBack(shapeDesc);
 
-		if (bodyFlag == 0)
+		if (isStatic)
 		{
-			actorDesc.body = NULL;
+			bodyDesc.flags |= bodyFlag;
+			actorDesc.body = &bodyDesc;
+			actorDesc.density = density;
 		}
 		else
 		{
-			bodyDesc.flags = NX_BF_VISUALIZATION | bodyFlag;
-			actorDesc.body = &bodyDesc;
-			actorDesc.density = density;
+			actorDesc.body = NULL;
 		}
 
 		actorDesc.globalPose.t = NxVec3(trMatrix._41, trMatrix._42, trMatrix._43);
@@ -236,7 +249,7 @@ public:
 		mtl[8] = trMatrix._33;
 		actorDesc.globalPose.M.setColumnMajor(mtl);
 
-//		mtl = NULL;
+		//		mtl = NULL;
 
 		if (pUserData)
 		{
@@ -246,5 +259,121 @@ public:
 		}
 
 		return MgrPhysXScene->createActor(actorDesc);
+	}
+
+	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxVec3 sizeValue, USERDATA* pUserData,
+		bool isKinematic = false, bool IsTrigger = false, bool isStatic = false , bool isGravaty = true)
+	{
+		// Our trigger is a cube
+		NxBodyDesc triggerBody;
+		triggerBody.setToDefault();
+
+		NxShapeDesc* shapeDesc = NULL;
+
+		NxActorDesc ActorDesc;
+		ActorDesc.setToDefault();
+
+		switch (type)
+		{
+		case NX_SHAPE_PLANE: {
+			break;
+		}
+		case NX_SHAPE_SPHERE: {
+			NxSphereShapeDesc desc; desc.setToDefault();
+			//	desc.materialIndex - materialIndex;
+			desc.radius = sizeValue.x;
+			break;
+		}
+		case NX_SHAPE_BOX: {
+			NxBoxShapeDesc desc;
+			desc.setToDefault();
+			desc.dimensions = sizeValue;
+			shapeDesc = &desc;
+
+			if (isKinematic)
+			{
+				NxBoxShapeDesc dummyShape;
+				dummyShape.setToDefault();
+				dummyShape.dimensions.set(sizeValue);
+				dummyShape.group = 1;
+				ActorDesc.shapes.pushBack(&dummyShape);
+			}
+			break;
+		}
+		case NX_SHAPE_CAPSULE: {
+			NxCapsuleShapeDesc desc; desc.setToDefault();
+			//	desc.materialIndex = materialIndex;
+			desc.radius = sizeValue.x;
+			desc.height = sizeValue.y;
+			shapeDesc = &desc;
+			break;
+		}
+		case NX_SHAPE_WHEEL: {
+			NxWheelShapeDesc desc; desc.setToDefault();
+			//	desc.materialIndex = materialIndex;
+			desc.radius = 0;
+			shapeDesc = &desc;
+			break;
+		}
+		case NX_SHAPE_CONVEX: {
+			break;
+		}
+		case NX_SHAPE_MESH: {
+			break;
+		}
+		case NX_SHAPE_HEIGHTFIELD: {
+			break;
+		}
+		case NX_SHAPE_RAW_MESH: {
+			break;
+		}
+		case NX_SHAPE_COMPOUND: {
+			break;
+		}
+		case NX_SHAPE_COUNT: {
+			break;
+		}
+		case NX_SHAPE_FORCE_DWORD: {
+			break;
+		}
+		default:break;
+		}
+		if (IsTrigger) shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
+
+		if (!isGravaty) triggerBody.flags |= NX_BF_DISABLE_GRAVITY;
+		if (isKinematic)
+		{
+			triggerBody.flags |= NX_BF_KINEMATIC;
+			triggerBody.mass = 1;
+
+			if (isStatic) ActorDesc.body = NULL;
+			else ActorDesc.body = &triggerBody;
+		}
+		else
+		{
+			triggerBody.mass = 1;
+			if (isStatic) ActorDesc.body = NULL;
+			else
+			{
+				triggerBody.angularDamping = 0.5f;
+				if (!IsTrigger)
+					ActorDesc.body = &triggerBody;
+			}
+		}
+
+
+		ActorDesc.shapes.pushBack(shapeDesc);
+		ActorDesc.globalPose.t = position;
+
+		ActorDesc.userData = (pUserData);
+		NxActor* actor = m_pNxScene->createActor(ActorDesc);	// This is just a quick-and-dirty way to identify the trigger for rendering
+		if (actor == NULL)
+		{
+			std::cout << "  NULL !";
+		}
+
+		m_pNxScene->setUserTriggerReport(new TriggerCallback);
+
+		return actor;
 	}
 };

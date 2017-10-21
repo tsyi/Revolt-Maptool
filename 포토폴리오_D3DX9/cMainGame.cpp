@@ -56,48 +56,92 @@ void cMainGame::Setup()
 	MgrPhysXScene->createMaterial(defaultMaterial);
 
 
-
+	std::cout << std::endl << "0";
 	pBoxObj_0 = new cStuff;
 	pBoxObj_0->SetPosition(0, 0, 0);
 	pBoxObj_0->SetMeshBox();
-	NxU32 flag = NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY;
-	pBoxObj_0->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, flag, pBoxObj_0->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObj_0->GetMatrix(false, true, true)));
+	pBoxObj_0->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(-6, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_0->GetUserData(),
+		false, true, true));	//->
 
+	std::cout << std::endl << "1";
 	pBoxObj_1 = new cStuff;
 	pBoxObj_1->SetPosition(5, 0, 0);
 	pBoxObj_1->SetMeshBox();
-	pBoxObj_1->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObj_1->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObj_1->GetMatrix(false, true, true)));
+	pBoxObj_1->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(-4, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_1->GetUserData(),
+		true, false, true));
 
+	std::cout << std::endl << "2";
 	pBoxObj_2 = new cStuff;
 	pBoxObj_2->SetPosition(10, 0, 0);
 	pBoxObj_2->SetMeshBox();
-	pBoxObj_2->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObj_2->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObj_2->GetMatrix(false, true, true)));
+	pBoxObj_2->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(-2, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_2->GetUserData(),
+		true, true, false));
 
+	std::cout << std::endl << "3";
 	pBoxObj_3 = new cStuff;
 	pBoxObj_3->SetPosition(15, 0, 0);
 	pBoxObj_3->SetMeshBox();
-	pBoxObj_3->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObj_3->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObj_3->GetMatrix(false, true, true)));
+	pBoxObj_3->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(-0, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_3->GetUserData(),
+		true, false, false));
 
+	std::cout << std::endl << "4";
 	pBoxObj_4 = new cStuff;
 	pBoxObj_4->SetPosition(20, 0, 0);
 	pBoxObj_4->SetMeshBox();
-	pBoxObj_4->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObj_4->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObj_4->GetMatrix(false, true, true)));
+	pBoxObj_4->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(2, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_4->GetUserData(),
+		false, true, false));	//->
 
+	std::cout << std::endl << "5";
+	pBoxObj_5 = new cStuff;
+	pBoxObj_5->SetPosition(20, 0, 0);
+	pBoxObj_5->SetMeshBox();
+	pBoxObj_5->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(4, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_5->GetUserData(),
+		false, false, true));
+
+	std::cout << std::endl << "6";
+	pBoxObj_6 = new cStuff;
+	pBoxObj_6->SetPosition(20, 0, 0);
+	pBoxObj_6->SetMeshBox();
+	pBoxObj_6->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(6, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_6->GetUserData(),
+		false, false, false, false));
+
+	std::cout << std::endl << "7";
+	pBoxObj_7 = new cStuff;
+	pBoxObj_7->SetPosition(20, 0, 0);
+	pBoxObj_7->SetMeshBox();
+	pBoxObj_7->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+		NxVec3(8, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_7->GetUserData(),
+		true, true, true));	//	->
 
 	m_pScene->PushObject(pBoxObj_0);
 	m_pScene->PushObject(pBoxObj_1);
 	m_pScene->PushObject(pBoxObj_2);
 	m_pScene->PushObject(pBoxObj_3);
 	m_pScene->PushObject(pBoxObj_4);
+	m_pScene->PushObject(pBoxObj_5);
+	m_pScene->PushObject(pBoxObj_6);
+	m_pScene->PushObject(pBoxObj_7);
 
 
 	SetUI();
 	SetLight();
+
+	//MgrPhysXScene->setUserTriggerReport(new TriggerCallback());
+
+
+
+	//NxShape* nx1 = *m_pScene->GetObjcets()[0]->GetActor()->getShapes();
+	//NxShape* nx2 = *m_pScene->GetObjcets()[2]->GetActor()->getShapes();
+	//MgrPhysXScene->setShapePairFlags(
+	//	*nx1, *nx2,
+	//	NX_TRIGGER_ON_ENTER);
 }
 
 void cMainGame::SetUI()
@@ -114,7 +158,7 @@ void cMainGame::SetUI()
 	UIWindowR->SetTag(eUITag::E_UI_WINDOW_R);
 	UIWindowR->SetTexture("Image/UI_WINDOW_R.png");
 	UIWindowR->SetScaleSize(203, 1000);
-	UIWindowR->SetPosition(APIWidth-15, 0, 0);
+	UIWindowR->SetPosition(APIWidth - 15, 0, 0);
 	UIWindowR->SetAnchor(1, 0, 0);
 
 	MgrUI->RegisteredUI(UIWindowR);
@@ -472,6 +516,10 @@ void cMainGame::Update()
 		MgrPhysX->RaycastAllShapes(m_camera->GetPosition(), MgrInput->MousePosToViewDir(m_camera));
 		MgrPhysX->RaycastClosestShape(m_camera->GetPosition(), MgrInput->MousePosToViewDir(m_camera));
 
+		//		TriggerCallback triggerCallBack;
+
+				//		MgrPhysXScene->setActorPairFlags()
+
 		m_pScene->Update();
 
 	}
@@ -531,8 +579,8 @@ void cMainGame::OnCreateObject(int eventID)
 	cStuff* pBoxObject = new cStuff;
 	pBoxObject->SetPosition(0, 4, 0);
 	pBoxObject->SetMeshBox();
-	pBoxObject->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObject->GetUserData(),
-		NxVec3(1, 1, 1), 0, 1, pBoxObject->GetMatrix(false, true, true)));
+	//pBoxObject->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_SF_VISUALIZATION, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObject->GetUserData(),
+	//	NxVec3(1, 1, 1), 0, 1, pBoxObject->GetMatrix(false, true, true)));
 
 	m_pScene->PushObject(pBoxObject);
 

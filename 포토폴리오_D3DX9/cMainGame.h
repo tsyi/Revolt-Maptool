@@ -27,6 +27,9 @@ private:
 	cStuff* pBoxObj_2;
 	cStuff* pBoxObj_3;
 	cStuff* pBoxObj_4;
+	cStuff* pBoxObj_5;
+	cStuff* pBoxObj_6;
+	cStuff* pBoxObj_7;
 
 
 

@@ -33,7 +33,7 @@ void cObject::Destory()
 
 void cObject::Update()
 {
-	GetActor()->putToSleep();
+	//GetActor()->putToSleep();
 
 	if (!MgrInput->GetHooking())
 	{
@@ -43,6 +43,14 @@ void cObject::Update()
 			break;
 		case E_OBJECT_STATE_SELECT:
 		{
+			if (MgrInput->IsKeyDown('Q'))
+			{
+				GetActor()->putToSleep();
+			}
+			if (MgrInput->IsKeyUp('Q'))
+			{
+				GetActor()->wakeUp();
+			}
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0)
