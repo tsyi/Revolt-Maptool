@@ -21,26 +21,26 @@ void cObjectManager::Setup()
 
 void cObjectManager::AddObj(eOBJ_TAG eObj)
 {
-	std::string strFolder;
-	std::string strFileName;
-
-	strFolder = "Object/Objects/" + strObjName[eObj];
-	strFileName = strObjName[eObj] + ".obj";
-
-	cMesh* mesh = new cMesh; // 매쉬 생성
-	if (eObj == 0)
-	{
-		mesh->m_pMesh = NULL;
-		mesh->m_vecMtlTex.clear();
-	}
-	else
-	{
-		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
-	}
-
-	m_vecCreatedObj.push_back(mesh); // 매쉬벡터에 넣어준다.
-	
-	std::cout << m_vecCreatedObj.size() << std::endl; // 벡터 사이즈 출력
+//	std::string strFolder;
+//	std::string strFileName;
+//
+//	strFolder = "Object/Objects/" + strObjName[eObj];
+//	strFileName = strObjName[eObj] + ".obj";
+//
+//	cMesh* mesh = new cMesh; // 매쉬 생성
+//	if (eObj == 0)
+//	{
+//		mesh->m_pMesh = NULL;
+//		mesh->m_vecMtlTex.clear();
+//	}
+//	else
+//	{
+//		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+//	}
+//
+//	m_vecCreatedObj.push_back(mesh); // 매쉬벡터에 넣어준다.
+//	
+//	std::cout << m_vecCreatedObj.size() << std::endl; // 벡터 사이즈 출력
 }
 
 void cObjectManager::DeleteObj()
@@ -59,23 +59,24 @@ void cObjectManager::DeleteObj()
 
 cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
 {
-	std::string strFolder;
-	std::string strFileName;
-
-	strFolder = "Object/Objects/" + strObjName[eObj];
-	strFileName = strObjName[eObj] + ".obj";
-
-	cMesh* mesh = new cMesh; // 매쉬 생성
-	if (eObj == 0)
-	{
-		mesh->m_pMesh = NULL;
-		mesh->m_vecMtlTex.clear();
-	}
-	else
-	{
-		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
-	}
-	return mesh;;
+//	std::string strFolder;
+//	std::string strFileName;
+//
+//	strFolder = "Object/Objects/" + strObjName[eObj];
+//	strFileName = strObjName[eObj] + ".obj";
+//
+//	cMesh* mesh = new cMesh; // 매쉬 생성
+//	if (eObj == 0)
+//	{
+//		mesh->m_pMesh = NULL;
+//		mesh->m_vecMtlTex.clear();
+//	}
+//	else
+//	{
+//		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+//	}
+//	return mesh;;
+	return NULL;
 }
 
 //void cObjectManager::AddObject(cObject * pObject)
@@ -90,27 +91,26 @@ cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
 
 void cObjectManager::Destroy()
 {
-	for each(auto p in m_vecCreatedObj)
-	{
-		p->Destory();
-		SAFE_DELETE(p);
-	}
-	m_vecCreatedObj.clear();
-
-	for each(auto p in m_vecObjList)
-	{
-		p->Destory();
-		SAFE_DELETE(p);
-	}
-	m_vecObjList.clear();
+//	for each(auto p in m_vecCreatedObj)
+//	{
+//		p->Destory();
+//		SAFE_DELETE(p);
+//	}
+//	m_vecCreatedObj.clear();
+//
+//	for each(auto p in m_vecObjList)
+//	{
+//		p->Destory();
+//		SAFE_DELETE(p);
+//	}
+//	m_vecObjList.clear();
 }
 
 void cObjectManager::Render()
 {
-	for each(cMesh* pMesh in m_vecCreatedObj)
-	{
-	//	pMesh->SetPosition(D3DXVECTOR3(0, 1, 0));
-		pMesh->Render();
-	}
-
+//	for each(cMesh* pMesh in m_vecCreatedObj)
+//	{
+//	//	pMesh->SetPosition(D3DXVECTOR3(0, 1, 0));
+//		pMesh->Render();
+//	}
 }

@@ -30,9 +30,13 @@ struct sUIText
 	void SetText(std::string _text) { text = _text; }
 	void SetOption(eFontType pFontType, DWORD style, D3DCOLOR color) 
 	{
-		this->fontType = pFontType,
-			this->style = style;
+		this->fontType = pFontType;
+		this->style = style;
 		this->color = color;
+	}
+	void SetFont(eFontType pFontType)
+	{
+		this->fontType = pFontType;
 	}
 	void SetUIRect(RECT rc)
 	{
@@ -47,6 +51,10 @@ struct sUIText
 		MgrFont->GetFont(fontType)->DrawTextA(NULL, text.c_str(), strlen(text.c_str()),
 			&rc, style, color);
 	}
+
+	std::string GetString() { return text; }
+	float GetFloat() { return cStringUtil::ToFloat(text); }
+	int GetInt() { return  cStringUtil::ToInt(text); }
 };
 
 class cUIText : public cUIObject
@@ -64,12 +72,13 @@ public:
 	void SetText(std::string text);
 	//style : DT_CENTER | DT_VCENTER | ....
 	void SetOption(eFontType pFontType, DWORD style, D3DCOLOR color);
+	void SetFont(eFontType pFontType);
 	void Destory();
 	void Update();
 	void Render();
 
 	// int(-1) -> 해당 변수는 변경하지 않음 
 
-	sUIText* GetUIText();
+	sUIText* GetText();
 };
 

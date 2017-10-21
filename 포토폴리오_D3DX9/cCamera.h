@@ -1,5 +1,5 @@
 #pragma once
-#include "cObject.h"
+//#include "cObject.h"
 
 #define CAMERA_MOVE_DETAIL 0.005
 #define CAMERA_MAX_MIN_Y 0.98f

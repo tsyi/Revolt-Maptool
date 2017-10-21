@@ -1,5 +1,6 @@
 #pragma once
-class cMtlTex;
+#include "cMtlTex.h"
+//class cMtlTex;
 
 class cMesh
 {

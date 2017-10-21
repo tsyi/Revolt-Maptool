@@ -2,8 +2,8 @@
 #define MgrFont cFontManager::GetInstance()
 enum eFontType {
 	E_DEFAULT,
-	E_QUEST,
-	E_TITLE
+	E_TEXTBOX,
+//	E_TITLE
 	//...
 };
 

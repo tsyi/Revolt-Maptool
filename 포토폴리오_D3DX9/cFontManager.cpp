@@ -19,8 +19,8 @@ void cFontManager::Setup()
 	AddFontResourceA("font/umberto.ttf");
 
 
-	fd.Height = 25;
-	fd.Width = 12;
+	fd.Height = 16;
+	fd.Width = 8;
 	fd.Weight = FW_BOLD;
 	fd.Italic = false;
 	fd.CharSet = DEFAULT_CHARSET;
@@ -28,25 +28,25 @@ void cFontManager::Setup()
 	fd.PitchAndFamily = FF_DONTCARE;
 	CreateFontDesc(E_DEFAULT, "±¼¸²Ã¼", fd);
 
-	fd.Height = 50;
-	fd.Width = 20;
+	fd.Height = 16;
+	fd.Width = 8;
 	fd.Weight = FW_LIGHT;
 	fd.Italic = false;
 	fd.CharSet = DEFAULT_CHARSET;
 	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
 	fd.PitchAndFamily = FF_DONTCARE;
 
-	CreateFontDesc(E_QUEST, "±Ã¼­Ã¼", fd);
+	CreateFontDesc(E_TEXTBOX, "ŒUÀ½Ã¼", fd);
 
-	fd.Height = 20;
-	fd.Width = 15;
-	fd.Weight = FW_MEDIUM;
-	fd.Italic = false;
-	fd.CharSet = DEFAULT_CHARSET;
-	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
-	fd.PitchAndFamily = FF_DONTCARE;
-	//	AddFontResourceA("font/umberto.ttf");
-	CreateFontDesc(E_TITLE, "umberto", fd);
+	//fd.Height = 20;
+	//fd.Width = 15;
+	//fd.Weight = FW_MEDIUM;
+	//fd.Italic = false;
+	//fd.CharSet = DEFAULT_CHARSET;
+	//fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+	//fd.PitchAndFamily = FF_DONTCARE;
+	////	AddFontResourceA("font/umberto.ttf");
+	//CreateFontDesc(E_TITLE, "umberto", fd);
 
 
 

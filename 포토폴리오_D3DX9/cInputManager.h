@@ -47,7 +47,7 @@ public:
 
 	int inputKeyBuffer;
 	SYNTHESIZE(bool, m_Hooking, Hooking);
-
+	bool IsSelectWindow;
 private:
 	void KeyUpdate();
 
@@ -70,6 +70,9 @@ public:
 		SetKeyNone();
 
 		wheelDistance = 0.f;
+
+	//	GetClientRect(g_hWnd, &window);
+	//	SetRect(&window, 0, 0, APIWidth, APIHeight);
 	}
 	void Release()
 	{
@@ -77,6 +80,7 @@ public:
 	}
 	void Update()
 	{
+		if (!IsSelectWindow) return;
 		KeyUpdate();
 		MouseUpdate();
 	}
@@ -102,6 +106,7 @@ public:
 	bool IsKeyNone(int key) { return GetKeyState(key) == INPUT_STATE_NONE; }
 	bool IsKeyDown(int key) { return GetKeyState(key) == INPUT_STATE_DOWN; }
 	bool IsKeyPress(int key) { return GetKeyState(key) == INPUT_STATE_PRESS; }
+
 	bool IsKeyOn(int key) { return !IsKeyOff(key); }
 	bool IsKeyOff(int key) { return IsKeyNone(key) || IsKeyUp(key); }
 
@@ -110,6 +115,8 @@ public:
 	bool IsMouseDown(MOUSE_BUTTON btn) { return GetMouseState(btn) == INPUT_STATE_DOWN; }
 	bool IsMousePress(MOUSE_BUTTON btn) { return GetMouseState(btn) == INPUT_STATE_PRESS; }
 	bool IsMouseDrag(MOUSE_BUTTON btn) { return GetMouseState(btn) == INPUT_STATE_DRAG; }
+	bool IsMousePressDrag(MOUSE_BUTTON btn) { return IsMousePress(btn) || IsMouseDrag(btn); }
+
 	bool IsMouseOn(MOUSE_BUTTON btn) { return  !IsMouseOff(btn); }
 	bool IsMouseOff(MOUSE_BUTTON btn) { return IsMouseUp(btn) || IsMouseDown(btn); }
 
@@ -129,6 +136,10 @@ public:
 		case WM_MOUSEWHEEL:
 			wheelDistance = (GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DETAIL);
 			break;
+		case WM_ACTIVATE: {
+			if (LOWORD(wParam) == WA_INACTIVE) IsSelectWindow = false;
+			else IsSelectWindow = true;
+		}break;
 		default:
 			//	wheelDistance = 0.f;
 			break;

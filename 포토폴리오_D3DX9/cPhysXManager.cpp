@@ -47,6 +47,11 @@ BOOL cPhysXManager::InitNxPhysX(DEBUG_RENDERER** pDebugRenderer)
 		return S_FALSE;
 	}
 
+	m_physXUserData = NULL;
+	PHYSXDATA*  newPhysXUserData = new PHYSXDATA;
+	newPhysXUserData->Init();
+	SetPhysXData(newPhysXUserData);
+
 	return S_OK;
 }
 
@@ -56,6 +61,12 @@ void cPhysXManager::Destory()
 	{
 		if (m_pNxScene != NULL)
 		{
+			NxU32 actorCount = m_pNxScene->getNbActors();
+			for (NxU32 i = 0; i < actorCount; i++)
+			{
+				NxActor* p = m_pNxScene->getActors()[i];
+				m_pNxScene->releaseActor(*p);
+			}
 			m_pNxPhysicsSDK->releaseScene(*m_pNxScene);
 			m_pNxScene = NULL;
 		}
@@ -146,107 +157,124 @@ NxTriangleMeshShapeDesc cPhysXManager::CreateTringleMesh(ID3DXMesh* pMesh, D3DXM
 	return meshShapeDesc;
 }
 
+NxBoxShapeDesc cPhysXManager::CreateBoxShape(int materialIndex, NxVec3 boxSize)
+{
+	NxBoxShapeDesc boxDesc;	boxDesc.setToDefault();
+	boxDesc.materialIndex = materialIndex;
+	boxDesc.dimensions = boxSize * 0.5f;
+
+
+
+	return boxDesc;
+}
+
 void cPhysXManager::Update()
 {
-//
-//	//	MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
-//	//	MgrPhysXScene->flushStream();
-//	//	MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
-//
-//
-//	NxU32 ContactPairFlag = 0;
-//	NxU32 actorCount = MgrPhysXScene->getNbActors();
-//	for (NxU32 i = 0; i < actorCount; i++)
-//	{
-//		NxActor* pActor = MgrPhysXScene->getActors()[i];
-//
-//		pActor->setName((char*)this);
-//		
-//		if (pActor == NULL) continue;
-//		if (!ContactPairFlag)
-//		{
-//			USERDATA* UserData = (USERDATA*)pActor->userData;
-//
-//			if (UserData)
-//			{
-//				ContactPairFlag = UserData->ContactPairFlag;
-//				//	pActor->userData = 0;
-//			}
-//			//std::cout << ContactPairFlag << std::endl;
-//		}
-//
-//		if (pActor->getName() != NULL)
-//		{
-//			if (pActor->getName() == TestName)
-//			{
-//				D3DXMatrixIdentity(&matMeshTest);
-//
-//				matMeshTest._41 = pActor->getGlobalPose().t.x;
-//				matMeshTest._42 = pActor->getGlobalPose().t.y;
-//				matMeshTest._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matMeshTest._11 = mtl[0];
-//				matMeshTest._12 = mtl[1];
-//				matMeshTest._13 = mtl[2];
-//				matMeshTest._21 = mtl[3];
-//				matMeshTest._22 = mtl[4];
-//				matMeshTest._23 = mtl[5];
-//				matMeshTest._31 = mtl[6];
-//				matMeshTest._32 = mtl[7];
-//				matMeshTest._33 = mtl[8];
-//			}
-//			if (pActor->getName() == TeapotName)
-//			{
-//				D3DXMATRIXA16 matWorld;
-//				D3DXMatrixIdentity(&matWorld);
-//
-//				matWorld._41 = pActor->getGlobalPose().t.x;
-//				matWorld._42 = pActor->getGlobalPose().t.y;
-//				matWorld._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matWorld._11 = mtl[0];
-//				matWorld._12 = mtl[1];
-//				matWorld._13 = mtl[2];
-//				matWorld._21 = mtl[3];
-//				matWorld._22 = mtl[4];
-//				matWorld._23 = mtl[5];
-//				matWorld._31 = mtl[6];
-//				matWorld._32 = mtl[7];
-//				matWorld._33 = mtl[8];
-//
-//				TeapotTr.SetQuaternion(matWorld);
-//				TeapotTr.SetPosition(matWorld);
-//			}
-//			if (pActor->getName() == strCarName)
-//			{
-//
-//				D3DXMATRIXA16 matWorld;
-//				D3DXMatrixIdentity(&matWorld);
-//
-//				matWorld._41 = pActor->getGlobalPose().t.x;
-//				matWorld._42 = pActor->getGlobalPose().t.y;
-//				matWorld._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matWorld._11 = mtl[0];
-//				matWorld._12 = mtl[1];
-//				matWorld._13 = mtl[2];
-//				matWorld._21 = mtl[3];
-//				matWorld._22 = mtl[4];
-//				matWorld._23 = mtl[5];
-//				matWorld._31 = mtl[6];
-//				matWorld._32 = mtl[7];
-//				matWorld._33 = mtl[8];
-//
-//
-//				carTr.SetQuaternion(matWorld);
-//				carTr.SetPosition(matWorld);
-//			}
-//		}
-//	}
+
+}
+
+void cPhysXManager::RaycastClosestShape(D3DXVECTOR3 start, D3DXVECTOR3 dir)
+{
+	NxRay worldRay;
+
+	worldRay.orig = MgrPhysX->D3DVecToNxVec(start);
+	worldRay.dir = MgrPhysX->D3DVecToNxVec(dir);
+
+	NxRaycastHit raycastHit;
+	MgrPhysXScene->raycastClosestShape(worldRay, NX_ALL_SHAPES, raycastHit);// , 0xffffffff, NX_MAX_F32, 0xffffffff, NULL, NULL);
+
+	if (raycastHit.shape)
+	{
+		USERDATA* userData = (USERDATA*)raycastHit.shape->getActor().userData;
+		userData->RaycastClosestShape = NX_TRUE;
+		userData->RayHitPos = raycastHit.worldImpact;
+		MgrPhysXData->RaycastClosestShapePosition = raycastHit.worldImpact;
+	}
+
+}
+
+void cPhysXManager::RaycastAllShapes(D3DXVECTOR3 start, D3DXVECTOR3 dir)
+{
+	NxRay worldRay;
+
+	worldRay.orig = MgrPhysX->D3DVecToNxVec(start);
+	worldRay.dir = MgrPhysX->D3DVecToNxVec(dir);
+
+	RaycastCallBack raycastHit;
+	MgrPhysXScene->raycastAllShapes(worldRay, raycastHit, NX_ALL_SHAPES);
+}
+
+bool RaycastCallBack::onHit(const NxRaycastHit & hit)
+{
+	NxActor& actor = hit.shape->getActor();
+	if (actor.userData)
+	{
+		USERDATA* userData = (USERDATA*)actor.userData;
+		userData->RaycastAllShape = NX_TRUE;
+		userData->RayHitPos = hit.worldImpact;
+		MgrPhysXData->RaycastAllShapeHitCount++;
+
+	}
+	return true;
+}
+
+void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
+{
+	USERDATA* pUserData0 = NULL;
+	USERDATA* pUserData1 = NULL;
+	switch (_event)
+	{
+	case NX_NOTIFY_ON_START_TOUCH:
+	{
+		pUserData0 = (USERDATA*)pair.actors[0]->userData;
+		pUserData1 = (USERDATA*)pair.actors[1]->userData;
+
+		pUserData0->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
+		pUserData1->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
+
+		std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
+
+	}break;
+	case NX_NOTIFY_ON_END_TOUCH:
+	{
+		pUserData0 = (USERDATA*)pair.actors[0]->userData;
+		pUserData1 = (USERDATA*)pair.actors[1]->userData;
+
+		pUserData0->ContactPairFlag = 0;
+		pUserData1->ContactPairFlag = 0;
+
+		std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
+
+	}break;
+	}
+}
+
+void TriggerCallback::onTrigger(NxShape & triggerShape, NxShape & otherShape, NxTriggerFlag status)
+{
+
+	// other actor is a trigger too?
+	if ((NxI32)(otherShape.getActor().userData) < 0)
+		return;
+
+	NxActor& triggerActor = triggerShape.getActor();
+	NxI32 triggerNumber = -(NxI32)triggerActor.userData;
+	NxI32 triggerIndex = triggerNumber - 1;
+
+	std::cout << "onTrigger ";
+	if (status & NX_TRIGGER_ON_LEAVE)
+	{
+		std::cout << "NX_TRIGGER_ON_LEAVE";
+	}
+	if (status & NX_TRIGGER_ON_ENTER)
+	{
+		std::cout << "NX_TRIGGER_ON_ENTER";
+	}
+	if (status & NX_TRIGGER_ON_STAY)
+	{
+		std::cout << "NX_TRIGGER_ON_STAY";
+	}
+
+
+
+	std::cout << std::endl;
 }

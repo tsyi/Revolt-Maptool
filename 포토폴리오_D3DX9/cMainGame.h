@@ -1,96 +1,50 @@
 #pragma once
-#include "cMesh.h"
-#include "cPhysXManager.h"
-#include "cTransform.h"
-#include "cEvent.h"
-#include "cMap.h"
 
-class cMeshAnim;
-class cTransform;
 class cCamera;
+class cScene;
 class cGrid;
-class cMesh;
-
-class cExUnit;
-class cCharacter;
-//class cUIImage;
-class NxActor;
-struct _USERDATA;
+class cObject;
+class cStuff;
 
 #define MAINGAME cMainGame::GetInstance()
 
-
-class cMainGame : public cEvent
+class cMainGame
 {
 public:
 	SINGLETONE(cMainGame);
 private:
-	cMeshAnim* meshAnim;
 	cCamera* m_camera;
 
 	cGrid* m_grid0;
 	cGrid* m_grid1;
 	cGrid* m_grid2;
 
-	cMesh* mesh;
-	cTransform* tr;
-
-	cCharacter* m_Character;
-	cExUnit* m_ExUnit;
-
-//	cUIImage* m_pUIImage;
-
-
-	//평면
-	NxActor*	pPlaneActor;
-	USERDATA	pPlaneUserData;
-	std::string planeName;
-
-	//박스
-	ID3DXMesh* pMeshTest;
-	D3DXMATRIXA16 matMeshTest;
-	USERDATA pMeshTextUserData;
-	std::string TestName;
-
-	//주전자
-	ID3DXMesh* pMeshTeapot;
-	cTransform TeapotTr;
-	std::string TeapotName;
-	NxActor* pTeapotActor;
-	USERDATA pTeapotUserData;
-
-//	D3DLIGHT9 stLight;
+	cScene* m_pScene;
+	
+	// 임의 로만들어진 박스 오브젝트;
+	cStuff* pBoxObj_0;
+	cStuff* pBoxObj_1;
+	cStuff* pBoxObj_2;
+	cStuff* pBoxObj_3;
+	cStuff* pBoxObj_4;
+	cStuff* pBoxObj_5;
+	cStuff* pBoxObj_6;
+	cStuff* pBoxObj_7;
 
 
-	cMesh* pMeshMapTest;
-	std::string strMapName;
-
-	cMesh* pMeshCarTest;
-	std::string strCarName;
-	cTransform carTr;
-	NxActor* pCarActor;
-
-
-
-	//Rat
-	NxRay worldRay;
 
 public:
 	void Setup();
-	void SetupUI();
-	
+	void SetUI();
+	void SetLight();
+
 	void Destory();
 	void Update();
 	void Render();
 
-	
-
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 public:	//EVENT
-	virtual void OnClick(cUIButton* pSender, eEventTag eventTag);
-	virtual void OnCilck(void* pvoid);
-
 	void OnCreateObject(int eventID);
 };
 

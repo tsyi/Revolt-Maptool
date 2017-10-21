@@ -20,6 +20,7 @@ private:
 public:
 	void Setup();
 	void Destory();
+	void OverCheck();
 	void Update();
 	void Render();
 

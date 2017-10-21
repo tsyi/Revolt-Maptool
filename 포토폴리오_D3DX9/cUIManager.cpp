@@ -27,6 +27,17 @@ void cUIManager::Destory()
 	{
 		p->Destory();
 	}
+	m_vecUI.clear();
+	SAFE_RELEASE(m_pSprite);
+}
+
+void cUIManager::OverCheck()
+{
+	for each(auto p in m_vecUI)
+	{
+		p->OverCheck();
+	}
+//	MgrInput->SetHooking(false);
 }
 
 void cUIManager::Update()

@@ -23,10 +23,10 @@ void cCamera::Setup()
 
 	D3DXVECTOR3 vLookAtDir = D3DXVECTOR3(0, -1, 1);
 	D3DXVec3Normalize(&vLookAtDir, &vLookAtDir);
-	cTransform::SetQuaternionToVector(vLookAtDir, true, true);
+	cTransform::SetQuaternion(vLookAtDir);
 
 	GetClientRect(g_hWnd, &rc);
-	SetRect(&rc, 400, 0, APIWidth, APIHeight);
+	SetRect(&rc, 0, 0, APIWidth, APIHeight);
 
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f,
@@ -71,7 +71,7 @@ void cCamera::Update(D3DXVECTOR3 target)
 
 			if (isbreak) break;
 		}
-		cTransform::SetQuaternionToVector(cameraDir, true, true);
+		cTransform::SetQuaternion(cameraDir);
 	}
 	if (MgrInput->IsKeyOn(VK_UP))
 	{
@@ -116,7 +116,7 @@ void cCamera::Update(D3DXVECTOR3 target)
 	//	D3DXVECTOR3 movepos = D3DXVECTOR3(100, 0, 0);
 	D3DXMATRIXA16 matCamera;
 	D3DXMatrixIdentity(&matCamera);
-	D3DXMatrixLookAtLH(&matCamera, &(cTransform::GetPosition()), &m_target, &(cTransform::GetUpVec()));
+	D3DXMatrixLookAtLH(&matCamera, &(cTransform::GetPosition()), &m_target, &(D3DXVECTOR3(0,1,0)));
 
 	MgrD3DDevice->SetTransform(D3DTS_VIEW, &matCamera);
 }

@@ -4,10 +4,7 @@
 #include "cUIImage.h"
 #include "cUIObject.h"
 #include "cEvent.h"
-#include "cObjectManager.h"
 
-
-#include <functional>
 
 enum eButtonState
 {
@@ -32,10 +29,11 @@ protected:
 	Event OnClick;
 	SYNTHESIZE(int, m_eventId, EventID);
 
+	float pushTime;
 public:
 	cUIButton();
 	~cUIButton();
-	void SetOnClick(Event function);
+	void SetEvent_OnCilck(Event function);
 
 	void RegistButtonUI(cUIText* pUiText, cUIImage* pUiImage, std::string text, std::string InagePach);
 	void Destory();

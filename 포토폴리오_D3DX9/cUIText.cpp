@@ -42,6 +42,11 @@ void cUIText::SetOption(eFontType pFontType, DWORD style, D3DCOLOR color)
 	pText->SetOption(pFontType, style, color);
 }
 
+void cUIText::SetFont(eFontType pFontType)
+{
+	pText->SetFont(pFontType);
+}
+
 void cUIText::Destory()
 {
 	cUIObject::Destory();
@@ -50,7 +55,7 @@ void cUIText::Destory()
 void cUIText::Update()
 {
 	if (!GetShow()) return;
-	if (IsMouseOver()) { MgrInput->SetHooking(true); }
+//	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 	cUIObject::Update();
 }
 
@@ -65,9 +70,7 @@ void cUIText::Render()
 	cUIObject::Render();
 }
 
-
-
-sUIText* cUIText::GetUIText()
+sUIText* cUIText::GetText()
 {
 	return pText;
 }

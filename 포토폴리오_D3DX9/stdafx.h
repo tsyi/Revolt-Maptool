@@ -58,24 +58,6 @@ extern HWND g_hWnd;
 #define BACKCOLOR D3DCOLOR_XRGB(47, 121, 112)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DefineFunction
 #define SAFE_RELEASE(p) { if(p) {p->Release() ; p = NULL;}}
 #define SAFE_DELETE(p) { if(p) {delete p ; p = NULL; }}
@@ -196,6 +178,12 @@ protected: varType varName ; \
 public : inline varType Get##funName(void) const { return varName ; } \
 public : inline void Set##funName(varType var) { varName = var ; }
 
+#define SYNTHESIZE_VIRTUAL( varType , varName , funName) \
+protected: varType varName; \
+public: inline virtual varType Get##funName(void) const { return varName; } \
+public : inline virtual void Set##funName(varType var) { varName = var ; }
+
+
 #define SYNTHESIZE_PASS_BY_REF( varType , varName , funName) \
 protected: varType varName ; \
 public : inline varType& Get##funName(void)  { return varName ; } \
@@ -240,6 +228,12 @@ enum ButtonState { None, Overlap, Down, Up };
 
 //Util
 #include "cStringUtil.h"
+
+//UI
+#include "cUIText.h"
+#include "cUIImage.h"
+#include "cUITextBox.h"
+#include "cUIListView.h"
 
 
 
