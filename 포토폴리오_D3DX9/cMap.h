@@ -1,8 +1,9 @@
 #pragma once
+#include "cObject.h"
 
 const std::string BaseFolder("Object/Maps");
 
-class cMap
+class cMap : public cObject
 {
 private:
 	cMesh* m_meshMap;

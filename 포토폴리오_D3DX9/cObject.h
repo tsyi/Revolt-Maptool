@@ -41,6 +41,7 @@ protected:
 	SYNTHESIZE_VIRTUAL(NxActor*, m_pActor, Actor);
 	SYNTHESIZE_VIRTUAL(USERDATA*, m_physxUserData, UserData);
 	SYNTHESIZE_VIRTUAL(bool, m_isActor, IsActor);
+	SYNTHESIZE_VIRTUAL(int, m_nAttribute, Attribute);
 public:
 	cObject();
 	~cObject();
