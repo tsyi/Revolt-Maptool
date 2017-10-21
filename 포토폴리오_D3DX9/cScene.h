@@ -6,6 +6,9 @@ class cScene
 	cObject* m_pMap;
 	std::vector<cObject*> m_vecObject;
 
+
+	//임시변수;
+	cObject* m_selectobj;
 public:
 	cScene();
 	~cScene();
@@ -13,6 +16,7 @@ public:
 	void Setup();
 	void Destory();
 	void Update();
+	void LastUpdate();
 	void Render();
 
 	//TEST
@@ -24,6 +28,6 @@ public:
 		m_vecObject.push_back(obj);
 	}
 
-
+	void OnChangeValue(int eventID);
 };
 

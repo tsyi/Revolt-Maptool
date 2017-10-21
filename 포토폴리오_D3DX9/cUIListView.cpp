@@ -27,6 +27,7 @@ void cUIListView::SetBackgroundUI(cUIImage * pImage)
 void cUIListView::AddButton(cUIButton * pButton)
 {
 	m_vecButton.push_back(pButton);
+	AddChild(pButton);
 	if (m_vecButton.size() == 1)
 	{
 		pButton->SetPosition(0, 0, 0);
@@ -37,18 +38,22 @@ void cUIListView::AddButton(cUIButton * pButton)
 		lastButton.y += m_vecButton.back()->GetSize().y;
 		pButton->SetPosition(lastButton);
 	}
-	AddChild(pButton);
 }
 
 void cUIListView::Destory()
 {
+	for each(cUIButton* p in m_vecButton)
+	{
+		p->Destory();
+	}
+	m_vecButton.clear();
 	cUIObject::Destory();
 }
 
 void cUIListView::Update()
 {
 	if (!GetShow()) return;
-	if (IsMouseOver()) { MgrInput->SetHooking(true); }
+//	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 
 	if (MgrInput->IsMouseWheel())
 	{

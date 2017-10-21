@@ -8,6 +8,7 @@ cUIObject::cUIObject()
 	, m_stSize(0, 0)
 	, m_tag(E_UI_NONE)
 	, m_isShow(true)
+	, IsHookingCheck(true)
 {
 	D3DXMatrixIdentity(&m_matWorld);
 }

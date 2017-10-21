@@ -47,6 +47,11 @@ BOOL cPhysXManager::InitNxPhysX(DEBUG_RENDERER** pDebugRenderer)
 		return S_FALSE;
 	}
 
+	m_physXUserData = NULL;
+	PHYSXDATA*  newPhysXUserData = new PHYSXDATA;
+	newPhysXUserData->Init();
+	SetPhysXData(newPhysXUserData);
+
 	return S_OK;
 }
 
@@ -56,6 +61,12 @@ void cPhysXManager::Destory()
 	{
 		if (m_pNxScene != NULL)
 		{
+			NxU32 actorCount = m_pNxScene->getNbActors();
+			for (NxU32 i = 0; i < actorCount ; i++)
+			{
+				NxActor* p = m_pNxScene->getActors()[i];
+				m_pNxScene->releaseActor(*p);
+			}
 			m_pNxPhysicsSDK->releaseScene(*m_pNxScene);
 			m_pNxScene = NULL;
 		}
@@ -151,7 +162,7 @@ NxBoxShapeDesc cPhysXManager::CreateBoxShape(int materialIndex, NxVec3 boxSize)
 	NxBoxShapeDesc boxDesc;	boxDesc.setToDefault();
 	boxDesc.materialIndex = materialIndex;
 	boxDesc.dimensions = boxSize * 0.5f;
-	
+
 
 
 	return boxDesc;
@@ -177,6 +188,7 @@ void cPhysXManager::RaycastClosestShape(D3DXVECTOR3 start, D3DXVECTOR3 dir)
 		USERDATA* userData = (USERDATA*)raycastHit.shape->getActor().userData;
 		userData->RaycastClosestShape = NX_TRUE;
 		userData->RayHitPos = raycastHit.worldImpact;
+		MgrPhysXData->RaycastClosestShapePosition = raycastHit.worldImpact;
 	}
 
 }
@@ -190,4 +202,49 @@ void cPhysXManager::RaycastAllShapes(D3DXVECTOR3 start, D3DXVECTOR3 dir)
 
 	RaycastCallBack raycastHit;
 	MgrPhysXScene->raycastAllShapes(worldRay, raycastHit, NX_ALL_SHAPES);
+}
+
+bool RaycastCallBack::onHit(const NxRaycastHit & hit)
+{
+	NxActor& actor = hit.shape->getActor();
+	if (actor.userData)
+	{
+		USERDATA* userData = (USERDATA*)actor.userData;
+		userData->RaycastAllShape = NX_TRUE;
+		userData->RayHitPos = hit.worldImpact;
+		MgrPhysXData->RaycastAllShapeHitCount++;
+
+	}
+	return true;
+}
+
+void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
+{
+	USERDATA* pUserData0 = NULL;
+	USERDATA* pUserData1 = NULL;
+	switch (_event)
+	{
+	case NX_NOTIFY_ON_START_TOUCH:
+	{
+		pUserData0 = (USERDATA*)pair.actors[0]->userData;
+		pUserData1 = (USERDATA*)pair.actors[1]->userData;
+
+		pUserData0->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
+		pUserData1->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
+
+		std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
+
+	}break;
+	case NX_NOTIFY_ON_END_TOUCH:
+	{
+		pUserData0 = (USERDATA*)pair.actors[0]->userData;
+		pUserData1 = (USERDATA*)pair.actors[1]->userData;
+
+		pUserData0->ContactPairFlag = 0;
+		pUserData1->ContactPairFlag = 0;
+
+		std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
+
+	}break;
+	}
 }

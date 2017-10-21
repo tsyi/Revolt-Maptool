@@ -25,14 +25,13 @@ void cUIImage::SetTexture(char * szFullPath)
 
 void cUIImage::Destory()
 {
-	SAFE_RELEASE(m_pTexture);
+	m_pTexture = NULL;
 	cUIObject::Destory();
 }
 
 void cUIImage::Update()
 {
 	if (!GetShow()) return;
-	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 	if (m_pTexture)
 	{
 

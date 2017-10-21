@@ -51,6 +51,10 @@ struct sUIText
 		MgrFont->GetFont(fontType)->DrawTextA(NULL, text.c_str(), strlen(text.c_str()),
 			&rc, style, color);
 	}
+
+	std::string GetString() { return text; }
+	float GetFloat() { return cStringUtil::ToFloat(text); }
+	int GetInt() { return  cStringUtil::ToInt(text); }
 };
 
 class cUIText : public cUIObject
@@ -75,6 +79,6 @@ public:
 
 	// int(-1) -> 해당 변수는 변경하지 않음 
 
-	sUIText* GetUIText();
+	sUIText* GetText();
 };
 

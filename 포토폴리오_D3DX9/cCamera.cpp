@@ -116,7 +116,7 @@ void cCamera::Update(D3DXVECTOR3 target)
 	//	D3DXVECTOR3 movepos = D3DXVECTOR3(100, 0, 0);
 	D3DXMATRIXA16 matCamera;
 	D3DXMatrixIdentity(&matCamera);
-	D3DXMatrixLookAtLH(&matCamera, &(cTransform::GetPosition()), &m_target, &(cTransform::GetUpVec()));
+	D3DXMatrixLookAtLH(&matCamera, &(cTransform::GetPosition()), &m_target, &(D3DXVECTOR3(0,1,0)));
 
 	MgrD3DDevice->SetTransform(D3DTS_VIEW, &matCamera);
 }

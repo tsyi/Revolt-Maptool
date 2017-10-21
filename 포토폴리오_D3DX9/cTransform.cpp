@@ -71,10 +71,6 @@ void cTransform::Render()
 	}
 }
 
-D3DXVECTOR3 cTransform::GetDirection()
-{
-	return front;
-}
 
 D3DXVECTOR3 cTransform::GetFrontVec()
 {
@@ -114,36 +110,54 @@ void cTransform::SetNxVec3(NxVec3 NxPos)
 	m_position.x = NxPos.x; m_position.y = NxPos.y; m_position.z = NxPos.z;
 }
 
-NxVec3 cTransform::GetNxVec3()
+
+
+NxVec3 cTransform::DxVec3ToNxVec3(D3DXVECTOR3 dxVec3)
 {
-	NxVec3 vec;
-	vec.x = GetPosition().x;
-	vec.y = GetPosition().y;
-	vec.z = GetPosition().z;
-	return vec;
+	return NxVec3(dxVec3.x, dxVec3.y, dxVec3.z);
 }
 
-NxF32 * cTransform::GetNxF32()
+NxF32 * cTransform::DxMatToNxF32(D3DXMATRIX dxMat)
 {
 	NxF32 mtl[] = { 1,0,0,0,1,0,0,0,1 };
-	D3DXMATRIXA16 mat = GetMatrix(false, true, true);
 
-	mtl[0] = mat._11;
-	mtl[1] = mat._12;
-	mtl[2] = mat._13;
-	mtl[3] = mat._21;
-	mtl[4] = mat._22;
-	mtl[5] = mat._23;
-	mtl[6] = mat._31;
-	mtl[7] = mat._32;
-	mtl[8] = mat._33;
+	mtl[0] = dxMat._11;
+	mtl[1] = dxMat._12;
+	mtl[2] = dxMat._13;
+	mtl[3] = dxMat._21;
+	mtl[4] = dxMat._22;
+	mtl[5] = dxMat._23;
+	mtl[6] = dxMat._31;
+	mtl[7] = dxMat._32;
+	mtl[8] = dxMat._33;
 
 	return mtl;
 }
 
-void cTransform::ChangeMatrix()
+D3DXVECTOR3 cTransform::NxVec3ToDxVec3(NxVec3 nxVec3)
 {
+	return D3DXVECTOR3(nxVec3.x, nxVec3.y, nxVec3.z);
 }
+
+D3DXMATRIX cTransform::NxF32ToDxMat(NxF32* nxF32)
+{
+	D3DXMATRIX mat;
+	D3DXMatrixIdentity(&mat);
+
+	mat._11 = nxF32[0];
+	mat._12 = nxF32[1];
+	mat._13 = nxF32[2];
+	mat._21 = nxF32[3];
+	mat._22 = nxF32[4];
+	mat._23 = nxF32[5];
+	mat._31 = nxF32[6];
+	mat._32 = nxF32[7];
+	mat._33 = nxF32[8];
+
+	return mat;
+}
+
+
 
 void cTransform::ArrowVectorSetting()
 {
@@ -157,6 +171,9 @@ void cTransform::ArrowVectorSetting()
 	D3DXVec3Normalize(&right, &right);
 	D3DXVec3Normalize(&up, &up);
 
-	SetDirection(front);
+	D3DXVECTOR3 dir = GetDirection();
+	float dirL = D3DXVec3Length(&dir);
+	D3DXVec3TransformNormal(&dir, &D3DXVECTOR3(0, 0, dirL), &matR);
+	SetDirection(dir);
 }
 

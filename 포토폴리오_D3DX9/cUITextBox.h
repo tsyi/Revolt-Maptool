@@ -2,6 +2,8 @@
 #include "cUIText.h"
 #include "cUIImage.h"
 #include "cUIObject.h"
+#include "cEvent.h"
+
 
 enum eTextBoxState
 {
@@ -11,19 +13,25 @@ enum eTextBoxState
 
 class cUITextBox : public cUIObject
 {
+	typedef std::function<void(int)> Event;
 protected:
 	cUIText* m_pUiText;
 	cUIImage* m_pUiImage;
-	
-	eTextBoxState m_state;
+
+	SYNTHESIZE(eTextBoxState, m_state, State);
+
+	SYNTHESIZE(Event, onEnter, OnEnter);
+	Event OnCancle;
+	SYNTHESIZE(int, m_eventId, EventID);
 
 	float pushTime;
 public:
 
 	cUITextBox();
 	~cUITextBox();
+	void SetEvent_OnEnter(Event function);
 
-	void RegistTextBoxUI(cUIText* pUiText, cUIImage* pUiImage,std::string text, std::string InagePach);
+	void RegistTextBoxUI(cUIText* pUiText, cUIImage* pUiImage, std::string text, std::string InagePach);
 	void Destory();
 	void Update();
 	void Render();

@@ -14,7 +14,7 @@ cUIButton::~cUIButton()
 {
 }
 
-void cUIButton::SetOnClick(Event function)
+void cUIButton::SetEvent_OnCilck(Event function)
 {
 	OnClick = std::move(function);
 }
@@ -51,7 +51,7 @@ void cUIButton::Destory()
 void cUIButton::Update()
 {
 	if (!GetShow()) return;
-	if (IsMouseOver()) { MgrInput->SetHooking(true); }
+//	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 
 	switch (m_state)
 	{

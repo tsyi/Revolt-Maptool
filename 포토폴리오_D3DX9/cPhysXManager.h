@@ -4,6 +4,24 @@
 #include "Stream.h"
 
 
+#define MgrPhysX		cPhysXManager::GetInstance()
+#define MgrPhysXScene	cPhysXManager::GetInstance()->GetPhysXScene()
+#define MgrPhysXSDK		cPhysXManager::GetInstance()->GetPhysXSDK()
+#define MgrPhysXData	cPhysXManager::GetInstance()->GetPhysXData()
+
+class DEBUG_RENDERER;
+
+struct PHYSXDATA
+{
+	int RaycastAllShapeHitCount;
+	NxVec3	RaycastClosestShapePosition;
+	PHYSXDATA() { Init(); }
+	void Init()
+	{
+		RaycastAllShapeHitCount = 0;
+		RaycastClosestShapePosition = NxVec3(0, 0, 0);
+	}
+};
 struct USERDATA
 {
 	NxU32 ContactPairFlag;
@@ -23,51 +41,13 @@ struct USERDATA
 class ContactCallBack : public NxUserContactReport
 {
 	//충돌확인
-	void onContactNotify(NxContactPair& pair, NxU32 _event)
-	{
-		USERDATA* pUserData0 = NULL;
-		USERDATA* pUserData1 = NULL;
-		switch (_event)
-		{
-		case NX_NOTIFY_ON_START_TOUCH:
-		{
-			pUserData0 = (USERDATA*)pair.actors[0]->userData;
-			pUserData1 = (USERDATA*)pair.actors[1]->userData;
-
-			pUserData0->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
-			pUserData1->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
-
-			std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
-
-		}break;
-		case NX_NOTIFY_ON_END_TOUCH:
-		{
-			pUserData0 = (USERDATA*)pair.actors[0]->userData;
-			pUserData1 = (USERDATA*)pair.actors[1]->userData;
-
-			pUserData0->ContactPairFlag = 0;
-			pUserData1->ContactPairFlag = 0;
-
-			std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
-
-		}break;
-		}
-	}
+	void onContactNotify(NxContactPair& pair, NxU32 _event);
 };
 
 class RaycastCallBack : public NxUserRaycastReport
 {
-	virtual bool onHit(const NxRaycastHit& hit)
-	{
-		NxActor& actor = hit.shape->getActor();
-		if (actor.userData)
-		{
-			USERDATA* userData = (USERDATA*)actor.userData;
-			userData->RaycastAllShape = NX_TRUE;
-			userData->RayHitPos = hit.worldImpact;
-		}
-		return true;
-	}
+	//Ray 확인
+	virtual bool onHit(const NxRaycastHit& hit);
 };
 
 enum E_MATERIAL
@@ -87,19 +67,15 @@ enum eShapeTag
 	E_SHAPE_PLANE,
 	E_SHAPE_TRIANGLE,
 };
-class DEBUG_RENDERER;
-
-#define MgrPhysX cPhysXManager::GetInstance()
-#define MgrPhysXScene cPhysXManager::GetInstance()->GetPhysXScene()
-#define MgrPhysXSDK   cPhysXManager::GetInstance()->GetPhysXSDK()
-
 
 class cPhysXManager
 {
 public:
 	SINGLETONE(cPhysXManager);
 
+	SYNTHESIZE(PHYSXDATA*, m_physXUserData, PhysXData);
 private:
+
 	NxPhysicsSDK*	m_pNxPhysicsSDK;
 	NxScene*		m_pNxScene;
 
@@ -108,8 +84,9 @@ public:
 	NxPhysicsSDK* GetPhysXSDK() { return m_pNxPhysicsSDK; }
 	NxScene* GetPhysXScene() { return m_pNxScene; }
 	BOOL InitNxPhysX(DEBUG_RENDERER** pDebugRenderer);
-	void Destory();
 
+	void Update();
+	void Destory();
 
 	NxTriangleMeshShapeDesc CreateTringleMesh(ID3DXMesh* pMesh, D3DXMATRIXA16* matS = NULL);
 	NxBoxShapeDesc CreateBoxShape(int materialIndex, NxVec3 boxSize);
@@ -117,7 +94,6 @@ public:
 
 
 
-	void Update();
 
 
 	NxVec3 D3DVecToNxVec(D3DXVECTOR3& d3d)
@@ -128,21 +104,17 @@ public:
 		vec.z = d3d.z;
 		return vec;
 	}
-	NxF32* D3DMatToNxMat(D3DMATRIX d3d)
+	void D3DMatToNxMat(NxF32* nx, D3DMATRIX& dx)
 	{
-		NxF32* mtl = new NxF32;
-
-		mtl[0] = d3d._11;
-		mtl[1] = d3d._12;
-		mtl[2] = d3d._13;
-		mtl[3] = d3d._21;
-		mtl[4] = d3d._22;
-		mtl[5] = d3d._23;
-		mtl[6] = d3d._31;
-		mtl[7] = d3d._32;
-		mtl[8] = d3d._33;
-
-		return mtl;
+		nx[0] = dx._11;
+		nx[1] = dx._12;
+		nx[2] = dx._13;
+		nx[3] = dx._21;
+		nx[4] = dx._22;
+		nx[5] = dx._23;
+		nx[6] = dx._31;
+		nx[7] = dx._32;
+		nx[8] = dx._33;
 	}
 
 	void RaycastClosestShape(D3DXVECTOR3 start, D3DXVECTOR3 dir);
@@ -252,8 +224,19 @@ public:
 		}
 
 		actorDesc.globalPose.t = NxVec3(trMatrix._41, trMatrix._42, trMatrix._43);
-		//NxF32* mtl = D3DMatToNxMat(trMatrix);
-		actorDesc.globalPose.M.setColumnMajor(D3DMatToNxMat(trMatrix));
+		NxF32 mtl[9];
+		mtl[0] = trMatrix._11;
+		mtl[1] = trMatrix._12;
+		mtl[2] = trMatrix._13;
+		mtl[3] = trMatrix._21;
+		mtl[4] = trMatrix._22;
+		mtl[5] = trMatrix._23;
+		mtl[6] = trMatrix._31;
+		mtl[7] = trMatrix._32;
+		mtl[8] = trMatrix._33;
+		actorDesc.globalPose.M.setColumnMajor(mtl);
+
+//		mtl = NULL;
 
 		if (pUserData)
 		{

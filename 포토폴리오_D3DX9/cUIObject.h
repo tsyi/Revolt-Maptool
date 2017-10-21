@@ -27,6 +27,7 @@ enum eUITag
 
 };
 
+#include <functional>
 
 class cUIButton;
 
@@ -49,7 +50,7 @@ protected:
 
 //	cUIObject* pParent;
 //	std::vector<cUIObject*> vecChild;
-
+	bool IsHookingCheck;
 public:
 	virtual void SetSize(float x, float y);
 	virtual void SetPosition(float x, float y, float z = 0);
@@ -72,7 +73,22 @@ public:
 
 		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}
-
+	virtual void OverCheck()
+	{
+		if (IsHookingCheck)
+		{
+			if (IsMouseOver())
+			{
+				MgrInput->SetHooking(true);
+				return;
+			}
+		}
+		for each(auto c in m_vecChild)
+		{
+			c->OverCheck();
+			if (MgrInput->GetHooking()) return;
+		}
+	}
 
 	virtual void AddButton(cUIButton* pButton) {}
 };

@@ -45,8 +45,6 @@ public:
 		DebugTr = Tr->DebugTr;
 	}
 
-	//방향백터를 가져옵니다,
-	D3DXVECTOR3 GetDirection();
 
 
 	//현재 백터의 정면을 향하는 백터
@@ -83,6 +81,7 @@ public:
 	{
 		//자세한 과정은 VectorToQuaternion 함수 참고
 		// !! Roll 값은 0으로 초기화된다 !!
+		m_direction = vecDir;
 		VectorToQuaternion(vecDir, true, true);
 		ArrowVectorSetting();
 	}
@@ -100,13 +99,15 @@ public:
 
 
 	//PhsyX 관련 변환
-	NxVec3 GetNxVec3();
+	NxVec3 DxVec3ToNxVec3(D3DXVECTOR3 dxVec3);
+	NxF32* DxMatToNxF32(D3DXMATRIX dxMat);
+	D3DXVECTOR3 NxVec3ToDxVec3(NxVec3 nxVec3);
+	D3DXMATRIX NxF32ToDxMat(NxF32* nxF32);
+
 	void SetNxVec3(NxVec3 NxPos);
-	NxF32* GetNxF32();
 	void SetNxF32(NxF32* mtl);
 	//	void GetScreenPos();
 
-	void ChangeMatrix();
 	void ArrowVectorSetting();
 
 	// VectorToQuaternion(----);
@@ -123,10 +124,11 @@ public:
 		D3DXQUATERNION quaternion;
 		D3DXQuaternionIdentity(&quaternion);
 
+
 		D3DXVECTOR3 vec_y(0, 0, 0);
 		D3DXVECTOR3 vec_p(0, 0, 0);
-		vec_y = vec;
-		vec_p = vec;
+		D3DXVec3Normalize(&vec_y, &vec);
+		D3DXVec3Normalize(&vec_p, &vec);
 
 		float yam = 0;
 		float pitch = 0;
