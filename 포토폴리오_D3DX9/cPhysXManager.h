@@ -261,9 +261,35 @@ public:
 		return MgrPhysXScene->createActor(actorDesc);
 	}
 
+
+	//CreateActor
+	//1
+	//NxShapeType				sizeValue
+	//NX_SHAPE_SPHERE		:	NxVec3(radius, 0, 0);
+	//NX_SHAPE_BOX			:	NxVec3(width/2, height/2, deep/2);
+	//NX_SHAPE_CAPSULE		:	NxVec3(radius, height, 0);
+	//NX_SHAPE_WHEEL		:	NxVec3(radius, 0, 0);
+	//2
+	//position 위치
+	//3
+	//충돌 크기
+	//4
+	//유저 데이터
+	//5 
+	//Kinematic -> 다른 객체에게 물리 효과를 받지 않음
+	//IsTrigger -> 트리거 충돌을 발생
+	//
+	//        (T,T)    (T,F)    (F,T)    (F,F)
+	// (F,F)   O/O      0/N      O/O      O/N
+	// (F,T)    /        /        /        /
+	// (T,F)    /        /        0        X
+	// (T,T)    /        /        /        O
+	//
+	//
 	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxVec3 sizeValue, USERDATA* pUserData,
-		bool isKinematic = false, bool IsTrigger = false, bool isStatic = false , bool isGravaty = true)
+		bool IsTrigger = false,  bool isStatic = false, bool isGravaty = true)
 	{
+		bool isKinematic = false;
 		// Our trigger is a cube
 		NxBodyDesc triggerBody;
 		triggerBody.setToDefault();
@@ -287,7 +313,8 @@ public:
 		case NX_SHAPE_BOX: {
 			NxBoxShapeDesc desc;
 			desc.setToDefault();
-			desc.dimensions = sizeValue;
+			desc.dimensions.set(sizeValue);
+			desc.materialIndex = 0;
 			shapeDesc = &desc;
 
 			if (isKinematic)
@@ -295,7 +322,6 @@ public:
 				NxBoxShapeDesc dummyShape;
 				dummyShape.setToDefault();
 				dummyShape.dimensions.set(sizeValue);
-				dummyShape.group = 1;
 				ActorDesc.shapes.pushBack(&dummyShape);
 			}
 			break;
@@ -338,42 +364,47 @@ public:
 		}
 		default:break;
 		}
-		if (IsTrigger) shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
-
 		if (!isGravaty) triggerBody.flags |= NX_BF_DISABLE_GRAVITY;
-		if (isKinematic)
+	
+		if (isKinematic&& IsTrigger)
+		{
+			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
+			triggerBody.flags |= NX_BF_KINEMATIC;
+
+			ActorDesc.body = &triggerBody;
+		//	ActorDesc.body = NULL;
+		}
+		if (isKinematic && !IsTrigger)
 		{
 			triggerBody.flags |= NX_BF_KINEMATIC;
-			triggerBody.mass = 1;
 
-			if (isStatic) ActorDesc.body = NULL;
-			else ActorDesc.body = &triggerBody;
+			ActorDesc.body = &triggerBody;
 		}
-		else
+		if (!isKinematic&& IsTrigger)
 		{
-			triggerBody.mass = 1;
-			if (isStatic) ActorDesc.body = NULL;
-			else
-			{
-				triggerBody.angularDamping = 0.5f;
-				if (!IsTrigger)
-					ActorDesc.body = &triggerBody;
-			}
+			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
+
+		//	ActorDesc.body = NULL;
+		}
+		if (!isKinematic && !IsTrigger)
+		{
+			ActorDesc.body = &triggerBody;
 		}
 
+		if (isStatic) ActorDesc.body = NULL;
 
+
+		ActorDesc.density = 10.f;
 		ActorDesc.shapes.pushBack(shapeDesc);
 		ActorDesc.globalPose.t = position;
 
 		ActorDesc.userData = (pUserData);
-		NxActor* actor = m_pNxScene->createActor(ActorDesc);	// This is just a quick-and-dirty way to identify the trigger for rendering
+
+		NxActor* actor = m_pNxScene->createActor(ActorDesc);	
 		if (actor == NULL)
 		{
-			std::cout << "  NULL !";
+			std::cout << "NULL";
 		}
-
-		m_pNxScene->setUserTriggerReport(new TriggerCallback);
-
 		return actor;
 	}
 };

@@ -41,6 +41,9 @@ protected:
 	SYNTHESIZE_VIRTUAL(NxActor*, m_pActor, Actor);
 	SYNTHESIZE_VIRTUAL(USERDATA*, m_physxUserData, UserData);
 	SYNTHESIZE_VIRTUAL(bool, m_isActor, IsActor);
+
+
+protected:
 public:
 	cObject();
 	~cObject();
@@ -52,6 +55,11 @@ public:
 	virtual void Render();
 	virtual void SetMeshBox() {}
 
+
+	virtual void SetActor()
+	{
+//		MgrPhysX->CreateActor()
+	}
 //	virtual USERDATA* GetUserData();
 //	virtual void SetMapUuerData(USERDATA* pMapData);
 //	virtual void SetActor(NxActor* pActor);
