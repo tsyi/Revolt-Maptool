@@ -30,9 +30,13 @@ struct sUIText
 	void SetText(std::string _text) { text = _text; }
 	void SetOption(eFontType pFontType, DWORD style, D3DCOLOR color) 
 	{
-		this->fontType = pFontType,
-			this->style = style;
+		this->fontType = pFontType;
+		this->style = style;
 		this->color = color;
+	}
+	void SetFont(eFontType pFontType)
+	{
+		this->fontType = pFontType;
 	}
 	void SetUIRect(RECT rc)
 	{
@@ -64,6 +68,7 @@ public:
 	void SetText(std::string text);
 	//style : DT_CENTER | DT_VCENTER | ....
 	void SetOption(eFontType pFontType, DWORD style, D3DCOLOR color);
+	void SetFont(eFontType pFontType);
 	void Destory();
 	void Update();
 	void Render();

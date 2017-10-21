@@ -25,6 +25,12 @@ public:
 	virtual void Render();
 
 	void SetScale(float x, float y) { m_scale.x = x; m_scale.y = y; }
+	void SetScaleSize(float x, float y)
+	{
+		D3DXVECTOR2 imageSize = GetSize();
+		imageSize = D3DXVECTOR2(x / imageSize.x, y / imageSize.y);
+		SetScale(imageSize);
+	}
 
 	D3DXVECTOR2 GetScaleSize() { return D3DXVECTOR2(m_stSize.x*m_scale.x, m_stSize.y*m_scale.y); }
 	void SetBassColor(D3DCOLOR c) { bassColor = c; }

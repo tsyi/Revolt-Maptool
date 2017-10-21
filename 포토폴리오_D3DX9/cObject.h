@@ -1,6 +1,7 @@
 #pragma once
 #include "cTransform.h"
-
+#include "cPhysXManager.h"
+#include "cMesh.h"
 
 enum eOBJECT_TAG
 {
@@ -13,20 +14,45 @@ enum eOBJECT_TAG
 	E_OBJECT_END,
 };
 
+enum eOBJECT_STATE
+{
+	E_OBJECT_STATE_NONE,
+	E_OBJECT_STATE_SELECT,
+	E_OBJECT_STATE_CANSLE,
+};
+
+
+
+
 class NxActor;
 class cMesh;
 
 class cObject : public cTransform
 {
-protected :
-	eOBJECT_TAG m_objTag;
+	//오직 멥툴에서만 필요.
+protected:
+	eOBJECT_STATE m_state;
+	USERDATA* m_pMapData;
+	float y;
 
-	cObject();
-	~cObject();
+protected:
+	eOBJECT_TAG m_objTag;
 	cMesh* m_pMesh;
+
 	NxActor* m_pActor;
+	USERDATA* m_physxUserData;
 	bool m_isActor;
 public:
+	cObject();
+	~cObject();
 
+	virtual void Setup();
+	virtual void Update();
+	virtual void Render();
+	virtual void SetMeshBox() {}
+
+	virtual USERDATA* GetUserData();
+	virtual void SetMapUuerData(USERDATA* pMapData);
+	virtual void SetActor(NxActor* pActor);
 };
 

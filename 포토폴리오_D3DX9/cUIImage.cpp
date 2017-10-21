@@ -60,6 +60,8 @@ void cUIImage::Render()
 		m_matWorld._43 = _z;
 		MgrUI->GetSprite()->SetTransform(&m_matWorld);
 
+	//	MgrUI->GetSprite()->
+
 		float a_x = m_anchor.x * GetSize().x;
 		float a_y = m_anchor.y * GetSize().y;
 

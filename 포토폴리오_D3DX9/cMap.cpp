@@ -13,15 +13,15 @@ cMap::~cMap()
 
 void cMap::Destroy()
 {
-	for each(cMesh* mesh in m_vecObj)
-	{
-		mesh->Destory();
-	}
-	m_vecObj.clear();
-
-	m_mapCamera.clear();
-	m_mapCheckBox.clear();
-	m_mapFollowPoint.clear();
+//	for each(cMesh* mesh in m_vecObj)
+//	{
+//		mesh->Destory();
+//	}
+//	m_vecObj.clear();
+//
+//	m_mapCamera.clear();
+//	m_mapCheckBox.clear();
+//	m_mapFollowPoint.clear();
 }
 
 HRESULT cMap::MapLoad(std::string rvlName)
@@ -78,7 +78,7 @@ HRESULT cMap::MapLoad(std::string rvlName)
 	//				{
 	//					float x, y, z;
 	//					sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
-	//					mesh->SetQuaternionToVector(D3DXVECTOR3(x, y, z), true, true);
+	//					mesh->VectorToQuaternion(D3DXVECTOR3(x, y, z), true, true);
 	//				}
 	//				else if (szTemp[0] == 'N')
 	//				{
@@ -159,7 +159,7 @@ HRESULT cMap::MapLoad(std::string rvlName)
 	//				{
 	//					float x, y, z;
 	//					sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
-	//					box->SetQuaternionToVector(D3DXVECTOR3(x, y, z),true,true);
+	//					box->VectorToQuaternion(D3DXVECTOR3(x, y, z),true,true);
 	//				}
 	//				else if (szTemp[0] == '#') //End
 	//				{

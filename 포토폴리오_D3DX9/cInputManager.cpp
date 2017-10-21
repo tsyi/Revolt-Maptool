@@ -46,6 +46,7 @@ void cInputManager::KeyUpdate()
 void cInputManager::MouseUpdate()
 {
 	bool checkMouseMove = CheckMouseMove();
+
 	for (int i = 0; i < MOUSE_COUNT; i++)
 	{
 		int vKey = 0;

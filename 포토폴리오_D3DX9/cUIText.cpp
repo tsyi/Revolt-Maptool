@@ -42,6 +42,11 @@ void cUIText::SetOption(eFontType pFontType, DWORD style, D3DCOLOR color)
 	pText->SetOption(pFontType, style, color);
 }
 
+void cUIText::SetFont(eFontType pFontType)
+{
+	pText->SetFont(pFontType);
+}
+
 void cUIText::Destory()
 {
 	cUIObject::Destory();

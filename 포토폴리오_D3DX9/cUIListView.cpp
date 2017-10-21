@@ -52,15 +52,19 @@ void cUIListView::Update()
 
 	if (MgrInput->IsMouseWheel())
 	{
-		if (IsMouseOver()) m_Vvalue += MgrInput->GetMouseWheelDelta() *10;
+		if (IsMouseOver()) m_Vvalue += MgrInput->GetMouseWheelDelta() * 10;
 	}
 
 	float heightsize =0;
+
 	for each(cUIButton* pButton in m_vecButton)
 	{
-		heightsize += pButton->GetSize().y;
 		pButton->SetPosition(0, heightsize + m_Vvalue, 0);
+		heightsize += pButton->GetSize().y;
+
+	//	Get
 	}
+
 	cUIObject::Update();
 }
 

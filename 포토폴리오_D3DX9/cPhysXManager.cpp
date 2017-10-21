@@ -146,107 +146,48 @@ NxTriangleMeshShapeDesc cPhysXManager::CreateTringleMesh(ID3DXMesh* pMesh, D3DXM
 	return meshShapeDesc;
 }
 
+NxBoxShapeDesc cPhysXManager::CreateBoxShape(int materialIndex, NxVec3 boxSize)
+{
+	NxBoxShapeDesc boxDesc;	boxDesc.setToDefault();
+	boxDesc.materialIndex = materialIndex;
+	boxDesc.dimensions = boxSize * 0.5f;
+	
+
+
+	return boxDesc;
+}
+
 void cPhysXManager::Update()
 {
-//
-//	//	MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
-//	//	MgrPhysXScene->flushStream();
-//	//	MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
-//
-//
-//	NxU32 ContactPairFlag = 0;
-//	NxU32 actorCount = MgrPhysXScene->getNbActors();
-//	for (NxU32 i = 0; i < actorCount; i++)
-//	{
-//		NxActor* pActor = MgrPhysXScene->getActors()[i];
-//
-//		pActor->setName((char*)this);
-//		
-//		if (pActor == NULL) continue;
-//		if (!ContactPairFlag)
-//		{
-//			USERDATA* UserData = (USERDATA*)pActor->userData;
-//
-//			if (UserData)
-//			{
-//				ContactPairFlag = UserData->ContactPairFlag;
-//				//	pActor->userData = 0;
-//			}
-//			//std::cout << ContactPairFlag << std::endl;
-//		}
-//
-//		if (pActor->getName() != NULL)
-//		{
-//			if (pActor->getName() == TestName)
-//			{
-//				D3DXMatrixIdentity(&matMeshTest);
-//
-//				matMeshTest._41 = pActor->getGlobalPose().t.x;
-//				matMeshTest._42 = pActor->getGlobalPose().t.y;
-//				matMeshTest._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matMeshTest._11 = mtl[0];
-//				matMeshTest._12 = mtl[1];
-//				matMeshTest._13 = mtl[2];
-//				matMeshTest._21 = mtl[3];
-//				matMeshTest._22 = mtl[4];
-//				matMeshTest._23 = mtl[5];
-//				matMeshTest._31 = mtl[6];
-//				matMeshTest._32 = mtl[7];
-//				matMeshTest._33 = mtl[8];
-//			}
-//			if (pActor->getName() == TeapotName)
-//			{
-//				D3DXMATRIXA16 matWorld;
-//				D3DXMatrixIdentity(&matWorld);
-//
-//				matWorld._41 = pActor->getGlobalPose().t.x;
-//				matWorld._42 = pActor->getGlobalPose().t.y;
-//				matWorld._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matWorld._11 = mtl[0];
-//				matWorld._12 = mtl[1];
-//				matWorld._13 = mtl[2];
-//				matWorld._21 = mtl[3];
-//				matWorld._22 = mtl[4];
-//				matWorld._23 = mtl[5];
-//				matWorld._31 = mtl[6];
-//				matWorld._32 = mtl[7];
-//				matWorld._33 = mtl[8];
-//
-//				TeapotTr.SetQuaternion(matWorld);
-//				TeapotTr.SetPosition(matWorld);
-//			}
-//			if (pActor->getName() == strCarName)
-//			{
-//
-//				D3DXMATRIXA16 matWorld;
-//				D3DXMatrixIdentity(&matWorld);
-//
-//				matWorld._41 = pActor->getGlobalPose().t.x;
-//				matWorld._42 = pActor->getGlobalPose().t.y;
-//				matWorld._43 = pActor->getGlobalPose().t.z;
-//
-//				NxF32 mtl[3 * 3];
-//				pActor->getGlobalPose().M.getColumnMajor(mtl);
-//				matWorld._11 = mtl[0];
-//				matWorld._12 = mtl[1];
-//				matWorld._13 = mtl[2];
-//				matWorld._21 = mtl[3];
-//				matWorld._22 = mtl[4];
-//				matWorld._23 = mtl[5];
-//				matWorld._31 = mtl[6];
-//				matWorld._32 = mtl[7];
-//				matWorld._33 = mtl[8];
-//
-//
-//				carTr.SetQuaternion(matWorld);
-//				carTr.SetPosition(matWorld);
-//			}
-//		}
-//	}
+
+}
+
+void cPhysXManager::RaycastClosestShape(D3DXVECTOR3 start, D3DXVECTOR3 dir)
+{
+	NxRay worldRay;
+
+	worldRay.orig = MgrPhysX->D3DVecToNxVec(start);
+	worldRay.dir = MgrPhysX->D3DVecToNxVec(dir);
+
+	NxRaycastHit raycastHit;
+	MgrPhysXScene->raycastClosestShape(worldRay, NX_ALL_SHAPES, raycastHit);// , 0xffffffff, NX_MAX_F32, 0xffffffff, NULL, NULL);
+
+	if (raycastHit.shape)
+	{
+		USERDATA* userData = (USERDATA*)raycastHit.shape->getActor().userData;
+		userData->RaycastClosestShape = NX_TRUE;
+		userData->RayHitPos = raycastHit.worldImpact;
+	}
+
+}
+
+void cPhysXManager::RaycastAllShapes(D3DXVECTOR3 start, D3DXVECTOR3 dir)
+{
+	NxRay worldRay;
+
+	worldRay.orig = MgrPhysX->D3DVecToNxVec(start);
+	worldRay.dir = MgrPhysX->D3DVecToNxVec(dir);
+
+	RaycastCallBack raycastHit;
+	MgrPhysXScene->raycastAllShapes(worldRay, raycastHit, NX_ALL_SHAPES);
 }
