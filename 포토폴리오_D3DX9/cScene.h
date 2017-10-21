@@ -14,7 +14,8 @@ public:
 	{
 
 	}
-
+	HRESULT LoadScene(std::string FileName);
+	HRESULT SaveScene(std::string FileName);
 
 };
 

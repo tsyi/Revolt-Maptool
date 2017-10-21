@@ -55,6 +55,9 @@
     <Filter Include="PhysX">
       <UniqueIdentifier>{89eb7c56-a298-478f-9874-ca787df3c193}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Map">
+      <UniqueIdentifier>{4ddf1620-4018-428a-ba77-851b92f4b24d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -193,7 +196,7 @@
       <Filter>PhysX</Filter>
     </ClInclude>
     <ClInclude Include="cMap.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Object\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -300,7 +303,7 @@
       <Filter>PhysX</Filter>
     </ClCompile>
     <ClCompile Include="cMap.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Object\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
