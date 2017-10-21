@@ -270,7 +270,7 @@ public:
 	//NX_SHAPE_CAPSULE		:	NxVec3(radius, height, 0);
 	//NX_SHAPE_WHEEL		:	NxVec3(radius, 0, 0);
 	//2
-	//position 위치
+	//position 위치 , 회전
 	//3
 	//충돌 크기
 	//4
@@ -286,7 +286,7 @@ public:
 	// (T,T)    /        /        /        O
 	//
 	//
-	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxVec3 sizeValue, USERDATA* pUserData,
+	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxF32* mat, NxVec3 sizeValue, USERDATA* pUserData,
 		bool IsTrigger = false,  bool isStatic = false, bool isGravaty = true)
 	{
 		bool isKinematic = false;
@@ -382,7 +382,7 @@ public:
 		}
 		if (!isKinematic&& IsTrigger)
 		{
-			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
+			shapeDesc->shapeFlags = NX_TRIGGER_ENABLE;
 
 		//	ActorDesc.body = NULL;
 		}
@@ -397,6 +397,7 @@ public:
 		ActorDesc.density = 10.f;
 		ActorDesc.shapes.pushBack(shapeDesc);
 		ActorDesc.globalPose.t = position;
+		ActorDesc.globalPose.M.setColumnMajor(mat);
 
 		ActorDesc.userData = (pUserData);
 

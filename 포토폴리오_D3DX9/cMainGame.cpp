@@ -76,18 +76,21 @@ void cMainGame::Setup()
 	pBoxObj_2 = new cStuff;
 	pBoxObj_2->SetPosition(0, 0, 0);
 	pBoxObj_2->SetMeshBox();
+	NxF32 mat[9] = { 1,0,0,0,1,0,0,0,1 };
 	pBoxObj_2->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
-		NxVec3(-2, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_2->GetUserData(),
-		true,false,false));
+		NxVec3(-2, 0, 0), mat,
+		NxVec3(0.5, 0.5, 0.5), pBoxObj_2->GetUserData(),
+		true,false,true));
 	pBoxObj_2->GetActor()->addForce(NxVec3(0, 0, 100));
 
 	pBoxObj_3 = new cStuff;
 	pBoxObj_3->SetPosition(0, 0, 0);
 	pBoxObj_3->SetMeshBox();
 	pBoxObj_3->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
-		NxVec3(-0, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_3->GetUserData(),
-		false, false, false));
-	pBoxObj_3->GetActor()->addForce(NxVec3(0, 0, 100));
+		NxVec3(-0, 0, 0), mat,
+		NxVec3(0.5, 0.5, 0.5), pBoxObj_3->GetUserData(),
+		false, false, true));
+	pBoxObj_3->GetActor()->addForce(NxVec3(0, 0, 0));
 
 	NxShape* shape = *pBoxObj_3->GetActor()->getShapes();
 

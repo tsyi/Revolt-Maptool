@@ -19,15 +19,13 @@ public:
 	void LastUpdate();
 	void Render();
 
-	//TEST
-//	void LoadMap();
-//	void ChanageMap();
+	HRESULT LoadScene(std::string FileName);
+	HRESULT SaveScene(std::string FileName);
 
 	void PushObject(cObject* obj)
 	{
 		m_vecObject.push_back(obj);
 	}
-
 	void OnChangeValue(int eventID);
 };
 
