@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "cScene.h"
-#include <fstream>
 #include "cUIText.h"
 #include "cMap.h"
 #include "cLight.h"
 #include "cStuff.h"
+#include <fstream>
 #include <time.h>
 
 cScene::cScene()
