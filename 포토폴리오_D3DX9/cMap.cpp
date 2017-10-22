@@ -29,17 +29,17 @@ HRESULT cMap::MapLoad(std::string loadName)
 	std::string folder = "Object/Maps/" + std::string(loadName);
 	std::string objName = loadName + std::string(".obj");
 	std::string rvlName = loadName + std::string(".rvl");
-	GetMesh()->LoadMesh(folder, objName);
+	GetMeshData()->LoadMesh(folder, objName);
 
 	//맵 물리정보 로드
-	if (GetMesh()->m_pMesh)	//맵은 특별한 인자값을 주고 받지 않는다. (굳이 있다면 재질값 정도)
+	if (GetMeshData()->m_pMesh)	//맵은 특별한 인자값을 주고 받지 않는다. (굳이 있다면 재질값 정도)
 	{
 		NxActorDesc actorDesc;	actorDesc.setToDefault();
 		NxBodyDesc  bodyDesc;	bodyDesc.setToDefault();
 
 		bodyDesc.flags |= NX_BF_KINEMATIC;
 
-		NxTriangleMeshShapeDesc shapeDesc = MgrPhysX->CreateTringleMesh(GetMesh()->m_pMesh);
+		NxTriangleMeshShapeDesc shapeDesc = MgrPhysX->CreateTringleMesh(GetMeshData()->m_pMesh);
 		shapeDesc.materialIndex = 0; // 재질 : 0 (default)값
 		shapeDesc.localPose.t = NxVec3(0, 0, 0);
 
@@ -50,7 +50,7 @@ HRESULT cMap::MapLoad(std::string loadName)
 		actorDesc.globalPose.t = NxVec3(0, 0, 0);
 
 		MgrPhysXScene->createActor(actorDesc);
-		cObject::SetActor(NULL);
+		cObject::GetPhysXData()->m_pActor = NULL;
 		//맵의 물리 정보를 주고 받지 않기 때문에  SetActor(NULL) 이다.
 	}
 	return E_NOTIMPL;

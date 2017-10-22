@@ -10,6 +10,7 @@
 cScene::cScene()
 	: m_pMap(NULL)
 {
+	m_sceenName = "";
 }
 
 cScene::~cScene()
@@ -22,22 +23,27 @@ void cScene::LoadScene(std::string FileName)
 	{
 		//동일한 씬을 로드했을 경우 로드를 무시.
 		MessageBoxA(g_hWnd, "현재 열려있는 파일입니다.", "알림", MB_OK);
-		return; 
+		return;
 	}
-	else m_sceenName = FileName;
+	else
+	{
+		Destory();// 기존에 가지고 있던 정보 버리기
+	}
+
+	m_sceenName = FileName;
 	std::string fullpath = "Object/Scene/" + FileName + ".scn";
 
 	std::fstream Load;
 	Load.open(fullpath);
-	
+
 	char szTemp[1024];
-	
+
 	if (Load.is_open())
 	{
 		while (1)
 		{
 			if (Load.eof()) break;
-	
+
 			Load.getline(szTemp, 1024);
 			if (szTemp[0] == ' ' || szTemp[0] == '\t') continue;
 			else if (szTemp[0] == '/') continue;
@@ -73,7 +79,7 @@ void cScene::LoadScene(std::string FileName)
 				case E_OBJECT_END:		break;
 				default: break;
 				}
-				
+
 				while (1)
 				{
 					Load.getline(szTemp, 1024);
@@ -121,7 +127,7 @@ void cScene::LoadScene(std::string FileName)
 	{
 		MessageBoxA(g_hWnd, "파일을 찾을 수 없습니다.", "오류", MB_OK);
 	}
-	
+
 	Load.close();
 	//
 //	return E_NOTIMPL;
@@ -137,11 +143,11 @@ void cScene::SaveScene(std::string FileName)
 	{
 		// Infomation
 		Save << "//Revolt Scene File" << std::endl;
-		Save << "//"<< FileName << std::endl;
+		Save << "//" << FileName << std::endl;
 		struct tm datetime;
 		time_t t;
 		t = time(NULL);
-		localtime_s(&datetime,&t);
+		localtime_s(&datetime, &t);
 		Save << "//Date : " << datetime.tm_year + 1900
 			<< "-" << datetime.tm_mon + 1
 			<< "-" << datetime.tm_mday << std::endl;
@@ -155,11 +161,11 @@ void cScene::SaveScene(std::string FileName)
 		for (int i = 0; i < m_vecObject.size(); i++)
 		{
 			Save << "Object" << std::endl;
-			
+
 			Save << "Tag " << m_vecObject[i]->GetTag() << std::endl;
-			
+
 			Save << "Attribute " << m_vecObject[i]->GetAttribute() << std::endl;
-			
+
 			Save << "Position"
 				<< m_vecObject[i]->GetPosition().x << " "
 				<< m_vecObject[i]->GetPosition().y << " "
@@ -174,7 +180,7 @@ void cScene::SaveScene(std::string FileName)
 				<< m_vecObject[i]->GetDirection().x << " "
 				<< m_vecObject[i]->GetDirection().y << " "
 				<< m_vecObject[i]->GetDirection().z << std::endl;
-			
+
 			Save << "N " << std::endl;
 
 			Save << "#" << std::endl;
@@ -189,7 +195,7 @@ void cScene::SaveScene(std::string FileName)
 
 	Save.close();
 
-//	return E_NOTIMPL;	
+	//	return E_NOTIMPL;	
 }
 
 void cScene::Setup()
@@ -232,33 +238,33 @@ void cScene::LastUpdate()
 
 			cUITextBox* pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetPosition().x));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPosition().x));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_Y);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetPosition().y));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPosition().y));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_Z);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetPosition().z));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPosition().z));
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetSize().x));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetSize().x));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Y);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetSize().y));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetSize().y));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Z);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetSize().z));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetSize().z));
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetDirection().x));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetDirection().x));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Y);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetDirection().y));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetDirection().y));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Z);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetText()->SetText(cStringUtil::ToString(pObj->GetDirection().z));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetDirection().z));
 		}
 	}
 }
@@ -279,29 +285,29 @@ void cScene::OnChangeValue(int eventID)
 
 	D3DXVECTOR3 vec3;
 	cUITextBox* pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_X);
-	vec3.x = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_Y);
-	vec3.y = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_Z);
-	vec3.z = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	m_selectobj->SetPosition(vec3);
 	NxVec3 nxPos = MgrPhysX->D3DVecToNxVec(vec3);
-	m_selectobj->GetActor()->setGlobalPosition(nxPos);
+	m_selectobj->GetPhysXData()->m_pActor->setGlobalPosition(nxPos);
 
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_X);
-	vec3.x = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Y);
-	vec3.y = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Z);
-	vec3.z = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	m_selectobj->SetSize(vec3);
 
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_X);
-	vec3.x = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Y);
-	vec3.y = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Z);
-	vec3.z = pTextBox->GetText()->GetText()->GetFloat();
+	vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
 	m_selectobj->SetQuaternion(vec3);
 	m_selectobj->SetDirection(vec3);
 
@@ -309,6 +315,6 @@ void cScene::OnChangeValue(int eventID)
 	MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false, true, true));
 	NxMat33 nxMat;
 	nxMat.setColumnMajor(nxF);
-	m_selectobj->GetActor()->setGlobalOrientation(nxMat);
+	m_selectobj->GetPhysXData()->m_pActor->setGlobalOrientation(nxMat);
 
 }

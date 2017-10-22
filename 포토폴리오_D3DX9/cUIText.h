@@ -79,6 +79,6 @@ public:
 
 	// int(-1) -> 해당 변수는 변경하지 않음 
 
-	sUIText* GetText();
+	sUIText* GetTextData();
 };
 

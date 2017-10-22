@@ -22,17 +22,7 @@ private:
 	cScene* m_pScene;
 	
 	// 임의 로만들어진 박스 오브젝트;
-	cStuff* pBoxObj_0;
-	cStuff* pBoxObj_1;
-	cStuff* pBoxObj_2;
-	cStuff* pBoxObj_3;
-	cStuff* pBoxObj_4;
-	cStuff* pBoxObj_5;
-	cStuff* pBoxObj_6;
-	cStuff* pBoxObj_7;
-
-
-
+	
 public:
 	void Setup();
 	void SetUI();
@@ -46,5 +36,7 @@ public:
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 public:	//EVENT
 	void OnCreateObject(int eventID);
+	void OnLoadMap(int eventID);
+	void OnSaveMap(int eventID);
 };
 

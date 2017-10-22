@@ -105,7 +105,7 @@ public:
 				if ((*text)[i] == (*cutChars)[j])
 				{
 					std::string pushData = text->substr(startIndex, i - startIndex);
-					if (pushData.length > 0) datas->push_back(pushData);
+					if (pushData.length ()> 0) datas->push_back(pushData);
 					break;
 				}
 			}
@@ -121,7 +121,7 @@ public:
 			if ((*text)[i] == *cutChar)
 			{
 				std::string pushData = text->substr(startIndex, i - startIndex);
-				if (pushData.length > 0) datas->push_back(pushData);
+				if (pushData.length() > 0) datas->push_back(pushData);
 				startIndex = i + 1;
 			}
 		}

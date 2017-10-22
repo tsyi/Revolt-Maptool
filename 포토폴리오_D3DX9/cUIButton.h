@@ -26,14 +26,14 @@ protected:
 	bool m_isOn;
 
 
-	Event OnClick;
+	SYNTHESIZE(Event, onClick_Up, OnClick_Up);
 	SYNTHESIZE(int, m_eventId, EventID);
 
 	float pushTime;
 public:
 	cUIButton();
 	~cUIButton();
-	void SetEvent_OnCilck(Event function);
+	void SetEvent_OnCilck_Up(Event function);
 
 	void RegistButtonUI(cUIText* pUiText, cUIImage* pUiImage, std::string text, std::string InagePach);
 	void Destory();

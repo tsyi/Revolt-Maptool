@@ -2,6 +2,7 @@
 #include "cTransform.h"
 #include "cPhysXManager.h"
 #include "cMesh.h"
+#include "cPhysX.h"
 //#include "cEvent.h"
 
 enum eOBJECT_TAG
@@ -24,12 +25,15 @@ enum eOBJECT_STATE
 
 class NxActor;
 class cMesh;
+class cPhysX;
 
 class cObject : public cTransform
 {
-
 protected:
 	//오직 멥툴에서만 필요한 protected
+	D3DXCOLOR isSelectColor = D3DXCOLOR(0.3f, 1.0f, 0.8f, 1.0f);
+	D3DXCOLOR unSelectColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
 	SYNTHESIZE(eOBJECT_STATE, m_state, State);
 	SYNTHESIZE(USERDATA*, m_pMapData, MapData);
 	SYNTHESIZE(float, m_heigth, Heigth);
@@ -38,13 +42,11 @@ protected:
 
 protected:
 	SYNTHESIZE_VIRTUAL(eOBJECT_TAG, m_objTag, Tag);
-	SYNTHESIZE_VIRTUAL(cMesh*, m_pMesh, Mesh);
 
-	SYNTHESIZE_VIRTUAL(NxActor*, m_pActor, Actor);
-	SYNTHESIZE_VIRTUAL(USERDATA*, m_physxUserData, UserData);
+	SYNTHESIZE_VIRTUAL(cMesh*, m_pMeshData, MeshData);
+	SYNTHESIZE_VIRTUAL(cPhysX*, m_PhysXData, PhysXData);
+
 	SYNTHESIZE_VIRTUAL(bool, m_isActor, IsActor);
-
-
 protected:
 
 	SYNTHESIZE_VIRTUAL(int, m_nAttribute, Attribute);

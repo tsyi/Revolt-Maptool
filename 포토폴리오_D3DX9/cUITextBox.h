@@ -21,7 +21,7 @@ protected:
 	SYNTHESIZE(eTextBoxState, m_state, State);
 
 	SYNTHESIZE(Event, onEnter, OnEnter);
-	Event OnCancle;
+	SYNTHESIZE(Event, OnCancle, OnCancle);
 	SYNTHESIZE(int, m_eventId, EventID);
 
 	float pushTime;
@@ -36,8 +36,8 @@ public:
 	void Update();
 	void Render();
 
-	cUIText* GetText() { return m_pUiText; }
-	cUIImage* GetImage() { return m_pUiImage; }
+	cUIText* GetUIText() { return m_pUiText; }
+	cUIImage* GetUIImage() { return m_pUiImage; }
 
 	std::string GetData_String();
 	float GetData_Float();

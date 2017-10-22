@@ -70,7 +70,7 @@ void cUIText::Render()
 	cUIObject::Render();
 }
 
-sUIText* cUIText::GetText()
+sUIText* cUIText::GetTextData()
 {
 	return pText;
 }

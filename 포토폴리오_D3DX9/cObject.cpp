@@ -3,15 +3,15 @@
 
 
 cObject::cObject()
-	: m_pMesh(NULL)
-	, m_pActor(NULL)
+	: m_pMeshData(NULL)
+	, m_PhysXData(NULL)
 	, m_isActor(false)
 	, m_objTag(E_OBJECT_NONE)
 	, m_state(E_OBJECT_STATE_CANSLE)
 {
-	m_pMesh = new cMesh;
-	m_physxUserData = new USERDATA;
+	m_pMeshData = new cMesh;
 	m_pMapData = new USERDATA;
+	//	m_physxUserData = new USERDATA;
 }
 
 
@@ -26,14 +26,15 @@ void cObject::Setup()
 
 void cObject::Destory()
 {
-	MgrPhysXScene->releaseActor(*m_pActor);
-	m_pActor = NULL;
-	GetMesh()->Destory();
+	GetPhysXData()->Destory();
+	m_PhysXData = NULL;
+	//	MgrPhysXScene->releaseActor(*GetPhysXData()->m_pActor);
+	GetMeshData()->Destory();
 }
 
 void cObject::Update()
 {
-	//GetActor()->putToSleep();
+	GetPhysXData()->m_pActor->putToSleep();
 
 	if (!MgrInput->GetHooking())
 	{
@@ -45,33 +46,33 @@ void cObject::Update()
 		{
 			if (MgrInput->IsKeyDown('Q'))
 			{
-				GetActor()->putToSleep();
+				GetPhysXData()->m_pActor->putToSleep();
 			}
 			if (MgrInput->IsKeyUp('Q'))
 			{
-				GetActor()->wakeUp();
+				GetPhysXData()->m_pActor->wakeUp();
 			}
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0)
 				{
 					SetState(E_OBJECT_STATE_CANSLE);
-					D3DXCOLOR materColor = D3DXCOLOR(0.3f, 1.0f, 0.8f, 1.0f);
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					D3DXCOLOR materColor = unSelectColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
 					break;
 				}
-				else if (GetUserData()->RaycastClosestShape != NX_TRUE)
+				else if (GetPhysXData()->m_pUserData->RaycastClosestShape != NX_TRUE)
 				{
 					SetState(E_OBJECT_STATE_CANSLE);
-					D3DXCOLOR materColor = D3DXCOLOR(0.3f, 1.0f, 0.8f, 1.0f);
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					D3DXCOLOR materColor = unSelectColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
 					break;
 				}
-				SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetUserData()->RayHitPos));
+				SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
 				SetHeigth(cTransform::GetPosition().y);
 			}
 			if (MgrInput->IsMousePressDrag(MOUSE_LEFT))
@@ -85,11 +86,11 @@ void cObject::Update()
 				}
 				else
 				{
-					pos = GetUserData()->RayHitPos;
+					pos = GetPhysXData()->m_pUserData->RayHitPos;
 					pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
 					pos.y = GetHeigth();
 				}
-				GetActor()->setGlobalPosition(pos);
+				GetPhysXData()->m_pActor->setGlobalPosition(pos);
 			}
 
 		}break;
@@ -98,39 +99,40 @@ void cObject::Update()
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0) break;
-				if (GetUserData()->RaycastClosestShape == NX_TRUE)
+				if (GetPhysXData()->m_pUserData->RaycastClosestShape == NX_TRUE)
 				{
-					SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetUserData()->RayHitPos));
+					SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
 					SetHeigth(cTransform::GetPosition().y);
 					SetState(E_OBJECT_STATE_SELECT);
 
-					D3DXCOLOR materColor = D3DXCOLOR(1.0f, 0.3f, 0.8f, 1.0f);
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMesh()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					D3DXCOLOR materColor = isSelectColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
 				}
 			}
 		} break;
 		}
 	}
+
 }
 
 void cObject::LastUpdate()
 {
-	NxVec3 pos = GetActor()->getGlobalPose().t;
+	NxVec3 pos = GetPhysXData()->m_pActor->getGlobalPose().t;
 	cTransform::SetNxVec3(pos);
 
-//	cTransform::GetDirection();
-	
+	//	cTransform::GetDirection();
+
 	NxF32 mtl[3 * 3];
-	GetActor()->getGlobalPose().M.getColumnMajor(mtl);
+	GetPhysXData()->m_pActor->getGlobalPose().M.getColumnMajor(mtl);
 	cTransform::SetNxF32(mtl);
 }
 
 void cObject::Render()
 {
-	m_physxUserData->Init();
+	GetPhysXData()->m_pUserData->Init();
 
 	MgrD3DDevice->SetTransform(D3DTS_WORLD, &cTransform::GetMatrix());
-	m_pMesh->Render();
+	GetMeshData()->Render();
 }

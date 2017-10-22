@@ -43,12 +43,20 @@ public:
 
 	virtual bool IsMouseOver()
 	{
+		float a_x = m_anchor.x * GetSize().x * GetScale().x;
+		float a_y = m_anchor.y * GetSize().y * GetScale().y;
+
 		RECT rc;
 		SetRect(&rc,
-			(int)m_matWorld._41,
-			(int)m_matWorld._42,
-			(int)m_matWorld._41 + (int)GetSize().x * GetScale().x,
-			(int)m_matWorld._42 + (int)GetSize().y * GetScale().y);
+			(int)m_matWorld._41 - a_x,
+			(int)m_matWorld._42 - a_y,
+			(int)m_matWorld._41 - a_x + (int)GetSize().x * GetScale().x,
+			(int)m_matWorld._42 - a_y + (int)GetSize().y * GetScale().y);
+
+		std::cout << rc.left << std::endl;
+		std::cout << rc.right << std::endl;
+		std::cout << rc.top << std::endl;
+		std::cout << rc.bottom << std::endl;
 
 		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}

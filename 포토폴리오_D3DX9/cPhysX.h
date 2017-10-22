@@ -1,15 +1,14 @@
 #pragma once
 
 #include <fstream>
-//#include <fstream>
-
 #include <iostream>
-#include <fstream>
+#include "cStringUtil.h"
+#include "cPhysXManager.h"
 
 class cPhysX
 {
 public:
-	NxActor*  m_pAxtor;		//save/load (X)
+	NxActor*  m_pActor;		//save/load (X)
 	USERDATA* m_pUserData;	//save/load (X)
 
 	cPhysX();
@@ -22,15 +21,14 @@ public:
 
 
 	bool m_IsTrigger = false;	//save/load
-	bool m_isStatic = false;	//save/load
+	bool m_isStatic_ = false;	//save/load
 	bool m_isGravaty = true;	//save/load
 
 	NxShapeType m_type;			//save/load
 
-
 	void SetPosition(NxVec3 pos)
 	{
-		m_pAxtor->getGlobalPose().t = pos;
+		m_pActor->getGlobalPose().t = pos;
 	}
 	void SetPosition(D3DXVECTOR3 vec3)
 	{
@@ -60,21 +58,21 @@ public:
 	}
 	void SetRotation(NxMat33 mat33)
 	{
-		m_pAxtor->getGlobalPose().M = mat33;
+		m_pActor->getGlobalPose().M = mat33;
 	}
 
 	NxVec3 GetPositionToNxVec3()
 	{
-		return m_pAxtor->getGlobalPose().t;
+		return m_pActor->getGlobalPose().t;
 	}
 	D3DXVECTOR3 GetPositionToD3DXVec3()
 	{
-		NxVec3 pos = m_pAxtor->getGlobalPose().t;
+		NxVec3 pos = m_pActor->getGlobalPose().t;
 		return D3DXVECTOR3(pos.x, pos.y, pos.z);
 	}
 	NxMat33 GetRotationToNxMat33()
 	{
-		return m_pAxtor->getGlobalPose().M;
+		return m_pActor->getGlobalPose().M;
 	}
 	D3DXMATRIXA16 GetRotationToD3DXMat16()
 	{
@@ -82,7 +80,7 @@ public:
 		D3DXMatrixIdentity(&mat16);
 
 		NxF32 mat[9] = { 1,0,0,0,1,0,0,0,1 };
-		m_pAxtor->getGlobalPose().M.getColumnMajor(mat);
+		m_pActor->getGlobalPose().M.getColumnMajor(mat);
 
 		mat16._11 = mat[0];
 		mat16._12 = mat[1];
@@ -97,34 +95,134 @@ public:
 		return mat16;
 	}
 
+	void Destory()
+	{
+		MgrPhysXScene->releaseActor(*m_pActor);
+		m_pActor = NULL;
+
+		m_pUserData = NULL;
+	}
+	void Update()
+	{
+		//저장을 위한 정보 갱신
+		m_position = GetPositionToNxVec3();
+		NxMat33 mat33 = GetRotationToNxMat33();
+		mat33.getColumnMajor(m_matR);
+
+
+	}
+
 
 #define TAB	'\t'
+#define POPDATA Data[sI++]
 	void LoadPhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Scene/" + fileName + ".phy";
-
+		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phy";
 		std::ifstream LOAD(fullpath);
 
 		if (LOAD.is_open())
 		{
 			while (!LOAD.eof())
 			{
-				CHAR text_[1024] = {};
-				LOAD.getline(text_, 1024);
-				std::string text = text_;
+				CHAR Text_[1024] = {};
+				LOAD.getline(Text_, 1024);
+				std::string Text = Text_;
 
 				std::vector<CHAR> Cut;
-				Cut.push_back(' ');
-				Cut.push_back(TAB);
+				Cut.push_back(' ');		// 데이터 구분 단위
+				Cut.push_back(TAB);		// 데이터 구분 단위
 
 				std::vector<std::string> Data;
-				cStringUtil::Split(&Data, &Cut, &text);
+				cStringUtil::Split(&Data, &Cut, &Text);
+				// 데이터 읽을 준비 완료.
 
-				if (Data[0] == "");
+
+				int sI = 0; //startIndex
+				while (Data[sI].length() == 1)
+				{
+					CHAR cut = Data[sI][0];
+					bool isCut = false;
+					for (int i = 0; i < Cut.size(); i++)
+					{
+						if (cut == Cut[i]) { isCut = true; ++sI; break; }
+						//해당 index 에서 cut 이 발생하면 데이터를 버리고 다음 index검사
+					}
+					if (!isCut) break;	//cut 이 일어나지 않으면 빠져나온다.
+				}
+				//유효한 시작 지점 검사 완료
+
+
+				//데이터 로드 시작.
+				std::string dateTitle = POPDATA; //  POPDATA = Data[sI++] (현재 데이터를 빼낸 뒤 다음 데이터를 준비)
+				if (dateTitle == "FILE_NAME")
+				{
+					actorName = POPDATA;
+					continue;
+				}
+				if (dateTitle == "SHAPE_TYPE")
+				{
+					m_type = (NxShapeType)cStringUtil::ToInt(POPDATA);
+					continue;
+				}
+				if (dateTitle == "IsTrigger")
+				{
+					m_IsTrigger = (bool)cStringUtil::ToInt(POPDATA);
+					continue;
+				}
+				if (dateTitle == "isStatic_")
+				{
+					m_isStatic_ = (bool)cStringUtil::ToInt(POPDATA);
+					continue;
+				}
+				if (dateTitle == "isGravaty")
+				{
+					m_isGravaty = (bool)cStringUtil::ToInt(POPDATA);
+					continue;
+				}
+				if (dateTitle == "POS_XYZ")
+				{
+					m_position.x = cStringUtil::ToFloat(POPDATA);
+					m_position.y = cStringUtil::ToFloat(POPDATA);
+					m_position.z = cStringUtil::ToFloat(POPDATA);
+					continue;
+				}
+				if (dateTitle == "SIZE_XYZ")
+				{
+					m_sizeValue.x = cStringUtil::ToFloat(POPDATA);
+					m_sizeValue.y = cStringUtil::ToFloat(POPDATA);
+					m_sizeValue.z = cStringUtil::ToFloat(POPDATA);
+					continue;
+				}
+				if (dateTitle == "FXU32_[9]")
+				{
+					m_matR[0] = cStringUtil::ToFloat(POPDATA);
+					m_matR[1] = cStringUtil::ToFloat(POPDATA);
+					m_matR[2] = cStringUtil::ToFloat(POPDATA);
+					m_matR[3] = cStringUtil::ToFloat(POPDATA);
+					m_matR[4] = cStringUtil::ToFloat(POPDATA);
+					m_matR[5] = cStringUtil::ToFloat(POPDATA);
+					m_matR[6] = cStringUtil::ToFloat(POPDATA);
+					m_matR[7] = cStringUtil::ToFloat(POPDATA);
+					m_matR[8] = cStringUtil::ToFloat(POPDATA);
+					continue;
+				}
+			}//eof
+
+			//creatActor
+			NxActor* pActor = MgrPhysX->CreateActor(m_type, m_position, m_matR, m_sizeValue, m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
+			if (pActor)
+			{
+				//새 pActor 생성에 성공하면 
+				//기존에 있던 정보내용 초기화하고
+				//새 pActor 로 등록 
+				MgrPhysXScene->releaseActor(*m_pActor);
+				m_pActor = NULL;
+
+				m_pActor = pActor;
 			}
-		}
+		}//open
+		LOAD.close();
 	}
-
 	void SavePhysX(std::string fileName)
 	{
 		std::string fullpath = "Object/Scene/" + fileName + ".phy";
@@ -133,174 +231,32 @@ public:
 
 		if (SAVE.is_open())
 		{
-			SAVE << fileName << std::endl;
+			SAVE << "FILE_NAME" << TAB << fileName << std::endl;
 
 			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
 
 			SAVE << "OPTION" << std::endl;
 			SAVE << TAB << "IsTrigger" << TAB << m_IsTrigger << std::endl;
-			SAVE << TAB << "isStatic"  << TAB << m_isStatic << std::endl;
+			SAVE << TAB << "isStatic_" << TAB << m_isStatic_ << std::endl;
 			SAVE << TAB << "isGravaty" << TAB << m_isGravaty << std::endl;
 
 			SAVE << "POS_XYZ" << TAB
-				<< m_position.x << TAB 
-				<< m_position.y << TAB 
-				<< m_position.z
-				<< std::endl;
+				<< m_position.x << TAB
+				<< m_position.y << TAB
+				<< m_position.z << std::endl;
 
 			SAVE << "SIZE_XYZ" << TAB
 				<< m_sizeValue.x << TAB
 				<< m_sizeValue.y << TAB
-				<< m_sizeValue.z
-				<< std::endl;
+				<< m_sizeValue.z << std::endl;
 
 			SAVE << "FXU32_[9]" << TAB
-				<< m_matR[0] << TAB << m_matR[1] << TAB << m_matR[2]
-				<< m_matR[3] << TAB << m_matR[4] << TAB << m_matR[5]
-				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8]
-				<< std::endl;
-
-
+				<< m_matR[0] << TAB << m_matR[1] << TAB << m_matR[2] << TAB
+				<< m_matR[3] << TAB << m_matR[4] << TAB << m_matR[5] << TAB
+				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8] << std::endl;
 		}
 	}
 
-	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxF32* mat, NxVec3 sizeValue, USERDATA* pUserData,
-		bool IsTrigger = false, bool isStatic = false, bool isGravaty = true)
-	{
-		actorName =
-			m_type = type;
-
-		m_position = position;
-		m_matR[0] = mat[0];
-		m_matR[1] = mat[1];
-		m_matR[2] = mat[2];
-		m_matR[3] = mat[3];
-		m_matR[4] = mat[4];
-		m_matR[5] = mat[5];
-		m_matR[6] = mat[6];
-		m_matR[7] = mat[7];
-		m_matR[8] = mat[8];
-
-
-		bool isKinematic = false;
-		// Our trigger is a cube
-		NxBodyDesc triggerBody;
-		triggerBody.setToDefault();
-
-		NxShapeDesc* shapeDesc = NULL;
-
-		NxActorDesc ActorDesc;
-		ActorDesc.setToDefault();
-
-		switch (type)
-		{
-		case NX_SHAPE_PLANE: {
-			break;
-		}
-		case NX_SHAPE_SPHERE: {
-			NxSphereShapeDesc desc; desc.setToDefault();
-			//	desc.materialIndex - materialIndex;
-			desc.radius = sizeValue.x;
-			break;
-		}
-		case NX_SHAPE_BOX: {
-			NxBoxShapeDesc desc;
-			desc.setToDefault();
-			desc.dimensions.set(sizeValue);
-			desc.materialIndex = 0;
-			shapeDesc = &desc;
-
-			if (isKinematic)
-			{
-				NxBoxShapeDesc dummyShape;
-				dummyShape.setToDefault();
-				dummyShape.dimensions.set(sizeValue);
-				ActorDesc.shapes.pushBack(&dummyShape);
-			}
-			break;
-		}
-		case NX_SHAPE_CAPSULE: {
-			NxCapsuleShapeDesc desc; desc.setToDefault();
-			//	desc.materialIndex = materialIndex;
-			desc.radius = sizeValue.x;
-			desc.height = sizeValue.y;
-			shapeDesc = &desc;
-			break;
-		}
-		case NX_SHAPE_WHEEL: {
-			NxWheelShapeDesc desc; desc.setToDefault();
-			//	desc.materialIndex = materialIndex;
-			desc.radius = 0;
-			shapeDesc = &desc;
-			break;
-		}
-		case NX_SHAPE_CONVEX: {
-			break;
-		}
-		case NX_SHAPE_MESH: {
-			break;
-		}
-		case NX_SHAPE_HEIGHTFIELD: {
-			break;
-		}
-		case NX_SHAPE_RAW_MESH: {
-			break;
-		}
-		case NX_SHAPE_COMPOUND: {
-			break;
-		}
-		case NX_SHAPE_COUNT: {
-			break;
-		}
-		case NX_SHAPE_FORCE_DWORD: {
-			break;
-		}
-		default:break;
-		}
-		if (!isGravaty) triggerBody.flags |= NX_BF_DISABLE_GRAVITY;
-
-		if (isKinematic&& IsTrigger)
-		{
-			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
-			triggerBody.flags |= NX_BF_KINEMATIC;
-
-			ActorDesc.body = &triggerBody;
-			//	ActorDesc.body = NULL;
-		}
-		if (isKinematic && !IsTrigger)
-		{
-			triggerBody.flags |= NX_BF_KINEMATIC;
-
-			ActorDesc.body = &triggerBody;
-		}
-		if (!isKinematic&& IsTrigger)
-		{
-			shapeDesc->shapeFlags = NX_TRIGGER_ENABLE;
-
-			//	ActorDesc.body = NULL;
-		}
-		if (!isKinematic && !IsTrigger)
-		{
-			ActorDesc.body = &triggerBody;
-		}
-
-		if (isStatic) ActorDesc.body = NULL;
-
-
-		ActorDesc.density = 10.f;
-		ActorDesc.shapes.pushBack(shapeDesc);
-		ActorDesc.globalPose.t = position;
-		ActorDesc.globalPose.M.setColumnMajor(mat);
-
-		ActorDesc.userData = (pUserData);
-
-		NxActor* actor = MgrPhysXScene->createActor(ActorDesc);
-		if (actor == NULL)
-		{
-			std::cout << "NULL";
-		}
-		return actor;
-	}
 
 };
 
