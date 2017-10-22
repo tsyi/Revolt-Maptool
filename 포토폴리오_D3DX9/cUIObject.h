@@ -53,8 +53,9 @@ protected:
 
 //	cUIObject* pParent;
 //	std::vector<cUIObject*> vecChild;
-	bool IsHookingCheck;
 public:
+	bool IsHookingCheck;
+
 	virtual void SetSize(float x, float y);
 	virtual void SetPosition(float x, float y, float z = 0);
 	virtual void AddPosition(D3DXVECTOR3 addPos);

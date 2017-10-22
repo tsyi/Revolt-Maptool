@@ -14,6 +14,10 @@
 #include "DEBUG_RENDERER.h"
 static DEBUG_RENDERER* m_pDebugRenderer = NULL;
 
+#define DEFAULT_MAPNAME "MapName"
+
+
+
 cMainGame::cMainGame()
 {
 }
@@ -27,6 +31,8 @@ void cMainGame::Setup()
 {
 	MgrPhysX->InitNxPhysX(&m_pDebugRenderer);
 
+	OnLoadMap(VK_RETURN); // 최초 디폴트 값을 로드
+
 	MgrObject->Setup();
 	MgrUI->Setup();
 	MgrInput->Setup();
@@ -38,20 +44,21 @@ void cMainGame::Setup()
 	m_grid1 = new cGrid; m_grid1->Setup(10, 10);
 	m_grid2 = new cGrid; m_grid2->Setup(10, 100);
 
-	m_pScene = new cScene; m_pScene->Setup();
-//
-//	//=========================Test
-//	m_pScene->LoadScene("Market2");
-//	m_pScene->SaveScene("Test");
-	//=========================
 
-	//	MgrSound->Setup();
-	//	MgrSound->LoadSound("sound", "sound01.mp3", true);
-	//	MgrSound->LoadSound("sound", "sound02.wav", false);
-	//	MgrSound->Play("sound01.mp3", 1.f);	//배경음 재생
+	//	m_pScene = new cScene; m_pScene->Setup();
+	//
+	//	//=========================Test
+	//	m_pScene->LoadScene("Market2");
+	//	m_pScene->SaveScene("Test");
+		//=========================
+
+		//	MgrSound->Setup();
+		//	MgrSound->LoadSound("sound", "sound01.mp3", true);
+		//	MgrSound->LoadSound("sound", "sound02.wav", false);
+		//	MgrSound->Play("sound01.mp3", 1.f);	//배경음 재생
 
 
-	// 로드되어있는 재질정보
+		// 로드되어있는 재질정보
 	NxMaterialDesc defaultMaterial;
 	defaultMaterial.setToDefault();
 	defaultMaterial.restitution = 0.5f;
@@ -97,7 +104,7 @@ void cMainGame::SetUI()
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_MAPNAME);
 		UITextBox->SetPosition(0, 0, 0);
 		UITextBox->SetSize(200, 20);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "MapName", "Image/UI_TEXTBOX.png");
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, DEFAULT_MAPNAME, "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
 		UITextBox->SetEvent_OnEnter(std::bind(&cMainGame::OnLoadMap, this, std::placeholders::_1));
 
@@ -456,7 +463,7 @@ void cMainGame::Update()
 		MgrPhysX->RaycastClosestShape(m_camera->GetPosition(), MgrInput->MousePosToViewDir(m_camera));
 
 
-		m_pScene->Update();
+		if (m_pScene) m_pScene->Update();
 
 	}
 	//후순위 업데이트=============================================
@@ -469,7 +476,7 @@ void cMainGame::Update()
 	MgrPhysXScene->flushStream();
 	MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 
-	m_pScene->LastUpdate();
+	if (m_pScene) m_pScene->LastUpdate();
 	if (m_camera) m_camera->Update();
 }
 
@@ -483,7 +490,7 @@ void cMainGame::Render()
 	//LigthOn
 	MgrD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-	m_pScene->Render();
+	if (m_pScene) m_pScene->Render();
 
 
 	//	MgrObject->Render();
@@ -513,13 +520,13 @@ LRESULT cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 void cMainGame::OnCreateObject(int eventID)
 {
-	cStuff* pBoxObject = new cStuff;
-	pBoxObject->SetPosition(0, 4, 0);
-	pBoxObject->SetMeshBox();
-	//pBoxObject->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_SF_VISUALIZATION, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObject->GetUserData(),
-	//	NxVec3(1, 1, 1), 0, 1, pBoxObject->GetMatrix(false, true, true)));
-
-	m_pScene->PushObject(pBoxObject);
+//	cStuff* pBoxObject = new cStuff;
+//	pBoxObject->SetPosition(0, 4, 0);
+//	pBoxObject->SetMeshBox();
+//	//pBoxObject->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_SF_VISUALIZATION, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObject->GetUserData(),
+//	//	NxVec3(1, 1, 1), 0, 1, pBoxObject->GetMatrix(false, true, true)));
+//
+//	m_pScene->PushObject(pBoxObject);
 
 	//	if (eOBJ_TAG::OBJ_MAX <= eventID) eventID = 0;
 	//	MgrObject->AddObj((eOBJ_TAG)eventID);
@@ -529,11 +536,16 @@ void cMainGame::OnLoadMap(int eventID)
 {
 	if (eventID == VK_RETURN)
 	{
-		if (!m_pScene) m_pScene = new cScene; m_pScene->Setup();
-
-		cUITextBox* pUI = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
-		m_pScene->LoadScene(pUI->GetUIText()->GetTextData()->text);
-
+		if (!m_pScene)
+		{
+			m_pScene = new cScene; m_pScene->Setup();
+			m_pScene->LoadScene(DEFAULT_MAPNAME);
+		}
+		else
+		{
+			cUITextBox* pUI = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+			m_pScene->LoadScene(pUI->GetUIText()->GetTextData()->text);
+		}
 	}
 }
 

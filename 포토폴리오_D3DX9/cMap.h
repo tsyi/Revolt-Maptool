@@ -20,4 +20,9 @@ public:
 	HRESULT MapLoad(std::string rvlName);
 	HRESULT MapSave(std::string rvlName);
 	HRESULT PhxLoad(std::string phxName,cMesh* dest);
+
+
+	void Update();
+	void Render();
+
 };

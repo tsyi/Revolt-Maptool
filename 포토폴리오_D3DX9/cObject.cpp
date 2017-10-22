@@ -26,10 +26,11 @@ void cObject::Setup()
 
 void cObject::Destory()
 {
-	GetPhysXData()->Destory();
-	m_PhysXData = NULL;
+	if(GetPhysXData()) GetPhysXData()->Destory();
+	if(GetMeshData()) GetMeshData()->Destory();
 	//	MgrPhysXScene->releaseActor(*GetPhysXData()->m_pActor);
-	GetMeshData()->Destory();
+	m_PhysXData = NULL;
+	m_pMeshData = NULL;
 }
 
 void cObject::Update()
@@ -119,6 +120,7 @@ void cObject::Update()
 
 void cObject::LastUpdate()
 {
+	if (!GetPhysXData()) return;
 	NxVec3 pos = GetPhysXData()->m_pActor->getGlobalPose().t;
 	cTransform::SetNxVec3(pos);
 
@@ -131,8 +133,8 @@ void cObject::LastUpdate()
 
 void cObject::Render()
 {
-	GetPhysXData()->m_pUserData->Init();
+	if(GetPhysXData()) GetPhysXData()->m_pUserData->Init();
 
 	MgrD3DDevice->SetTransform(D3DTS_WORLD, &cTransform::GetMatrix());
-	GetMeshData()->Render();
+	if(GetMeshData()) GetMeshData()->Render();
 }

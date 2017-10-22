@@ -34,4 +34,3 @@ public:
 		GetMeshData()->m_vecMtlTex.push_back(mtlText);
 	}
 };
-

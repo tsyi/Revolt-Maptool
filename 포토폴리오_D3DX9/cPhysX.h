@@ -97,7 +97,7 @@ public:
 
 	void Destory()
 	{
-		MgrPhysXScene->releaseActor(*m_pActor);
+		if(m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
 		m_pActor = NULL;
 
 		m_pUserData = NULL;
@@ -117,7 +117,7 @@ public:
 #define POPDATA Data[sI++]
 	void LoadPhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phy";
+		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
 		std::ifstream LOAD(fullpath);
 
 		if (LOAD.is_open())
@@ -225,7 +225,7 @@ public:
 	}
 	void SavePhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Scene/" + fileName + ".phy";
+		std::string fullpath = "Object/Scene/" + fileName + ".phx";
 
 		std::ofstream SAVE(fullpath);
 

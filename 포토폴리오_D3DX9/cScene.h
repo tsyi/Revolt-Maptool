@@ -6,7 +6,7 @@ class cScene
 {
 	std::string m_sceenName;
 	SYNTHESIZE(cObject*, m_pMap, Map);
-	SYNTHESIZE(std::vector<cObject*>, m_vecObject, Objcets);
+	SYNTHESIZE(std::vector<cObject*>, m_vecObject, Objects);
 
 
 	//임시변수;
