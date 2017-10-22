@@ -7,7 +7,7 @@ cObject::cObject()
 	, m_PhysXData(NULL)
 	, m_isActor(false)
 	, m_objTag(E_OBJECT_NONE)
-	, m_state(E_OBJECT_STATE_CANSLE)
+	, m_state(E_OBJECT_STATE_NONE)
 {
 	m_pMeshData = new cMesh;
 	m_pMapData = new USERDATA;
@@ -26,8 +26,8 @@ void cObject::Setup()
 
 void cObject::Destory()
 {
-	if(GetPhysXData()) GetPhysXData()->Destory();
-	if(GetMeshData()) GetMeshData()->Destory();
+	if (GetPhysXData()) GetPhysXData()->Destory();
+	if (GetMeshData()) GetMeshData()->Destory();
 	//	MgrPhysXScene->releaseActor(*GetPhysXData()->m_pActor);
 	m_PhysXData = NULL;
 	m_pMeshData = NULL;
@@ -42,7 +42,17 @@ void cObject::Update()
 		switch (m_state)
 		{
 		case E_OBJECT_STATE_NONE:
-			break;
+		{
+			if (GetMeshData())
+			{
+				D3DXCOLOR materColor = unSelectColor;
+				GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+				GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+				GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+			}
+			m_state = E_OBJECT_STATE_CANSLE;
+		}
+		break;
 		case E_OBJECT_STATE_SELECT:
 		{
 			if (MgrInput->IsKeyDown('Q'))
@@ -97,7 +107,7 @@ void cObject::Update()
 					pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
 					pos.y = GetHeigth();
 				}
-				GetPhysXData()->m_pActor->setGlobalPosition(pos);
+				GetPhysXData()->m_worldPose.t = pos;
 			}
 
 		}break;
@@ -130,20 +140,25 @@ void cObject::Update()
 void cObject::LastUpdate()
 {
 	if (!GetPhysXData()) return;
-	NxVec3 pos = GetPhysXData()->m_pActor->getGlobalPose().t;
+	NxVec3 pos = GetPhysXData()->m_worldPose.t;
 	cTransform::SetNxVec3(pos);
 
 	//	cTransform::GetDirection();
 
 	NxF32 mtl[3 * 3];
-	GetPhysXData()->m_pActor->getGlobalPose().M.getColumnMajor(mtl);
+	GetPhysXData()->m_worldPose.M.getColumnMajor(mtl);
 	cTransform::SetNxF32(mtl);
+
+	NxMat34 NxActorPose;
+	NxActorPose.multiply(GetPhysXData()->m_worldPose, GetPhysXData()->m_localPose);
+
+	GetPhysXData()->m_pActor->setGlobalPose(NxActorPose);
 }
 
 void cObject::Render()
 {
-	if(GetPhysXData()) GetPhysXData()->m_pUserData->Init();
+	if (GetPhysXData()) GetPhysXData()->m_pUserData->Init();
 
 	MgrD3DDevice->SetTransform(D3DTS_WORLD, &cTransform::GetMatrix());
-	if(GetMeshData()) GetMeshData()->Render();
+	if (GetMeshData()) GetMeshData()->Render();
 }

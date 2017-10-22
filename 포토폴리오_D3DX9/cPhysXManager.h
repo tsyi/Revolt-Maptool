@@ -404,10 +404,10 @@ public:
 
 		if (isStatic) ActorDesc.body = NULL;
 
-
 		ActorDesc.density = 10.f;
 		ActorDesc.shapes.pushBack(shapeDesc);
 		ActorDesc.globalPose.t = position;
+		
 		if (mat == NULL)
 		{
 			NxF32 mat_[9] = { 1,0,0,0,1,0,0,0,1 };

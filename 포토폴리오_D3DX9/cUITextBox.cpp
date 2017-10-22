@@ -33,6 +33,7 @@ void cUITextBox::RegistTextBoxUI(cUIText * pUiText, cUIImage * pUiImage, std::st
 	m_pUiText->SetText(text);
 
 	m_pUiImage->SetTexture((char*)InagePach.c_str());
+
 	D3DXVECTOR2 imageSize = m_pUiImage->GetSize();
 	imageSize = D3DXVECTOR2(this->GetSize().x / imageSize.x, this->GetSize().y / imageSize.y);
 	m_pUiImage->SetScale(imageSize);
@@ -71,7 +72,8 @@ void cUITextBox::Update()
 			//È®ÀÎ
 			m_state = eTextBoxState::E_TEXT_BOX_STATE_NONE;
 			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
-			if (onEnter) GetOnEnter()(VK_RETURN);
+			if (onEnter) 
+				GetOnEnter()(VK_RETURN);
 		}
 		if (MgrInput->IsMouseDown(MOUSE_BUTTON::MOUSE_LEFT))
 		{

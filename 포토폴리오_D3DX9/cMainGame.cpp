@@ -373,54 +373,339 @@ void cMainGame::SetUI()
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_TITLE);
 		ui->AddChild(UIListView);
 	}
-	//ButtonList
-//	{
-//		cUIButton* pButton = new cUIButton;
-//		cUIImage* pButtonImage = new cUIImage;
-//		cUIText* pbuttonText = new cUIText;
-//
-//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-//		pButton->SetSize(200, 40);
-//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
-//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-//		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
-//
-//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-//		ui->AddButton(pButton);
-//	}
-//	{
-//		cUIButton* pButton = new cUIButton;
-//		cUIImage* pButtonImage = new cUIImage;
-//		cUIText* pbuttonText = new cUIText;
-//
-//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-//		pButton->SetSize(200, 40);
-//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button2", "Image/UI_TEXTBOX.png");
-//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-//		pButton->SetEventID(eOBJ_TAG::OBJ_CHEESE);
-//
-//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-//		ui->AddButton(pButton);
-//	}
-//	{
-//		cUIButton* pButton = new cUIButton;
-//		cUIImage* pButtonImage = new cUIImage;
-//		cUIText* pbuttonText = new cUIText;
-//
-//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-//		pButton->SetSize(200, 40);
-//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button3", "Image/UI_TEXTBOX.png");
-//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-//		pButton->SetEventID(eOBJ_TAG::OBJ_CHICKEN);
-//
-//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-//		ui->AddButton(pButton);
-//	}
-
 	//PhysX 관련 UI
+	// NxShapeType
+	{ 
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_SHAPETYPE);
+		UITextBox->SetPosition(0, 340, 0);
+		UITextBox->SetSize(200, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ShapeType", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
 	{
 
 	}
+	// Trigger
+	{
+		cUIButton* UIButton = new cUIButton;
+		cUIText* UIButton_TextV = new cUIText;
+		cUIImage* UIButton_Image = new cUIImage;
+
+		UIButton->SetTag(eUITag::E_UI_BUTTON_TRIGGER);
+		UIButton->SetPosition(0, 380, 0);
+		UIButton->SetSize(120, 20);
+		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "TRIGGER", "Image/UI_BUTTON.png");
+		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+
+		MgrUI->RegisteredUI(UIButton);
+	}
+	{ 
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+		
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_TRIGGER);
+		UITextBox->SetPosition(130, 380, 0);
+		UITextBox->SetSize(70, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	// Static
+	{
+		cUIButton* UIButton = new cUIButton;
+		cUIText* UIButton_TextV = new cUIText;
+		cUIImage* UIButton_Image = new cUIImage;
+
+		MgrUI->RegisteredUI(UIButton);
+
+		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+		UIButton->SetPosition(0, 410, 0);
+		UIButton->SetSize(120, 20);
+		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "STATIC", "Image/UI_BUTTON.png");
+		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+	}
+	{ 
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_STATIC);
+		UITextBox->SetPosition(130, 410, 0);
+		UITextBox->SetSize(70, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	// Gravity
+	{
+		cUIButton* UIButton = new cUIButton;
+		cUIText* UIButton_TextV = new cUIText;
+		cUIImage* UIButton_Image = new cUIImage;
+
+		MgrUI->RegisteredUI(UIButton);
+
+		UIButton->SetTag(eUITag::E_UI_BUTTON_GRAVITY);
+		UIButton->SetPosition(0, 440, 0);
+		UIButton->SetSize(120, 20);
+		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "GRAVITY", "Image/UI_BUTTON.png");
+		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_GRAVITY);
+		UITextBox->SetPosition(130, 440, 0);
+		UITextBox->SetSize(70, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	// Position
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_POS_X);
+		UITextBox->SetPosition(50, 480, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("POSX");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_POS_Y);
+		UITextBox->SetPosition(50, 500, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("POSY");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_POS_Z);
+		UITextBox->SetPosition(50, 520, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("POSZ");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+
+	// Size
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_SIZE_X);
+		UITextBox->SetPosition(50, 560, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("SIZEX");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Y);
+		UITextBox->SetPosition(50, 580, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("SIZEY");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Z);
+		UITextBox->SetPosition(50, 600, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("SIZEZ");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+
+	// Rotation
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);
+		UITextBox->SetPosition(50, 640, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("ROTX");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_ROT_Y);
+		UITextBox->SetPosition(50, 660, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("ROTY");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_NX_ROT_Z);
+		UITextBox->SetPosition(50, 680, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
+		cUIText* UITextBox_TextT = new cUIText;
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("ROTZ");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
+	}
+
+
 }
 void cMainGame::SetLight()
 {
@@ -468,6 +753,7 @@ void cMainGame::Update()
 	MgrTime->Update();		//시간 계산
 	MgrInput->Update();		//키보드 입력과 마우스 입력을 검사한다.
 	MgrInput->SetHooking(false);	//마우스 
+	MgrUI->OverCheck();				//마우스가 UI와 겹쳐졌는지. 체크
 	//업데이트====================================================
 	{
 		//PhysxData Updata
@@ -482,7 +768,6 @@ void cMainGame::Update()
 	//후순위 업데이트=============================================
 	MgrSound->Update();
 	MgrUI->Update();
-	MgrUI->OverCheck();				//마우스가 UI와 겹쳐졌는지. 체크
 
 	MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
 	MgrPhysXScene->flushStream();
@@ -496,7 +781,7 @@ void cMainGame::Render()
 {
 	//	return;
 	//"g_pD3DDevice->" 는 "MgrD3DDevice->" 으로도 접근 가능, , ,
-	MgrD3DDevice->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0F, 0);
+	MgrD3DDevice->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(47, 121, 112), 1.0F, 0);
 	MgrD3DDevice->BeginScene();
 	//===========Render=============
 	//LigthOn

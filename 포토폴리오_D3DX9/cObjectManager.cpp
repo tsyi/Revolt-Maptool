@@ -86,13 +86,16 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 	cPhysX*		physX = new cPhysX;
 	if (objectName == "default_Sphere")
 	{
-		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
+		physX->m_sizeValue = NxVec3(0.5, 0, 0);
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData,	true, true, false);
+
 		//trigger / 정적 / 무중력 상태의 객체 생성
 	}
 	else if (objectName == "default_Box")
 	{
-		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0.5, 0.5),
+		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, true, true, false);
 		//trigger / 정적 / 무중력 상태의 객체 생성
 	}
@@ -123,5 +126,4 @@ void cObjectManager::CreateButton(std::string objectName)
 		pButton->RegistButtonUI(pbuttonText, pButtonImage, objectName, "Image/UI_BUTTON.png");
 		ui->AddButton(pButton);
 	}
-
 }

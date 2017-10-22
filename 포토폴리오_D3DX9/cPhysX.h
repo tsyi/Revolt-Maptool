@@ -8,8 +8,12 @@
 class cPhysX
 {
 public:
-	NxActor*  m_pActor;		//save/load (X)
+	NxActor*  m_pActor;		//save/load (X)		->월드좌표 + 로컬좌표 저장
 	USERDATA* m_pUserData;	//save/load (X)
+
+	NxMat34 m_worldPose;	//save/load (X)		->월드좌표 저장
+	NxMat34 m_localPose;	//save/load (X)		->로컬좌표 저장
+
 
 	cPhysX();
 	~cPhysX();
@@ -34,6 +38,15 @@ public:
 	{
 		SetPosition(NxVec3(vec3.x, vec3.y, vec3.z));
 	}
+	void SetLocalPosition(NxVec3 pos)
+	{
+		m_localPose.t = pos;
+	}
+	void SetLocalPosition(D3DXVECTOR3 vec3)
+	{
+		SetLocalPosition(NxVec3(vec3.x, vec3.y, vec3.z));
+	}
+
 	void SetRotation(D3DXMATRIX mat16)
 	{
 		NxF32 nxf[9] = { 1,0,0,0,1,0,0,0,1 };
@@ -59,6 +72,33 @@ public:
 	void SetRotation(NxMat33 mat33)
 	{
 		m_pActor->getGlobalPose().M = mat33;
+	}
+
+	void SetLocalRotation(D3DXMATRIX mat16)
+	{
+		NxF32 nxf[9] = { 1,0,0,0,1,0,0,0,1 };
+
+		nxf[0] = mat16._11;
+		nxf[1] = mat16._12;
+		nxf[2] = mat16._13;
+		nxf[3] = mat16._21;
+		nxf[4] = mat16._22;
+		nxf[5] = mat16._23;
+		nxf[6] = mat16._31;
+		nxf[7] = mat16._32;
+		nxf[8] = mat16._33;
+
+		SetLocalRotation(nxf);
+	}
+	void SetLocalRotation(NxF32* nxf32)
+	{
+		NxMat33 mat33;
+		mat33.setColumnMajor(nxf32);
+		SetLocalRotation(mat33);
+	}
+	void SetLocalRotation(NxMat33 mat33)
+	{
+		m_localPose.M = mat33;
 	}
 
 	NxVec3 GetPositionToNxVec3()
@@ -105,11 +145,9 @@ public:
 	void Update()
 	{
 		//저장을 위한 정보 갱신
-		m_position = GetPositionToNxVec3();
-		NxMat33 mat33 = GetRotationToNxMat33();
+		m_position =  m_localPose.t;
+		NxMat33 mat33 = m_localPose.M;
 		mat33.getColumnMajor(m_matR);
-
-
 	}
 
 
@@ -226,8 +264,14 @@ public:
 		else
 		{
 			// 파일을 찾지 못한 경우 구 로 생성
-			m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
-				m_pUserData, true, true, false);
+			m_position = NxVec3(0, 0, 0);
+			m_sizeValue = NxVec3(0.5, 0, 0);
+			m_type = NX_SHAPE_SPHERE;
+			m_IsTrigger = true;
+			m_isStatic_ = true;
+			m_isGravaty = false;
+			m_pActor = MgrPhysX->CreateActor(m_type, m_position, NULL, m_sizeValue,
+				m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
 		}
 		LOAD.close();
 	}
