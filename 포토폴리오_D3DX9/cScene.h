@@ -9,6 +9,9 @@ class cScene
 
 	//임시변수;
 	cObject* m_selectobj;
+
+	//const std::string BaseFolder = "Object/Scene";
+
 public:
 	cScene();
 	~cScene();
@@ -21,11 +24,22 @@ public:
 
 	HRESULT LoadScene(std::string FileName);
 	HRESULT SaveScene(std::string FileName);
+<<<<<<< .merge_file_a13924
+=======
+
+	//TEST
+//	void LoadMap();
+//	void ChanageMap();
+>>>>>>> .merge_file_a08352
 
 	void PushObject(cObject* obj)
 	{
 		m_vecObject.push_back(obj);
 	}
+<<<<<<< .merge_file_a13924
+=======
+
+>>>>>>> .merge_file_a08352
 	void OnChangeValue(int eventID);
 };
 

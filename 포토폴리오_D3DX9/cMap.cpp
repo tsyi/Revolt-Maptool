@@ -26,7 +26,6 @@ void cMap::Destroy()
 
 HRESULT cMap::MapLoad(std::string rvlName)
 {
-
 	return E_NOTIMPL;
 }
 

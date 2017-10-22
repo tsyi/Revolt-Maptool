@@ -25,6 +25,8 @@ cMainGame::~cMainGame()
 
 void cMainGame::Setup()
 {
+	
+
 	MgrPhysX->InitNxPhysX(&m_pDebugRenderer);
 
 	//	MgrObject->Setup();
@@ -40,6 +42,10 @@ void cMainGame::Setup()
 
 	m_pScene = new cScene; m_pScene->Setup();
 
+	//=========================Test
+	m_pScene->LoadScene("Market2");
+	m_pScene->SaveScene("Test");
+	//=========================
 
 	//	MgrSound->Setup();
 	//	MgrSound->LoadSound("sound", "sound01.mp3", true);

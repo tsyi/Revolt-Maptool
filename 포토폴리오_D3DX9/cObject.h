@@ -27,8 +27,8 @@ class cMesh;
 
 class cObject : public cTransform
 {
-	//오직 멥툴에서만 필요.
 protected:
+	//오직 멥툴에서만 필요한 protected
 	SYNTHESIZE(eOBJECT_STATE, m_state, State);
 	SYNTHESIZE(USERDATA*, m_pMapData, MapData);
 	SYNTHESIZE(float, m_heigth, Heigth);
@@ -44,6 +44,8 @@ protected:
 
 
 protected:
+
+	SYNTHESIZE_VIRTUAL(int, m_nAttribute, Attribute);
 public:
 	cObject();
 	~cObject();
@@ -60,11 +62,5 @@ public:
 	{
 //		MgrPhysX->CreateActor()
 	}
-//	virtual USERDATA* GetUserData();
-//	virtual void SetMapUuerData(USERDATA* pMapData);
-//	virtual void SetActor(NxActor* pActor);
-
-	//TextBoxEvent
-
 };
 
