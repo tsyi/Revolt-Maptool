@@ -25,11 +25,9 @@ cMainGame::~cMainGame()
 
 void cMainGame::Setup()
 {
-	
-
 	MgrPhysX->InitNxPhysX(&m_pDebugRenderer);
 
-	//	MgrObject->Setup();
+	MgrObject->Setup();
 	MgrUI->Setup();
 	MgrInput->Setup();
 	MgrFont->Setup();
@@ -78,38 +76,38 @@ void cMainGame::Setup()
 //		NxVec3(-4, 0, 0), NxVec3(0.5, 0.5, 0.5), pBoxObj_1->GetUserData(),
 //		true, false, false, false));
 //	pBoxObj_1->GetActor()->addForce(NxVec3(0, 0, 100));
-
-	pBoxObj_2 = new cStuff;
-	pBoxObj_2->SetPosition(0, 0, 0);
-	pBoxObj_2->SetMeshBox();
-	NxF32 mat[9] = { 1,0,0,0,1,0,0,0,1 };
-	pBoxObj_2->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
-		NxVec3(-2, 0, 0), mat,
-		NxVec3(0.5, 0.5, 0.5), pBoxObj_2->GetUserData(),
-		true,false,true));
-	pBoxObj_2->GetActor()->addForce(NxVec3(0, 0, 100));
-
-	pBoxObj_3 = new cStuff;
-	pBoxObj_3->SetPosition(0, 0, 0);
-	pBoxObj_3->SetMeshBox();
-	pBoxObj_3->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
-		NxVec3(-0, 0, 0), mat,
-		NxVec3(0.5, 0.5, 0.5), pBoxObj_3->GetUserData(),
-		false, false, true));
-	pBoxObj_3->GetActor()->addForce(NxVec3(0, 0, 0));
-
-	NxShape* shape = *pBoxObj_3->GetActor()->getShapes();
-
-
-
-	//m_pScene->PushObject(pBoxObj_0);
-	//m_pScene->PushObject(pBoxObj_1);
-	m_pScene->PushObject(pBoxObj_2);
-	m_pScene->PushObject(pBoxObj_3);
-	//m_pScene->PushObject(pBoxObj_4);
-	//m_pScene->PushObject(pBoxObj_5);
-	//m_pScene->PushObject(pBoxObj_6);
-	//m_pScene->PushObject(pBoxObj_7);
+//
+//	pBoxObj_2 = new cStuff;
+//	pBoxObj_2->SetPosition(0, 0, 0);
+//	pBoxObj_2->SetMeshBox();
+//	NxF32 mat[9] = { 1,0,0,0,1,0,0,0,1 };
+//	pBoxObj_2->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+//		NxVec3(-2, 0, 0), mat,
+//		NxVec3(0.5, 0.5, 0.5), pBoxObj_2->GetUserData(),
+//		true,false,true));
+//	pBoxObj_2->GetActor()->addForce(NxVec3(0, 0, 100));
+//
+//	pBoxObj_3 = new cStuff;
+//	pBoxObj_3->SetPosition(0, 0, 0);
+//	pBoxObj_3->SetMeshBox();
+//	pBoxObj_3->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX,
+//		NxVec3(-0, 0, 0), mat,
+//		NxVec3(0.5, 0.5, 0.5), pBoxObj_3->GetUserData(),
+//		false, false, true));
+//	pBoxObj_3->GetActor()->addForce(NxVec3(0, 0, 0));
+//
+//	NxShape* shape = *pBoxObj_3->GetActor()->getShapes();
+//
+//
+//
+//	//m_pScene->PushObject(pBoxObj_0);
+//	//m_pScene->PushObject(pBoxObj_1);
+//	m_pScene->PushObject(pBoxObj_2);
+//	m_pScene->PushObject(pBoxObj_3);
+//	//m_pScene->PushObject(pBoxObj_4);
+//	//m_pScene->PushObject(pBoxObj_5);
+//	//m_pScene->PushObject(pBoxObj_6);
+//	//m_pScene->PushObject(pBoxObj_7);
 
 
 	SetUI();
@@ -117,13 +115,6 @@ void cMainGame::Setup()
 
 	MgrPhysXScene->setUserTriggerReport(new TriggerCallback());
 
-
-
-	//NxShape* nx1 = *m_pScene->GetObjcets()[0]->GetActor()->getShapes();
-	//NxShape* nx2 = *m_pScene->GetObjcets()[2]->GetActor()->getShapes();
-	//MgrPhysXScene->setShapePairFlags(
-	//	*nx1, *nx2,
-	//	NX_TRIGGER_ON_ENTER);
 }
 
 void cMainGame::SetUI()
@@ -489,8 +480,8 @@ void cMainGame::Update()
 		//선순위 업데이트=============================================
 	MgrTime->Update();		//시간 계산
 	MgrInput->Update();		//키보드 입력과 마우스 입력을 검사한다.
-	MgrInput->SetHooking(false);
-	MgrUI->OverCheck();
+	MgrInput->SetHooking(false);	//마우스 
+	MgrUI->OverCheck();				//마우스가 UI와 겹쳐졌는지. 체크
 	//업데이트====================================================
 	{
 		//PhysxData Updata
@@ -498,10 +489,7 @@ void cMainGame::Update()
 		MgrPhysX->RaycastAllShapes(m_camera->GetPosition(), MgrInput->MousePosToViewDir(m_camera));
 		MgrPhysX->RaycastClosestShape(m_camera->GetPosition(), MgrInput->MousePosToViewDir(m_camera));
 
-		//		TriggerCallback triggerCallBack;
-
-				//		MgrPhysXScene->setActorPairFlags()
-
+	
 		m_pScene->Update();
 
 	}
@@ -521,7 +509,7 @@ void cMainGame::Update()
 void cMainGame::Render()
 {
 	//	return;
-		//"g_pD3DDevice->" 는 "MgrD3DDevice->" 으로도 접근 가능, , ,
+	//"g_pD3DDevice->" 는 "MgrD3DDevice->" 으로도 접근 가능, , ,
 	MgrD3DDevice->Clear(NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0F, 0);
 	MgrD3DDevice->BeginScene();
 	//===========Render=============

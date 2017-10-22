@@ -27,12 +27,14 @@ class cMesh;
 
 class cObject : public cTransform
 {
+
 protected:
 	//오직 멥툴에서만 필요한 protected
 	SYNTHESIZE(eOBJECT_STATE, m_state, State);
 	SYNTHESIZE(USERDATA*, m_pMapData, MapData);
 	SYNTHESIZE(float, m_heigth, Heigth);
 	SYNTHESIZE(D3DXVECTOR3, m_mouseDistance, MouseDistance);
+	SYNTHESIZE(std::string, objName, Name)
 
 protected:
 	SYNTHESIZE_VIRTUAL(eOBJECT_TAG, m_objTag, Tag);

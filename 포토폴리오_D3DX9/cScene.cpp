@@ -8,6 +8,7 @@
 #include <time.h>
 
 cScene::cScene()
+	: m_pMap(NULL)
 {
 }
 
@@ -15,8 +16,15 @@ cScene::~cScene()
 {
 }
 
-HRESULT cScene::LoadScene(std::string FileName)
+void cScene::LoadScene(std::string FileName)
 {
+	if (m_sceenName == FileName)
+	{
+		//동일한 씬을 로드했을 경우 로드를 무시.
+		MessageBoxA(g_hWnd, "현재 열려있는 파일입니다.", "알림", MB_OK);
+		return; 
+	}
+	else m_sceenName = FileName;
 	std::string fullpath = "Object/Scene/" + FileName + ".scn";
 
 	std::fstream Load;
@@ -37,11 +45,14 @@ HRESULT cScene::LoadScene(std::string FileName)
 			{
 				char szMapFile[1024];
 				sscanf_s(szTemp, "%*s %s", szMapFile, 1024);
-				m_pMap = new cMap;
-				std::string folder = "Object/Maps/" + std::string(szMapFile);
-				std::string fileName = szMapFile + std::string(".obj");
-	
-				m_pMap->GetMesh()->LoadMesh(folder, fileName);
+				if (m_pMap != NULL)
+				{
+					m_pMap->Destory();	//기존 지형 지우기
+					m_pMap = NULL;
+				}
+				cMap* newMap = new cMap;
+				newMap->SetName(szMapFile);
+				m_pMap = newMap;
 			}
 			else if (szTemp[0] == 'O') //Object Load
 			{
@@ -94,9 +105,11 @@ HRESULT cScene::LoadScene(std::string FileName)
 					else if (szTemp[0] == 'N') //Physics
 					{
 						//물리정보입력
+
 					}
 					else if (szTemp[0] == '#') //Push
 					{
+
 						m_vecObject.push_back(Obj);
 						break;
 					}
@@ -111,10 +124,10 @@ HRESULT cScene::LoadScene(std::string FileName)
 	
 	Load.close();
 	//
-	return E_NOTIMPL;
+//	return E_NOTIMPL;
 }
 
-HRESULT cScene::SaveScene(std::string FileName)
+void cScene::SaveScene(std::string FileName)
 {
 	std::string fullpath = "Object/Scene/" + FileName + ".scn";
 	std::ofstream Save(fullpath);
@@ -124,7 +137,7 @@ HRESULT cScene::SaveScene(std::string FileName)
 	{
 		// Infomation
 		Save << "//Revolt Scene File" << std::endl;
-		Save << "//Market2" << std::endl;
+		Save << "//"<< FileName << std::endl;
 		struct tm datetime;
 		time_t t;
 		t = time(NULL);
@@ -133,6 +146,8 @@ HRESULT cScene::SaveScene(std::string FileName)
 			<< "-" << datetime.tm_mon + 1
 			<< "-" << datetime.tm_mday << std::endl;
 		Save << std::endl;
+
+		//Map
 		Save << "Map " << FileName << std::endl;
 		Save << std::endl;
 
@@ -173,8 +188,8 @@ HRESULT cScene::SaveScene(std::string FileName)
 	}
 
 	Save.close();
-	return E_NOTIMPL;
-	
+
+//	return E_NOTIMPL;	
 }
 
 void cScene::Setup()

@@ -198,6 +198,9 @@
     <ClInclude Include="cMap.h">
       <Filter>Object\Map</Filter>
     </ClInclude>
+    <ClInclude Include="cPhysX.h">
+      <Filter>PhysX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="포토폴리오_D3DX9.cpp">
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="cMap.cpp">
       <Filter>Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cPhysX.cpp">
+      <Filter>PhysX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
