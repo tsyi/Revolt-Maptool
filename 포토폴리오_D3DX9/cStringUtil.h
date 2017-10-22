@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sstream>
+#include <iostream>
 
 // USES_CONVERSION 매크로
 #include "atlconv.h"
@@ -41,7 +42,7 @@ CW2WEX		이 클래스를 사용 하 여 문자열 변환 매크로에서 CW2TEX 및 CT2WEX, 및 typed
 (맨 뒤의 EX를 제외해서 사용 가능)
 
 CComBSTR		에 대 한 래퍼 클래스인 BSTRs.
-_U_STRINGorID	이 인수 어댑터 클래스 두 리소스 이름이 있습니다 
+_U_STRINGorID	이 인수 어댑터 클래스 두 리소스 이름이 있습니다
 				(LPCTSTRs) 또는 리소스 Id (UINTs) 호출자 ID를 사용 하여
 				문자열에 변환할 필요 없이 함수에 전달 하는 MAKEINTRESOURCE 매크로.
 */
@@ -63,7 +64,7 @@ public:
 	static std::string ToString(int value) { std::stringstream ss; ss << value; return ss.str(); }
 	static std::string ToString(float value) { std::stringstream ss; ss << value; return ss.str(); }
 	static std::string ToString(CHAR text) { std::stringstream ss; ss << text; return ss.str(); }
-	
+
 	static std::wstring ToWString(int value) { std::wstringstream ss; ss << value; return ss.str(); }
 	static std::wstring ToWString(float value) { std::wstringstream ss; ss << value; return ss.str(); }
 	static std::wstring ToWString(WCHAR text) { std::wstringstream ss; ss << text; return ss.str(); }
@@ -78,7 +79,7 @@ public:
 	{
 		USES_CONVERSION; return A2W(text.c_str());
 	}
-	
+
 	//ATL 7.0 변환 클래스
 	static std::string ToString(std::wstring text)
 	{
@@ -92,10 +93,45 @@ public:
 	//자세한 내용(ATL) : "https://technet.microsoft.com/ko-kr/library/87zae4a3(v=vs.110)"
 
 
+	//std::vector<CHAR> 값에 포함된 문자들을 이용하여 string을 자릅니다.
+	static void Split(std::vector<std::string>* datas, std::vector<CHAR>* cutChars, std::string* text)
+	{
+		datas->clear();
+		int startIndex = 0;
+		for (int i = 0; i < text->length(); i++)
+		{
+			for (int j = 0; j < cutChars->size(); j++)
+			{
+				if ((*text)[i] == (*cutChars)[j])
+				{
+					std::string pushData = text->substr(startIndex, i - startIndex);
+					if (pushData.length ()> 0) datas->push_back(pushData);
+					break;
+				}
+			}
+		}
+		datas->push_back(text->substr(startIndex, text->length() - startIndex));
+	}
+	static void Split(std::vector<std::string>* datas, CHAR* cutChar, std::string* text)
+	{
+		datas->clear();
+		int startIndex = 0;
+		for (int i = 0; i < text->length(); i++)
+		{
+			if ((*text)[i] == *cutChar)
+			{
+				std::string pushData = text->substr(startIndex, i - startIndex);
+				if (pushData.length() > 0) datas->push_back(pushData);
+				startIndex = i + 1;
+			}
+		}
+		datas->push_back(text->substr(startIndex, text->length() - startIndex));
+	}
+
 private:
 	void TestFunc()
 	{
-		
+
 	}
 };
 

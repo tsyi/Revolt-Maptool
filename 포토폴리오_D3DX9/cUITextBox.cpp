@@ -16,7 +16,7 @@ cUITextBox::~cUITextBox()
 
 void cUITextBox::SetEvent_OnEnter(Event function)
 {
-	onEnter = function;
+	SetOnEnter(std::move(function));
 }
 
 void cUITextBox::RegistTextBoxUI(cUIText * pUiText, cUIImage * pUiImage, std::string text, std::string InagePach)
@@ -71,7 +71,7 @@ void cUITextBox::Update()
 			//È®ÀÎ
 			m_state = eTextBoxState::E_TEXT_BOX_STATE_NONE;
 			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
-			if (onEnter) onEnter(1);
+			if (onEnter) GetOnEnter()(VK_RETURN);
 		}
 		if (MgrInput->IsMouseDown(MOUSE_BUTTON::MOUSE_LEFT))
 		{
@@ -80,27 +80,27 @@ void cUITextBox::Update()
 			{
 				m_state = eTextBoxState::E_TEXT_BOX_STATE_NONE;
 				m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
-				if (onEnter) onEnter(0);
+				if (onEnter) GetOnEnter()(VK_ESCAPE);
 			}
 		}
 		if (m_state == eTextBoxState::E_TEXT_BOX_STATE_SELECT)
 		{
 			if (MgrInput->IsKeyDown(VK_DELETE))
 			{
-				m_pUiText->GetText()->text = "";
+				m_pUiText->GetTextData()->text = "";
 			}
 			if (MgrInput->IsKeyDown(VK_BACK))
 			{
-				if (m_pUiText->GetText()->text.length() > 0)
+				if (m_pUiText->GetTextData()->text.length() > 0)
 				{
-					m_pUiText->GetText()->text.pop_back();
+					m_pUiText->GetTextData()->text.pop_back();
 				}
 			}
 			if (MgrInput->IsKeyPress(VK_BACK))
 			{
-				if (pushTime > 0.5f && m_pUiText->GetText()->text.length() > 0)
+				if (pushTime > 0.5f && m_pUiText->GetTextData()->text.length() > 0)
 				{
-					m_pUiText->GetText()->text.pop_back();
+					m_pUiText->GetTextData()->text.pop_back();
 					pushTime -= 0.05f;
 				}
 				else pushTime += MgrTime->GetElapsedTime();
@@ -115,27 +115,27 @@ void cUITextBox::Update()
 				if ((textBuffer >= 'A' && textBuffer <= 'Z')) // -65== '/'
 				{
 					if (!MgrInput->IsKeyPress(VK_LSHIFT)) textBuffer += ('a' - 'A');
-					m_pUiText->GetText()->text.push_back(textBuffer);
+					m_pUiText->GetTextData()->text.push_back(textBuffer);
 				}
 				else if ((textBuffer >= '0' && textBuffer <= '9')) // -66 == .
 				{
-					m_pUiText->GetText()->text.push_back(textBuffer);
+					m_pUiText->GetTextData()->text.push_back(textBuffer);
 				}
 				else
 				{
 					if (textBuffer == -66) {
-						m_pUiText->GetText()->text.push_back('.');
+						m_pUiText->GetTextData()->text.push_back('.');
 					}
 					if (textBuffer == -65) {
-						m_pUiText->GetText()->text.push_back('/');
+						m_pUiText->GetTextData()->text.push_back('/');
 					}
 					if (textBuffer == -67)
 					{
 						if (MgrInput->IsKeyPress(VK_LSHIFT)) {
-							m_pUiText->GetText()->text.push_back('_');
+							m_pUiText->GetTextData()->text.push_back('_');
 						}
 						else {
-							m_pUiText->GetText()->text.push_back('-');
+							m_pUiText->GetTextData()->text.push_back('-');
 						}
 					}
 				}
@@ -155,7 +155,7 @@ void cUITextBox::Render()
 
 std::string cUITextBox::GetData_String()
 {
-	return m_pUiText->GetText()->text;
+	return m_pUiText->GetTextData()->text;
 }
 
 int cUITextBox::GetData_Int()
@@ -170,7 +170,7 @@ float cUITextBox::GetData_Float()
 
 void cUITextBox::SetData_ToString(std::string text)
 {
-	m_pUiText->GetText()->text = text;
+	m_pUiText->GetTextData()->text = text;
 }
 
 void cUITextBox::SetData_ToString(float value)

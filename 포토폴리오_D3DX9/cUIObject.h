@@ -10,6 +10,9 @@ enum eUITag
 	E_UI_WINDOW_R,
 	
 	E_UI_TEXTBOX_MAPNAME,
+	E_UI_BUTTON_SAVE,
+
+
 	E_UI_TEXTBOX_OBJNAME,
 	E_UI_TEXTBOX_POS_X,
 	E_UI_TEXTBOX_POS_Y,
@@ -66,8 +69,8 @@ public:
 	{
 		RECT rc;
 		SetRect(&rc,
-			(int)m_matWorld._41,
-			(int)m_matWorld._42,
+			(int)m_matWorld._41 ,
+			(int)m_matWorld._42 ,
 			(int)m_matWorld._41 + (int)GetSize().x,
 			(int)m_matWorld._42 + (int)GetSize().y);
 

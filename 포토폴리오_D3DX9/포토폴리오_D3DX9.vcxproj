@@ -169,6 +169,7 @@
     <ClInclude Include="cObject.h" />
     <ClInclude Include="cObjectManager.h" />
     <ClInclude Include="cObjLoader.h" />
+    <ClInclude Include="cPhysX.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cSoundManager.h" />
     <ClInclude Include="cStringUtil.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="cObject.cpp" />
     <ClCompile Include="cObjectManager.cpp" />
     <ClCompile Include="cObjLoader.cpp" />
+    <ClCompile Include="cPhysX.cpp" />
     <ClCompile Include="cScene.cpp" />
     <ClCompile Include="cStringUtil.cpp" />
     <ClCompile Include="cStuff.cpp" />
