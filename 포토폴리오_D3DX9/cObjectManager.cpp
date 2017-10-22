@@ -47,25 +47,25 @@ void cObjectManager::AddObj(cScene* addScene, eOBJ_TAG eObj)
 
 
 	// 미 완성
-	pObject == NULL;
-	if (pObject)
-	{
-		addScene->GetObjects().push_back(pObject);
+	//pObject == NULL;
+	//if (pObject)
+	//{
+	//	addScene->GetObjects().push_back(pObject);
 
-		// 동적으로 버튼 생성
-		cUIButton* pButton = new cUIButton;
-		cUIImage* pButtonImage = new cUIImage;
-		cUIText* pbuttonText = new cUIText;
+	//	// 동적으로 버튼 생성
+	//	cUIButton* pButton = new cUIButton;
+	//	cUIImage* pButtonImage = new cUIImage;
+	//	cUIText* pbuttonText = new cUIText;
 
-		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-		pButton->SetSize(200, 40);
-		pButton->RegistButtonUI(pbuttonText, pButtonImage, strObjName[eObj], "Image/UI_BUTTON.png");
-		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
+	//	pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
+	//	pButton->SetSize(200, 40);
+	//	pButton->RegistButtonUI(pbuttonText, pButtonImage, strObjName[eObj], "Image/UI_BUTTON.png");
+	//	pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+	//	pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
 
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-		ui->AddButton(pButton);
-	}
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+	//	ui->AddButton(pButton);
+	//}
 }
 
 void cObjectManager::DeleteObj()

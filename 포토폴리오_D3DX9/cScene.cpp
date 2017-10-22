@@ -111,11 +111,13 @@ void cScene::LoadScene(std::string FileName)
 					else if (szTemp[0] == 'N') //Physics
 					{
 						//물리정보입력
-
+						Obj->GetPhysXData()->LoadPhysX(FileName);
+						bool isActor = 0;
+						sscanf_s(szTemp, "%*s %d", &isActor);
+						Obj->SetIsActor(isActor);
 					}
 					else if (szTemp[0] == '#') //Push
 					{
-
 						m_vecObject.push_back(Obj);
 						break;
 					}
@@ -181,7 +183,7 @@ void cScene::SaveScene(std::string FileName)
 				<< m_vecObject[i]->GetDirection().y << " "
 				<< m_vecObject[i]->GetDirection().z << std::endl;
 
-			Save << "N " << std::endl;
+			Save << "N " << m_vecObject[i]->GetIsActor() << std::endl;
 
 			Save << "#" << std::endl;
 
