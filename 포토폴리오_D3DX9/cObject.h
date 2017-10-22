@@ -23,7 +23,6 @@ enum eOBJECT_STATE
 	E_OBJECT_STATE_CANSLE,
 };
 
-class NxActor;
 class cMesh;
 class cPhysX;
 

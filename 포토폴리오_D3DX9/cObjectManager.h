@@ -3,6 +3,7 @@
 #define MgrObject	cObjectManager::GetInstance()
 
 class cObject;
+class cScene;
 
 enum eOBJ_TAG
 {
@@ -40,7 +41,7 @@ private:
 
 public:
 	void Setup();
-	void AddObj(eOBJ_TAG eObj);
+	void AddObj(cScene* AddScene, eOBJ_TAG eObj);
 	void DeleteObj();
 	cMesh* LoadObj(eOBJ_TAG fileName);
 	//void AddObject(cObject* pObject);

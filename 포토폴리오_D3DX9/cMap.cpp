@@ -104,5 +104,15 @@ HRESULT cMap::PhxLoad(std::string phxName, cMesh * dest)
 	return E_NOTIMPL;
 }
 
+void cMap::Update()
+{
+	//맵은 뭘업데이트 하나??
+}
+
+void cMap::Render()
+{
+	cObject::Render();
+}
+
 
 
