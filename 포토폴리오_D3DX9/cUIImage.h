@@ -53,11 +53,6 @@ public:
 			(int)m_matWorld._41 - a_x + (int)GetSize().x * GetScale().x,
 			(int)m_matWorld._42 - a_y + (int)GetSize().y * GetScale().y);
 
-		std::cout << rc.left << std::endl;
-		std::cout << rc.right << std::endl;
-		std::cout << rc.top << std::endl;
-		std::cout << rc.bottom << std::endl;
-
 		return PtInRect(&rc, MgrInput->GetMousePoint());
 	}
 

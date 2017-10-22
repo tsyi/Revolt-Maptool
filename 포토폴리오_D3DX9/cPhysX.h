@@ -154,7 +154,7 @@ public:
 
 				//데이터 로드 시작.
 				std::string dateTitle = POPDATA; //  POPDATA = Data[sI++] (현재 데이터를 빼낸 뒤 다음 데이터를 준비)
-				if (dateTitle == "FILE_NAME")
+				if (dateTitle == "OBJECT_NAME")
 				{
 					actorName = POPDATA;
 					continue;
@@ -206,9 +206,10 @@ public:
 					m_matR[8] = cStringUtil::ToFloat(POPDATA);
 					continue;
 				}
-			}//eof
+			}//while(eof)
 
 			//creatActor
+
 			NxActor* pActor = MgrPhysX->CreateActor(m_type, m_position, m_matR, m_sizeValue, m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
 			if (pActor)
 			{
@@ -220,18 +221,25 @@ public:
 
 				m_pActor = pActor;
 			}
-		}//open
+
+		}//LOAD.is_open()
+		else
+		{
+			// 파일을 찾지 못한 경우 구 로 생성
+			m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
+				m_pUserData, true, true, false);
+		}
 		LOAD.close();
 	}
 	void SavePhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Scene/" + fileName + ".phx";
+		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
 
 		std::ofstream SAVE(fullpath);
 
 		if (SAVE.is_open())
 		{
-			SAVE << "FILE_NAME" << TAB << fileName << std::endl;
+			SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;
 
 			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
 

@@ -38,6 +38,8 @@ void cUIListView::AddButton(cUIButton * pButton)
 		lastButton.y += m_vecButton.back()->GetSize().y;
 		pButton->SetPosition(lastButton);
 	}
+	pButton->SetEventID(m_vecButton.size() - 1);
+	pButton->SetEvent_OnCilck_Up(std::bind(&cUIListView::OnCheckButtonClick, this, std::placeholders::_1));
 }
 
 void cUIListView::Destory()
@@ -53,27 +55,36 @@ void cUIListView::Destory()
 void cUIListView::Update()
 {
 	if (!GetShow()) return;
-//	if (IsMouseOver()) { MgrInput->SetHooking(true); }
+	//	if (IsMouseOver()) { MgrInput->SetHooking(true); }
 
 	if (MgrInput->IsMouseWheel())
 	{
 		if (IsMouseOver()) m_Vvalue += MgrInput->GetMouseWheelDelta() * 10;
 	}
 
-	float heightsize =0;
+	float heightsize = 0;
 
 	for each(cUIButton* pButton in m_vecButton)
 	{
 		pButton->SetPosition(0, heightsize + m_Vvalue, 0);
 		heightsize += pButton->GetSize().y;
-
-	//	Get
 	}
 
 	cUIObject::Update();
+
 }
 
 void cUIListView::Render()
 {
 	cUIObject::Render();
+}
+
+void cUIListView::OnCheckButtonClick(int buttonIndex)
+{
+	GetOnClick_List()(buttonIndex);
+}
+
+void cUIListView::SetEvent_OnCilck_List(Event function)
+{
+	SetOnClick_List(std::move(function));
 }

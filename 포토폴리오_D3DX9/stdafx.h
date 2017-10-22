@@ -176,21 +176,17 @@ struct ST_RAYCAST
 #define SYNTHESIZE( varType , varName , funName) \
 protected: varType varName ; \
 public : inline varType Get##funName(void) const { return varName ; } \
-public : inline void Set##funName(varType var) { varName = var ; } \
-protected:
+public : inline void Set##funName(varType var) { varName = var ; }
 
 #define SYNTHESIZE_VIRTUAL( varType , varName , funName) \
 protected: varType varName; \
 public: inline virtual varType Get##funName(void) const { return varName; } \
-public : inline virtual void Set##funName(varType var) { varName = var ; }\
-protected:
-
+public : inline virtual void Set##funName(varType var) { varName = var ; }
 
 #define SYNTHESIZE_PASS_BY_REF( varType , varName , funName) \
 protected: varType varName ; \
 public : inline varType& Get##funName(void)  { return varName ; } \
-public : inline void Set##funName(varType& var) { varName = var ; }\
-protected:
+public : inline void Set##funName(varType& var) { varName = var ; }
 
 #define SAFE_ADD_REF(p) { if(p) p->AddRef() ; }
 
@@ -204,8 +200,7 @@ protected:
 					SAFE_RELEASE(varName) ; \
 					varName = var ; \
 				} \
-		}\
-protected:
+		}
 
 
 enum ButtonState { None, Overlap, Down, Up };

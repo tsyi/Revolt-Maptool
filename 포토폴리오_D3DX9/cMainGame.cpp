@@ -31,10 +31,15 @@ void cMainGame::Setup()
 {
 	MgrPhysX->InitNxPhysX(&m_pDebugRenderer);
 
+//	MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
+//		NULL, true, true, false);
+
+
 	OnLoadMap(VK_RETURN); // 최초 디폴트 값을 로드
 
-	MgrObject->Setup();
 	MgrUI->Setup();
+	SetUI();	//OnLoadMap(VK_RETURN); 다음에 실행
+
 	MgrInput->Setup();
 	MgrFont->Setup();
 
@@ -58,7 +63,7 @@ void cMainGame::Setup()
 		//	MgrSound->Play("sound01.mp3", 1.f);	//배경음 재생
 
 
-		// 로드되어있는 재질정보
+	// 로드되어있는 재질정보
 	NxMaterialDesc defaultMaterial;
 	defaultMaterial.setToDefault();
 	defaultMaterial.restitution = 0.5f;
@@ -67,11 +72,13 @@ void cMainGame::Setup()
 	MgrPhysXScene->createMaterial(defaultMaterial);
 
 
-	SetUI();
+	
 	SetLight();
 
-	MgrPhysXScene->setUserTriggerReport(new TriggerCallback());
+	MgrObject->Setup();	//SetUI(); 다음에 실행
 
+	//trigger 충돌을 위해 필요
+	MgrPhysXScene->setUserTriggerReport(new TriggerCallback());
 }
 
 void cMainGame::SetUI()
@@ -82,8 +89,7 @@ void cMainGame::SetUI()
 	UIWindowL->SetScaleSize(203, 1000);
 	UIWindowL->SetPosition(0, 0, 0);
 	UIWindowL->SetAnchor(0, 0, 0);
-	UIWindowL->IsHookingCheck = true
-		;
+	UIWindowL->IsHookingCheck = true;
 	MgrUI->RegisteredUI(UIWindowL);
 
 	cUIImage* UIWindowR = new cUIImage;
@@ -362,51 +368,58 @@ void cMainGame::SetUI()
 		UIListView->SetPosition(0, 30, 0);
 		UIListView->SetSize(200, 1000);
 		UIListView->SetBackgroundUI(pBackgroundImage);
+		UIListView->SetEvent_OnCilck_List(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_TITLE);
 		ui->AddChild(UIListView);
 	}
 	//ButtonList
+//	{
+//		cUIButton* pButton = new cUIButton;
+//		cUIImage* pButtonImage = new cUIImage;
+//		cUIText* pbuttonText = new cUIText;
+//
+//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
+//		pButton->SetSize(200, 40);
+//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
+//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+//		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
+//
+//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+//		ui->AddButton(pButton);
+//	}
+//	{
+//		cUIButton* pButton = new cUIButton;
+//		cUIImage* pButtonImage = new cUIImage;
+//		cUIText* pbuttonText = new cUIText;
+//
+//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
+//		pButton->SetSize(200, 40);
+//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button2", "Image/UI_TEXTBOX.png");
+//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+//		pButton->SetEventID(eOBJ_TAG::OBJ_CHEESE);
+//
+//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+//		ui->AddButton(pButton);
+//	}
+//	{
+//		cUIButton* pButton = new cUIButton;
+//		cUIImage* pButtonImage = new cUIImage;
+//		cUIText* pbuttonText = new cUIText;
+//
+//		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
+//		pButton->SetSize(200, 40);
+//		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button3", "Image/UI_TEXTBOX.png");
+//		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+//		pButton->SetEventID(eOBJ_TAG::OBJ_CHICKEN);
+//
+//		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+//		ui->AddButton(pButton);
+//	}
+
+	//PhysX 관련 UI
 	{
-		cUIButton* pButton = new cUIButton;
-		cUIImage* pButtonImage = new cUIImage;
-		cUIText* pbuttonText = new cUIText;
 
-		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-		pButton->SetSize(200, 40);
-		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button1", "Image/UI_TEXTBOX.png");
-		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-		ui->AddButton(pButton);
-	}
-	{
-		cUIButton* pButton = new cUIButton;
-		cUIImage* pButtonImage = new cUIImage;
-		cUIText* pbuttonText = new cUIText;
-
-		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-		pButton->SetSize(200, 40);
-		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button2", "Image/UI_TEXTBOX.png");
-		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-		pButton->SetEventID(eOBJ_TAG::OBJ_CHEESE);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-		ui->AddButton(pButton);
-	}
-	{
-		cUIButton* pButton = new cUIButton;
-		cUIImage* pButtonImage = new cUIImage;
-		cUIText* pbuttonText = new cUIText;
-
-		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
-		pButton->SetSize(200, 40);
-		pButton->RegistButtonUI(pbuttonText, pButtonImage, "button3", "Image/UI_TEXTBOX.png");
-		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-		pButton->SetEventID(eOBJ_TAG::OBJ_CHICKEN);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
-		ui->AddButton(pButton);
 	}
 }
 void cMainGame::SetLight()
@@ -471,7 +484,6 @@ void cMainGame::Update()
 	MgrUI->Update();
 	MgrUI->OverCheck();				//마우스가 UI와 겹쳐졌는지. 체크
 
-
 	MgrPhysXScene->simulate(MgrTime->GetElapsedTime());	//프레임 지정
 	MgrPhysXScene->flushStream();
 	MgrPhysXScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
@@ -520,16 +532,7 @@ LRESULT cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 void cMainGame::OnCreateObject(int eventID)
 {
-//	cStuff* pBoxObject = new cStuff;
-//	pBoxObject->SetPosition(0, 4, 0);
-//	pBoxObject->SetMeshBox();
-//	//pBoxObject->SetActor(MgrPhysX->CreateActor(NX_SHAPE_BOX, NX_SF_VISUALIZATION, NX_BF_ENERGY_SLEEP_TEST | NX_BF_DISABLE_GRAVITY, pBoxObject->GetUserData(),
-//	//	NxVec3(1, 1, 1), 0, 1, pBoxObject->GetMatrix(false, true, true)));
-//
-//	m_pScene->PushObject(pBoxObject);
-
-	//	if (eOBJ_TAG::OBJ_MAX <= eventID) eventID = 0;
-	//	MgrObject->AddObj((eOBJ_TAG)eventID);
+	MgrObject->AddObj(m_pScene, eventID);
 }
 
 void cMainGame::OnLoadMap(int eventID)

@@ -58,19 +58,25 @@ void cObject::Update()
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0)
 				{
 					SetState(E_OBJECT_STATE_CANSLE);
-					D3DXCOLOR materColor = unSelectColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					if (GetMeshData())
+					{
+						D3DXCOLOR materColor = unSelectColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					}
 					break;
 				}
 				else if (GetPhysXData()->m_pUserData->RaycastClosestShape != NX_TRUE)
 				{
 					SetState(E_OBJECT_STATE_CANSLE);
-					D3DXCOLOR materColor = unSelectColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					if (GetMeshData())
+					{
+						D3DXCOLOR materColor = unSelectColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					}
 					break;
 				}
 				SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
@@ -106,10 +112,13 @@ void cObject::Update()
 					SetHeigth(cTransform::GetPosition().y);
 					SetState(E_OBJECT_STATE_SELECT);
 
-					D3DXCOLOR materColor = isSelectColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
-					GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					if (GetMeshData())
+					{
+						D3DXCOLOR materColor = isSelectColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+						GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+					}
 				}
 			}
 		} break;

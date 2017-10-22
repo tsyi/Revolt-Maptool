@@ -83,7 +83,7 @@ NxTriangleMeshShapeDesc cPhysXManager::CreateTringleMesh(ID3DXMesh* pMesh, D3DXM
 	NxTriangleMesh* pTriangleMesh;
 	NxTriangleMeshDesc meshDesc;
 	NxU32 flg = 0;
-	
+
 	if (pMesh)
 	{
 		//메쉬 정보 복사
@@ -213,7 +213,6 @@ bool RaycastCallBack::onHit(const NxRaycastHit & hit)
 		userData->RaycastAllShape = NX_TRUE;
 		userData->RayHitPos = hit.worldImpact;
 		MgrPhysXData->RaycastAllShapeHitCount++;
-
 	}
 	return true;
 }

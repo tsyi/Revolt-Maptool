@@ -10,11 +10,12 @@ class cScene
 
 
 	//임시변수;
-	cObject* m_selectobj;
 
 	//const std::string BaseFolder = "Object/Scene";
+	cObject* m_selectobj;
 
 public:
+
 	cScene();
 	~cScene();
 

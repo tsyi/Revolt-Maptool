@@ -10,132 +10,118 @@ cObjectManager::cObjectManager()
 
 cObjectManager::~cObjectManager()
 {
+
 }
 
 void cObjectManager::Setup()
 {
-	//모든 오브젝트를 불러와서 벡터에 담는다.
+	m_vecObjectKey.push_back("default_Box");
+	m_vecObjectKey.push_back("default_Sphere");
 
-	//오브젝트 번호에따라 순서대로 불러와서 매쉬리스트 만든다.
+	m_vecObjectKey.push_back("cheese");
+	m_vecObjectKey.push_back("chicken");
+	m_vecObjectKey.push_back("fabric");
+	m_vecObjectKey.push_back("kidride");
+
+	for (int i = 0; i < m_vecObjectKey.size(); i++)
+	{
+		CreateButton(m_vecObjectKey[i]);
+	}
 }
 
-void cObjectManager::AddObj(cScene* addScene, eOBJ_TAG eObj)
+void cObjectManager::AddObj(cScene* addScene, int keyID)
+{
+	cObject* pObject = CreateObject(m_vecObjectKey[keyID]);
+	if (pObject)
+	{
+		addScene->PushObject(pObject);
+	}
+}
+
+void cObjectManager::DeleteObj()
+{
+	
+}
+//
+//cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
+//{
+//
+//	return NULL;
+//}
+
+
+
+void cObjectManager::Destroy()
+{
+
+}
+
+void cObjectManager::Render()
+{
+	
+}
+
+
+cObject* cObjectManager::CreateObject(std::string objectName)
 {
 	std::string strFolder;
 	std::string strFileName;
 
-	strFolder = "Object/Objects/" + strObjName[eObj];
-	strFileName = strObjName[eObj] + ".obj";
+	strFolder = "Object/Objects/" + objectName;
+	strFileName = objectName + ".obj";
 
-	cObject* pObject = new cObject;
-
-
-
-
-	cMesh* mesh = new cMesh; // 매쉬 생성
-	if (eObj == 0)
+	cObject*	pObject = new cObject;
+	cMesh*		mesh = new cMesh; // 매쉬 생성
+	if (objectName == "default_Box" || objectName == "default_Sphere")
 	{
 		mesh->m_pMesh = NULL;
 		mesh->m_vecMtlTex.clear();
+		delete mesh;
+		mesh = NULL;
 	}
 	else
 	{
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 	}
-
-
-
-
-	// 미 완성
-	pObject == NULL;
-	if (pObject)
+	cPhysX*		physX = new cPhysX;
+	if (objectName == "default_Sphere")
 	{
-		addScene->GetObjects().push_back(pObject);
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
+			physX->m_pUserData,	true, true, false);
+		//trigger / 정적 / 무중력 상태의 객체 생성
+	}
+	else if (objectName == "default_Box")
+	{
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0.5, 0.5),
+			physX->m_pUserData, true, true, false);
+		//trigger / 정적 / 무중력 상태의 객체 생성
+	}
+	else
+	{
+		physX->LoadPhysX(strFileName);
+		//기존에 저장되어있는 정보로 생성
+	}
 
-		// 동적으로 버튼 생성
+	pObject->SetMeshData(mesh);
+	pObject->SetPhysXData(physX);
+
+	return pObject;
+}
+
+void cObjectManager::CreateButton(std::string objectName)
+{
+	// 동적으로 버튼 생성
+	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+	if (ui)
+	{
 		cUIButton* pButton = new cUIButton;
 		cUIImage* pButtonImage = new cUIImage;
 		cUIText* pbuttonText = new cUIText;
 
 		pButton->SetTag(eUITag::E_UI_OBJLIST_BUTTONS);
 		pButton->SetSize(200, 40);
-		pButton->RegistButtonUI(pbuttonText, pButtonImage, strObjName[eObj], "Image/UI_BUTTON.png");
-		pButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-		pButton->SetEventID(eOBJ_TAG::OBJ_NONE);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_VIEW);
+		pButton->RegistButtonUI(pbuttonText, pButtonImage, objectName, "Image/UI_BUTTON.png");
 		ui->AddButton(pButton);
 	}
-}
 
-void cObjectManager::DeleteObj()
-{
-	//for (int i = 0; i < m_vecCreatedObj.size(); i++)
-	//{
-	//	if (m_vecCreatedObj[i]->GetState() == MESH_STATE_SELET)
-	//	{
-	//		m_vecCreatedObj[i]->Destory();
-	//		SAFE_DELETE(m_vecCreatedObj[i]);
-	//
-	//		m_vecCreatedObj.erase(m_vecCreatedObj.begin() + i);
-	//	}
-	//}
-}
-
-cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
-{
-//	std::string strFolder;
-//	std::string strFileName;
-//
-//	strFolder = "Object/Objects/" + strObjName[eObj];
-//	strFileName = strObjName[eObj] + ".obj";
-//
-//	cMesh* mesh = new cMesh; // 매쉬 생성
-//	if (eObj == 0)
-//	{
-//		mesh->m_pMesh = NULL;
-//		mesh->m_vecMtlTex.clear();
-//	}
-//	else
-//	{
-//		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
-//	}
-//	return mesh;;
-	return NULL;
-}
-
-//void cObjectManager::AddObject(cObject * pObject)
-//{
-//	
-//}
-//
-//void cObjectManager::RemoveObject(cObject * pObject)
-//{
-//
-//}
-
-void cObjectManager::Destroy()
-{
-//	for each(auto p in m_vecCreatedObj)
-//	{
-//		p->Destory();
-//		SAFE_DELETE(p);
-//	}
-//	m_vecCreatedObj.clear();
-//
-//	for each(auto p in m_vecObjList)
-//	{
-//		p->Destory();
-//		SAFE_DELETE(p);
-//	}
-//	m_vecObjList.clear();
-}
-
-void cObjectManager::Render()
-{
-//	for each(cMesh* pMesh in m_vecCreatedObj)
-//	{
-//	//	pMesh->SetPosition(D3DXVECTOR3(0, 1, 0));
-//		pMesh->Render();
-//	}
 }

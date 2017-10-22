@@ -30,7 +30,7 @@ class cObject : public cTransform
 {
 protected:
 	//오직 멥툴에서만 필요한 protected
-	D3DXCOLOR isSelectColor = D3DXCOLOR(0.3f, 1.0f, 0.8f, 1.0f);
+	D3DXCOLOR isSelectColor = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
 	D3DXCOLOR unSelectColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	SYNTHESIZE(eOBJECT_STATE, m_state, State);
@@ -65,5 +65,6 @@ public:
 	{
 //		MgrPhysX->CreateActor()
 	}
+
 };
 

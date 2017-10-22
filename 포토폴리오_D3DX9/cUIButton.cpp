@@ -15,11 +15,7 @@ cUIButton::~cUIButton()
 {
 }
 
-void cUIButton::SetEvent_OnCilck_Up(Event function)
-{
-//	onClick_Up = std::move(function);
-	SetOnClick_Up(std::move(function));
-}
+
 
 void cUIButton::RegistButtonUI(cUIText * pUiText, cUIImage * pUiImage, std::string text, std::string InagePach)
 {
@@ -83,11 +79,12 @@ void cUIButton::Update()
 		if (!IsMouseOver())
 		{
 			m_state = E_BUTTON_NONE;
+			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 		else  if (MgrInput->IsMouseUp(MOUSE_LEFT))
 		{
 			m_state = E_BUTTON___UP;
-			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255 / 2, 255 / 2, 255 / 2));
+			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 	}break;
 	case E_BUTTON___UP:
@@ -103,4 +100,9 @@ void cUIButton::Update()
 void cUIButton::Render()
 {
 	cUIObject::Render();
+}
+
+void cUIButton::SetEvent_OnCilck_Up(Event function)
+{
+	SetOnClick_Up(std::move(function));
 }

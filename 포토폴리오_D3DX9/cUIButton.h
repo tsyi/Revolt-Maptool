@@ -33,7 +33,6 @@ protected:
 public:
 	cUIButton();
 	~cUIButton();
-	void SetEvent_OnCilck_Up(Event function);
 
 	void RegistButtonUI(cUIText* pUiText, cUIImage* pUiImage, std::string text, std::string InagePach);
 	void Destory();
@@ -42,4 +41,5 @@ public:
 
 //	void EventSet()
 
+	void SetEvent_OnCilck_Up(Event function);
 };

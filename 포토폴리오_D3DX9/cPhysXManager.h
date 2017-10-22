@@ -306,8 +306,19 @@ public:
 		}
 		case NX_SHAPE_SPHERE: {
 			NxSphereShapeDesc desc; desc.setToDefault();
-			//	desc.materialIndex - materialIndex;
+
+			desc.setToDefault();
 			desc.radius = sizeValue.x;
+			desc.materialIndex = 0;
+			shapeDesc = &desc;
+
+			if (isKinematic)
+			{
+				NxSphereShapeDesc dummyShape;
+				dummyShape.setToDefault();
+				dummyShape.radius = sizeValue.x;
+				ActorDesc.shapes.pushBack(&dummyShape);
+			}
 			break;
 		}
 		case NX_SHAPE_BOX: {
@@ -382,7 +393,7 @@ public:
 		}
 		if (!isKinematic&& IsTrigger)
 		{
-			shapeDesc->shapeFlags = NX_TRIGGER_ENABLE;
+			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
 
 		//	ActorDesc.body = NULL;
 		}
@@ -397,9 +408,15 @@ public:
 		ActorDesc.density = 10.f;
 		ActorDesc.shapes.pushBack(shapeDesc);
 		ActorDesc.globalPose.t = position;
+		if (mat == NULL)
+		{
+			NxF32 mat_[9] = { 1,0,0,0,1,0,0,0,1 };
+			mat = mat_;
+		}
+		
 		ActorDesc.globalPose.M.setColumnMajor(mat);
 
-		ActorDesc.userData = (pUserData);
+		if (pUserData != NULL) ActorDesc.userData = (pUserData);
 
 		NxActor* actor = m_pNxScene->createActor(ActorDesc);	
 		if (actor == NULL)
