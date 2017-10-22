@@ -1,0 +1,14 @@
+//Revolt Scene File
+//Market2
+//Date : 2017-10-20
+
+Map Market2
+
+Object
+Tag 4
+Attribute 1
+Position 0 0 0
+Scale 1 1 1
+Rotation 0 0 0
+N 물리정보파일이름
+# <- 여기서 푸쉬
