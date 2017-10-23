@@ -31,6 +31,8 @@ void cObject::Destory()
 	//	MgrPhysXScene->releaseActor(*GetPhysXData()->m_pActor);
 	m_PhysXData = NULL;
 	m_pMeshData = NULL;
+
+	m_state = E_OBJECT_STATE_NONE;
 }
 
 void cObject::Update()
@@ -84,25 +86,25 @@ void cObject::Update()
 				SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
 				SetHeigth(cTransform::GetPosition().y);
 			}
-			if (MgrInput->IsMousePressDrag(MOUSE_LEFT))
+		}
+		if (MgrInput->IsMousePressDrag(MOUSE_LEFT))
+		{
+			NxVec3 pos(0, 0, 0);
+			if (GetMapData()->RaycastAllShape == NX_TRUE)
 			{
-				NxVec3 pos(0, 0, 0);
-				if (GetMapData()->RaycastAllShape == NX_TRUE)
-				{
-					pos = GetMapData()->RayHitPos;
-					pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
-					pos.y = GetHeigth();
-				}
-				else
-				{
-					pos = GetPhysXData()->m_pUserData->RayHitPos;
-					pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
-					pos.y = GetHeigth();
-				}
-				GetPhysXData()->m_worldPose.t = pos;
+				pos = GetMapData()->RayHitPos;
+			//	pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
+				pos.y = GetHeigth();
 			}
-
-		}break;
+			else
+			{
+				pos = GetPhysXData()->m_pUserData->RayHitPos;
+				pos += cTransform::DxVec3ToNxVec3(GetMouseDistance());
+				pos.y = GetHeigth();
+			}
+			GetPhysXData()->m_worldPose.t = pos;
+		}
+		break;
 		case E_OBJECT_STATE_CANSLE:
 		{
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
@@ -126,7 +128,6 @@ void cObject::Update()
 		} break;
 		}
 	}
-
 }
 
 void cObject::LastUpdate()

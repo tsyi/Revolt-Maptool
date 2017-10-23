@@ -355,26 +355,26 @@ void cMainGame::SetUI()
 	}
 
 	{
-		cUITextBox* UITextBox = new cUITextBox;
-		cUIText* UITextBox_TextV = new cUIText;
-		cUIImage* UITextBox_Image = new cUIImage;
-
-		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_PHYSX_KEY);
-		UITextBox->SetPosition(50, 340, 0);
-		UITextBox->SetSize(150, 20);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "PhsyXKey", "Image/UI_TEXTBOX.png");
-		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
-
-		cUIText* UITextBox_TextT = new cUIText;
-		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
-		UITextBox_TextT->SetSize(50, 20);
-		UITextBox_TextT->SetText("PhsX");
-		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
-		UITextBox->AddChild(UITextBox_TextT);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
-		ui->AddChild(UITextBox);
+	//	cUITextBox* UITextBox = new cUITextBox;
+	//	cUIText* UITextBox_TextV = new cUIText;
+	//	cUIImage* UITextBox_Image = new cUIImage;
+	//
+	//	UITextBox->SetTag(eUITag::E_UI_TEXTBOX_PHYSX_KEY);
+	//	UITextBox->SetPosition(50, 340, 0);
+	//	UITextBox->SetSize(150, 20);
+	//	UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "PhsyXKey", "Image/UI_TEXTBOX.png");
+	//	UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+	//	UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+	//
+	//	cUIText* UITextBox_TextT = new cUIText;
+	//	UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+	//	UITextBox_TextT->SetSize(50, 20);
+	//	UITextBox_TextT->SetText("PhsX");
+	//	UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+	//	UITextBox->AddChild(UITextBox_TextT);
+	//
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+	//	ui->AddChild(UITextBox);
 	}
 	//PhysX 관련 UI
 	//PhysX 적용버튼
@@ -408,17 +408,18 @@ void cMainGame::SetUI()
 		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
 		UIButton->SetEventID(0);
 	}
-
+	
 	// NxShapeType
 	{ 
 		cUITextBox* UITextBox = new cUITextBox;
 		cUIText* UITextBox_TextV = new cUIText;
 		cUIImage* UITextBox_Image = new cUIImage;
-		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_SHAPETYPE);
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_SHAPET_TYPE);
 		UITextBox->SetPosition(0, 380, 0);
 		UITextBox->SetSize(200, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ShapeType", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1, VAR::_2));
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
 		ui->AddChild(UITextBox);
 	}
@@ -450,7 +451,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(70, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -547,7 +548,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -569,7 +570,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -591,7 +592,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -615,7 +616,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -637,7 +638,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -659,7 +660,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -683,7 +684,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -705,7 +706,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
@@ -727,7 +728,7 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(150, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
 
 		cUIText* UITextBox_TextT = new cUIText;
 		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));

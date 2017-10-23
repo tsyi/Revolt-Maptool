@@ -244,16 +244,16 @@ void cScene::OnChangePhysX(int eventID)
 	{
 		if (m_selectobj)
 		{
-		//	m_selectobj->GetPhysXData()->SavePhysX(m_selectobj->GetPhysXName());
+			//				m_selectobj->GetPhysXData()->SavePhysX(m_selectobj->GetPhysXName());
 		}
-		for (int i = 0; i < GetObjects().size(); i++)
-		{
-			if (GetObjects()[i]->GetPhysXData()->m_pActor)
-			{
-				MgrPhysXScene->releaseActor(*GetObjects()[i]->GetPhysXData()->m_pActor);
-			}
-			GetObjects()[i]->GetPhysXData()->LoadPhysX("");
-		}
+		//	for (int i = 0; i < GetObjects().size(); i++)
+		//	{
+		//		if (GetObjects()[i]->GetPhysXData()->m_pActor)
+		//		{
+		//			MgrPhysXScene->releaseActor(*GetObjects()[i]->GetPhysXData()->m_pActor);
+		//		}
+		//		GetObjects()[i]->GetPhysXData()->LoadPhysX("");
+		//	}
 	}
 }
 
@@ -280,6 +280,24 @@ void cScene::Update()
 	{
 		pObj->SetMapData(m_pMap->GetPhysXData()->m_pUserData);
 		pObj->Update();
+	}
+
+	if (MgrInput->IsKeyDown(VK_DELETE))
+	{
+		if (MgrInput->IsKeyPress(VK_LCONTROL))
+		{
+			for (int i = 0; i < m_vecObject.size(); i++)
+			{
+				if (m_vecObject[i]->GetState() == eOBJECT_STATE::E_OBJECT_STATE_SELECT)
+				{
+					m_selectobj = m_vecObject[i];
+					m_vecObject.erase(m_vecObject.begin() + i);
+					m_selectobj->Destory();
+					m_selectobj == NULL;
+					--i;
+				}
+			}
+		}
 	}
 }
 
@@ -332,18 +350,16 @@ void cScene::LastUpdate()
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetDirection().z));
 
-			//	pPhysX->m_worldPose.t = MgrPhysX->D3DVecToNxVec(m_selectobj->GetPosition());
-			//	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
-			//	MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false, true, true));
-			//	NxMat33 nxMat; nxMat.setColumnMajor(nxF);
-			//	pPhysX->m_worldPose.M = nxMat;
-
-
+	
 
 			//PhysX
 
 			NxVec3 NxPos = pObj->GetPhysXData()->m_localPose.t;
 			NxVec3 NxDir = pObj->GetPhysXData()->m_dirValue;
+			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SHAPET_TYPE);
+			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_type));
+
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_POS_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
@@ -414,13 +430,26 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
+
+		if (D3DXVec3LengthSq(&vec3) < 0.000001f) vec3 = D3DXVECTOR3(0, 0, 1);
 		m_selectobj->SetQuaternion(vec3);
+	}
+}
 
-
-
+void cScene::OnChangeValueNx(int eventID, std::string eventKey)
+{
+	if (eventID != VK_RETURN) return;
+	if (!m_selectobj) return;
+	if (m_selectobj->GetState() != eOBJECT_STATE::E_OBJECT_STATE_SELECT) return;
+	{
 		//PhysX
+		cUITextBox* pTextBox = NULL;
 		cPhysX* pPhysX = m_selectobj->GetPhysXData();
 
+		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SHAPET_TYPE);
+		pPhysX->m_type = (NxShapeType)cStringUtil::ToInt(pTextBox->GetUIText()->GetTextData()->text);
+
+		D3DXVECTOR3 vec3;
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_POS_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_POS_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_POS_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
@@ -434,8 +463,11 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
+
+		if (D3DXVec3LengthSq(&vec3) < 0.000001f) vec3 = D3DXVECTOR3(0, 0, 1);
 		pPhysX->m_dirValue = NxVec3(vec3.x, vec3.y, vec3.z);
-		if (vec3.x == 0.f && vec3.y == 0.f && vec3.z == 0.f) vec3.z = 1;
+
+		//local
 		{
 			cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
 			MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
@@ -443,6 +475,7 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 			pPhysX->SetLocalRotation(nxMat);
 		}
 
+		//world
 		{
 			pPhysX->m_worldPose.t = MgrPhysX->D3DVecToNxVec(m_selectobj->GetPosition());
 			NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
@@ -454,5 +487,21 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		NxActorPose.multiply(pPhysX->m_worldPose, pPhysX->m_localPose);
 
 		pPhysX->m_pActor->setGlobalPose(NxActorPose);
+
+
+		pPhysX->m_position = pPhysX->m_pActor->getGlobalPose().t;
+		pPhysX->m_pActor->getGlobalPose().M.getColumnMajor(pPhysX->m_matR);
+		pPhysX->m_sizeValue = pPhysX->m_sizeValue;
+		pPhysX->m_type = pPhysX->m_type;
+
+		pPhysX->m_IsTrigger = pPhysX->m_IsTrigger ;
+		pPhysX->m_isStatic_ = pPhysX->m_isStatic_ ;
+		pPhysX->m_isGravaty = pPhysX->m_isGravaty ;
+
+		pPhysX->Destory();
+
+		USERDATA* pUserData = new USERDATA;
+		pPhysX->m_pUserData = pUserData;
+		pPhysX->m_pActor = MgrPhysX->CreateActor(pPhysX->m_type, pPhysX->m_position, pPhysX->m_matR, pPhysX->m_sizeValue, pPhysX->m_pUserData, pPhysX->m_IsTrigger, pPhysX->m_isStatic_, pPhysX->m_isGravaty);
 	}
 }

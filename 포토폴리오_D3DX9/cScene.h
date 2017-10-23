@@ -29,7 +29,7 @@ public:
 	void SaveScene(std::string FileName);
 
 	//
-	void SaveScene();
+//	void SaveScene();
 
 
 	void OnChangePhysX(int eventID);
@@ -39,5 +39,8 @@ public:
 		m_vecObject.push_back(obj);
 	}
 	void OnChangeValue(int eventID, std::string eventKey);
+	void OnChangeValueNx(int eventID, std::string eventKey);
+	// -> 물리 내용 변경부 따로 만들기.
+
 };
 
