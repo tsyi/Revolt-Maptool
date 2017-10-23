@@ -118,13 +118,13 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	}
 
 	/*vecMtlTex.resize((pMesh->m_mapMtlTex).size());
-	
+
 	for each(auto it in (pMesh->m_mapMtlTex))
 	{
 		vecMtlTex[it.second->GetMtlTexID()] = it.second;
 	}*/
 
-//	LPD3DXMESH newMesh = NULL;
+	//	LPD3DXMESH newMesh = NULL;
 	D3DXCreateMeshFVF(vecAttribute.size(),
 		vecVertex.size(),
 		D3DXMESH_MANAGED,
@@ -160,13 +160,8 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 		D3DXMESHOPT_VERTEXCACHE,
 		&vecAdj[0],
 		0, 0, 0);
-	//	m_mapMtlTex.clear();
-
-
-//	return pMesh;
-
-
 }
+
 
 // >> : vertexbuffer
 // >> : indexbuffer
@@ -208,7 +203,7 @@ void cObjLoader::LoadMtlLib(std::map<std::string, cMtlTex*>* mtlTex,
 		}
 		else if (szTemp[lineCol] == 'n')
 		{
-			char szMtlName[1024]; 
+			char szMtlName[1024];
 			sscanf_s(szTemp, "%*s %s", szMtlName, 1024);
 			sMtlName = std::string(szMtlName);
 
@@ -218,13 +213,13 @@ void cObjLoader::LoadMtlLib(std::map<std::string, cMtlTex*>* mtlTex,
 
 				//: >>
 				(*mtlTex)[sMtlName]->SetMtlTexID(nCnt);
-				nCnt++; 
+				nCnt++;
 				// : <<
 			}
 		}
 		else if (szTemp[lineCol] == 'K')
 		{
-			if (szTemp[lineCol + 1] == 'a') 
+			if (szTemp[lineCol + 1] == 'a')
 			{
 				float r, g, b;
 				sscanf_s(szTemp, "%*s %f %f %f", &r, &g, &b);

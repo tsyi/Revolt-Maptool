@@ -40,7 +40,7 @@ void cObjectManager::AddObj(cScene* addScene, int keyID)
 
 void cObjectManager::DeleteObj()
 {
-	
+
 }
 //
 //cMesh * cObjectManager::LoadObj(eOBJ_TAG eObj)
@@ -58,7 +58,7 @@ void cObjectManager::Destroy()
 
 void cObjectManager::Render()
 {
-	
+
 }
 
 
@@ -70,27 +70,19 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 	strFolder = "Object/Stuffs/" + objectName;
 	strFileName = objectName + ".obj";
 
-	cObject*	pObject = new cObject;
-	pObject->SetName(objectName);
+	cObject* pObject = new cObject;
+	pObject->SetObjName(objectName);
 
-	cMesh*		mesh = new cMesh; // 매쉬 생성
-	if (objectName == "default_Box" || objectName == "default_Sphere")
-	{
-		mesh->m_pMesh = NULL;
-		mesh->m_vecMtlTex.clear();
-		delete mesh;
-		mesh = NULL;
-	}
-	else
-	{
-		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
-	}
-	cPhysX*		physX = new cPhysX;
+	cMesh*	mesh = new cMesh; // 매쉬 생성
+	mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+
+
+	cPhysX*	physX = new cPhysX;
 	if (objectName == "default_Sphere")
 	{
 		physX->m_sizeValue = NxVec3(0.5, 0, 0);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
-			physX->m_pUserData,	true, true, false);
+			physX->m_pUserData, true, true, false);
 
 		//trigger / 정적 / 무중력 상태의 객체 생성
 	}
@@ -113,7 +105,6 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 		pObject->SetPhysXData(physX);
 	}
 	else pObject = NULL;
-
 
 	return pObject;
 }

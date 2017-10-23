@@ -58,7 +58,7 @@ void cScene::LoadScene(std::string FileName)
 					m_pMap = NULL;
 				}
 				cMap* newMap = new cMap;
-				newMap->SetName(szMapFile);
+				newMap->SetObjName(szMapFile);
 				std::string Folder = "Object/Maps/" + FileName;
 				std::string Name = FileName + ".obj";
 				newMap->GetMeshData()->LoadMesh(Folder, Name);
@@ -71,7 +71,7 @@ void cScene::LoadScene(std::string FileName)
 				// 이름
 				char szName[1024];
 				sscanf_s(szTemp, "%*s %d", &szName);
-				Obj->SetName(szName);
+				Obj->SetObjName(szName);
 
 				eOBJECT_TAG tag;
 				Load.getline(szTemp, 1024);
@@ -147,7 +147,6 @@ void cScene::LoadScene(std::string FileName)
 //	return E_NOTIMPL;
 }
 
-
 void cScene::SaveScene(std::string FileName)
 {
 	std::string fullpath = "Object/Scene/" + FileName + ".scn";
@@ -175,7 +174,7 @@ void cScene::SaveScene(std::string FileName)
 		//Object
 		for (int i = 0; i < m_vecObject.size(); i++)
 		{
-			Save << "Object " << m_vecObject[i]->GetName() << std::endl;
+			Save << "Object " << m_vecObject[i]->GetObjName() << std::endl;
 
 			//Save << "Tag " << m_vecObject[i]->GetTag() << std::endl;
 
@@ -209,23 +208,51 @@ void cScene::SaveScene(std::string FileName)
 	{
 		MessageBoxA(g_hWnd, "파일을 생성할 수 없습니다.", "오류", MB_OK);
 	}
-
 	Save.close();
+
+	fullpath = "Object/PhysXData/PhysXData.phx";
+	std::ofstream SAVE(fullpath);
+	if (SAVE.is_open())
+	{
+		SAVE << "DATA_NAME" << TAB << "SHAPE_TYPE" << TAB
+			<< "IsTrigger" << TAB << "isStatic_" << TAB << "isGravaty" << TAB
+			<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+			<< "SIZE_X" << TAB << "SIZE_Y" << TAB << "SIZE_Z" << TAB
+			<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+			<< "FXU32_[0]" << TAB << "FXU32_[1]" << TAB << "FXU32_[2]" << TAB
+			<< "FXU32_[3]" << TAB << "FXU32_[4]" << TAB << "FXU32_[5]" << TAB
+			<< "FXU32_[6]" << TAB << "FXU32_[7]" << TAB << "FXU32_[8]" << std::endl;
+		for each (cObject* pObj in m_vecObject)
+		{
+			cPhysX* p = pObj->GetPhysXData();
+			SAVE << p->m_pActor->getName() << TAB << p->m_type << TAB
+				<< p->m_IsTrigger << TAB << p->m_isStatic_ << TAB << p->m_isGravaty << TAB
+				<< p->m_position.x << TAB << p->m_position.y << TAB << p->m_position.z << TAB
+				<< p->m_sizeValue.x << TAB << p->m_sizeValue.y << TAB << p->m_sizeValue.z << TAB
+				<< p->m_matR[0] << TAB << p->m_matR[1] << TAB << p->m_matR[2] << TAB
+				<< p->m_matR[3] << TAB << p->m_matR[4] << TAB << p->m_matR[5] << TAB
+				<< p->m_matR[6] << TAB << p->m_matR[7] << TAB << p->m_matR[8] << std::endl;
+		}
+	}
 
 	//	return E_NOTIMPL;	
 }
 
-void cScene::OnLoadPhysX(int eventID)
+void cScene::OnChangePhysX(int eventID)
 {
 	if (eventID == 1)
 	{
+		if (m_selectobj)
+		{
+		//	m_selectobj->GetPhysXData()->SavePhysX(m_selectobj->GetPhysXName());
+		}
 		for (int i = 0; i < GetObjects().size(); i++)
 		{
 			if (GetObjects()[i]->GetPhysXData()->m_pActor)
 			{
 				MgrPhysXScene->releaseActor(*GetObjects()[i]->GetPhysXData()->m_pActor);
 			}
-			GetObjects()[i]->GetPhysXData()->LoadPhysX(GetObjects()[i]->GetName());
+			GetObjects()[i]->GetPhysXData()->LoadPhysX("");
 		}
 	}
 }
@@ -270,7 +297,12 @@ void cScene::LastUpdate()
 			m_selectobj = pObj;
 			cPhysX* pPhysX = m_selectobj->GetPhysXData();
 
-			cUITextBox* pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_X);
+			cUITextBox* pTextBox = NULL;
+			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_OBJNAME);
+			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
+				pTextBox->GetUIText()->SetText(pObj->GetObjName());
+
+			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPosition().x));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_Y);
@@ -333,17 +365,6 @@ void cScene::LastUpdate()
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.z));
 
-			//	NxF32 mat9[9] = { 1,0,0,0,1,0,0,0,1 };
-			//	NxMat.getColumnMajor(mat9);
-			//	D3DXMATRIXA16 mat;
-			//	D3DXMatrixIdentity(&mat);
-			//	mat._11 = mat9[0];	mat._12 = mat9[1];	mat._13 = mat9[2];
-			//	mat._21 = mat9[3];	mat._22 = mat9[4];	mat._23 = mat9[5];
-			//	mat._31 = mat9[6];	mat._32 = mat9[7];	mat._33 = mat9[8];
-			//
-			//	D3DXVECTOR3 dir(0, 0, 1);
-			//	D3DXVec3TransformNormal(&dir, &dir, &mat);
-
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(NxDir.x));
@@ -374,6 +395,10 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 	{
 		//D3DX
 		cUITextBox* pTextBox = NULL;
+
+		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_OBJNAME);
+		m_selectobj->SetObjName(pTextBox->GetUIText()->GetTextData()->text);
+
 
 		D3DXVECTOR3 vec3;
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_POS_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
@@ -409,9 +434,9 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
-
+		pPhysX->m_dirValue = NxVec3(vec3.x, vec3.y, vec3.z);
+		if (vec3.x == 0.f && vec3.y == 0.f && vec3.z == 0.f) vec3.z = 1;
 		{
-			pPhysX->m_dirValue = NxVec3(vec3.x, vec3.y, vec3.z);
 			cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
 			MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
 			NxMat33 nxMat; nxMat.setColumnMajor(nxF);

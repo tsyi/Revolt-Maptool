@@ -12,7 +12,7 @@ class cObjectManager
 	//public:
 	//	cObjectManager();
 	//	~cObjectManager();
-	const std::string OBJECTS_PACH = "Object/Objects/";
+	const std::string OBJECTS_PACH = "Object/Stuffs/";
 
 private:
 	SINGLETONE(cObjectManager);

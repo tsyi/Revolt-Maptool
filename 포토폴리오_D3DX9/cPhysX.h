@@ -63,6 +63,9 @@ public:
 		nxf[8] = mat16._33;
 
 		SetRotation(nxf);
+
+
+	//	m_pActor->desc
 	}
 	void SetRotation(NxF32* nxf32)
 	{
@@ -138,7 +141,7 @@ public:
 
 	void Destory()
 	{
-		if(m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
+		if (m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
 		m_pActor = NULL;
 
 		m_pUserData = NULL;
@@ -146,7 +149,7 @@ public:
 	void Update()
 	{
 		//저장을 위한 정보 갱신
-		m_position =  m_localPose.t;
+		m_position = m_localPose.t;
 		NxMat33 mat33 = m_localPose.M;
 		mat33.getColumnMajor(m_matR);
 	}
@@ -156,7 +159,7 @@ public:
 #define POPDATA Data[sI++]
 	void LoadPhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
+		std::string fullpath = "Object/Objects/PhysXData/PhysXData.phx";
 		std::ifstream LOAD(fullpath);
 
 		if (LOAD.is_open())
@@ -193,9 +196,10 @@ public:
 
 				//데이터 로드 시작.
 				std::string dateTitle = POPDATA; //  POPDATA = Data[sI++] (현재 데이터를 빼낸 뒤 다음 데이터를 준비)
-				if (dateTitle == "OBJECT_NAME")
+				if (dateTitle == "DATA_NAME")
 				{
 					actorName = POPDATA;
+
 					continue;
 				}
 				if (dateTitle == "SHAPE_TYPE")
@@ -264,7 +268,13 @@ public:
 		}//LOAD.is_open()
 		else
 		{
-			// 파일을 찾지 못한 경우 구 로 생성
+			//	fullpath = "Object/Objects/PhysXData/" + fileName + "/" + fileName + ".phx";
+			//	LOAD = fullpath;
+			//	if (LOAD.is_open())
+			//	{
+			//	}
+			//	else
+			//	{// 파일을 찾지 못한 경우 구 로 생성
 			m_position = NxVec3(0, 0, 0);
 			m_sizeValue = NxVec3(0.5, 0, 0);
 			m_type = NX_SHAPE_SPHERE;
@@ -273,6 +283,7 @@ public:
 			m_isGravaty = false;
 			m_pActor = MgrPhysX->CreateActor(m_type, m_position, NULL, m_sizeValue,
 				m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
+			//	}
 		}
 		LOAD.close();
 	}
@@ -281,7 +292,6 @@ public:
 		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
 
 		std::ofstream SAVE(fullpath);
-
 		if (SAVE.is_open())
 		{
 			//SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;

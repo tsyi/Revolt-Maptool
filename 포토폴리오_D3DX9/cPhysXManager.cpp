@@ -203,6 +203,7 @@ void cPhysXManager::RaycastAllShapes(D3DXVECTOR3 start, D3DXVECTOR3 dir)
 
 	RaycastCallBack raycastHit;
 	MgrPhysXScene->raycastAllShapes(worldRay, raycastHit, NX_ALL_SHAPES);
+
 }
 
 bool RaycastCallBack::onHit(const NxRaycastHit & hit)
