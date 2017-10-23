@@ -8,11 +8,13 @@
 enum eOBJECT_TAG
 {
 	E_OBJECT_NONE,
-	E_OBJECT_CAR,
-	E_OBJECT_MAP,
-	E_OBJECT_LIGHT,
+
 	E_OBJECT_STUFF,
-	E_OBJECT_CAMERA,
+
+	E_OBJECT_TRIGGER,
+
+	E_OBJECT_LIGHT,
+
 	E_OBJECT_END,
 };
 
@@ -37,8 +39,9 @@ protected:
 	SYNTHESIZE(USERDATA*, m_pMapData, MapData);
 	SYNTHESIZE(float, m_heigth, Heigth);
 	SYNTHESIZE(D3DXVECTOR3, m_mouseDistance, MouseDistance);
-	SYNTHESIZE(std::string, objName, Name)
-
+	SYNTHESIZE(std::string, objName, ObjName);
+	SYNTHESIZE(std::string, meshName, MeshName);
+	SYNTHESIZE(std::string, phyxName, PhysXName);
 protected:
 	SYNTHESIZE_VIRTUAL(eOBJECT_TAG, m_objTag, Tag);
 

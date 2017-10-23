@@ -28,7 +28,11 @@ public:
 	void LoadScene(std::string FileName);
 	void SaveScene(std::string FileName);
 
-	void OnLoadPhysX(int eventID);
+	//
+	void SaveScene();
+
+
+	void OnChangePhysX(int eventID);
 
 	void PushObject(cObject* obj)
 	{

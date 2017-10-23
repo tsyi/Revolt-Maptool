@@ -14,7 +14,7 @@
 #include "DEBUG_RENDERER.h"
 static DEBUG_RENDERER* m_pDebugRenderer = NULL;
 
-#define DEFAULT_MAPNAME "MapName"
+#define DEFAULT_MAPNAME "Market2"
 
 
 
@@ -142,6 +142,8 @@ void cMainGame::SetUI()
 		UITextBox->SetSize(200, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ObjName", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
 		ui->AddChild(UITextBox);
 
@@ -388,7 +390,7 @@ void cMainGame::SetUI()
 		UIButton->SetSize(100, 20);
 		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "적용", "Image/UI_BUTTON.png");
 		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnLoadPhysX, m_pScene, std::placeholders::_1));
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
 		UIButton->SetEventID(1);
 	}
 	{
@@ -403,7 +405,7 @@ void cMainGame::SetUI()
 		UIButton->SetSize(100, 20);
 		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "취소", "Image/UI_BUTTON.png");
 		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnLoadPhysX, m_pScene, std::placeholders::_1));
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
 		UIButton->SetEventID(0);
 	}
 

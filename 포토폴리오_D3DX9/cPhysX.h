@@ -63,6 +63,9 @@ public:
 		nxf[8] = mat16._33;
 
 		SetRotation(nxf);
+
+
+	//	m_pActor->desc
 	}
 	void SetRotation(NxF32* nxf32)
 	{
@@ -138,7 +141,7 @@ public:
 
 	void Destory()
 	{
-		if(m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
+		if (m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
 		m_pActor = NULL;
 
 		m_pUserData = NULL;
@@ -146,7 +149,7 @@ public:
 	void Update()
 	{
 		//저장을 위한 정보 갱신
-		m_position =  m_localPose.t;
+		m_position = m_localPose.t;
 		NxMat33 mat33 = m_localPose.M;
 		mat33.getColumnMajor(m_matR);
 	}
@@ -156,7 +159,7 @@ public:
 #define POPDATA Data[sI++]
 	void LoadPhysX(std::string fileName)
 	{
-		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
+		std::string fullpath = "Object/Objects/PhysXData/PhysXData.phx";
 		std::ifstream LOAD(fullpath);
 
 		if (LOAD.is_open())
@@ -193,9 +196,10 @@ public:
 
 				//데이터 로드 시작.
 				std::string dateTitle = POPDATA; //  POPDATA = Data[sI++] (현재 데이터를 빼낸 뒤 다음 데이터를 준비)
-				if (dateTitle == "OBJECT_NAME")
+				if (dateTitle == "DATA_NAME")
 				{
 					actorName = POPDATA;
+
 					continue;
 				}
 				if (dateTitle == "SHAPE_TYPE")
@@ -264,7 +268,13 @@ public:
 		}//LOAD.is_open()
 		else
 		{
-			// 파일을 찾지 못한 경우 구 로 생성
+			//	fullpath = "Object/Objects/PhysXData/" + fileName + "/" + fileName + ".phx";
+			//	LOAD = fullpath;
+			//	if (LOAD.is_open())
+			//	{
+			//	}
+			//	else
+			//	{// 파일을 찾지 못한 경우 구 로 생성
 			m_position = NxVec3(0, 0, 0);
 			m_sizeValue = NxVec3(0.5, 0, 0);
 			m_type = NX_SHAPE_SPHERE;
@@ -273,6 +283,7 @@ public:
 			m_isGravaty = false;
 			m_pActor = MgrPhysX->CreateActor(m_type, m_position, NULL, m_sizeValue,
 				m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
+			//	}
 		}
 		LOAD.close();
 	}
@@ -281,29 +292,21 @@ public:
 		std::string fullpath = "Object/Objects/" + fileName + "/" + fileName + ".phx";
 
 		std::ofstream SAVE(fullpath);
-
 		if (SAVE.is_open())
 		{
-			SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;
+			SAVE << "DATA_NAME" << TAB << "SHAPE_TYPE" << TAB
+				<< "IsTrigger" << TAB << "isStatic_" << TAB << "isGravaty" << TAB
+				<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+				<< "SIZE_X" << TAB << "SIZE_Y" << TAB << "SIZE_Z" << TAB
+				<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+				<< "FXU32_[0]" << TAB << "FXU32_[1]" << TAB << "FXU32_[2]" << TAB
+				<< "FXU32_[3]" << TAB << "FXU32_[4]" << TAB << "FXU32_[5]" << TAB
+				<< "FXU32_[6]" << TAB << "FXU32_[7]" << TAB << "FXU32_[8]" << std::endl;
 
-			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
-
-			SAVE << "OPTION" << std::endl;
-			SAVE << TAB << "IsTrigger" << TAB << m_IsTrigger << std::endl;
-			SAVE << TAB << "isStatic_" << TAB << m_isStatic_ << std::endl;
-			SAVE << TAB << "isGravaty" << TAB << m_isGravaty << std::endl;
-
-			SAVE << "POS_XYZ" << TAB
-				<< m_position.x << TAB
-				<< m_position.y << TAB
-				<< m_position.z << std::endl;
-
-			SAVE << "SIZE_XYZ" << TAB
-				<< m_sizeValue.x << TAB
-				<< m_sizeValue.y << TAB
-				<< m_sizeValue.z << std::endl;
-
-			SAVE << "FXU32_[9]" << TAB
+			SAVE << fileName << TAB << (int)m_type << TAB
+				<< m_IsTrigger << TAB << m_isStatic_ << TAB << m_isGravaty << TAB
+				<< m_position.x << TAB << m_position.y << TAB << m_position.z << TAB
+				<< m_sizeValue.x << TAB << m_sizeValue.y << TAB << m_sizeValue.z << TAB
 				<< m_matR[0] << TAB << m_matR[1] << TAB << m_matR[2] << TAB
 				<< m_matR[3] << TAB << m_matR[4] << TAB << m_matR[5] << TAB
 				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8] << std::endl;
