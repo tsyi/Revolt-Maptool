@@ -13,7 +13,7 @@ enum eTextBoxState
 
 class cUITextBox : public cUIObject
 {
-	typedef std::function<void(int)> Event;
+	typedef std::function<void(int, std::string)> Event;
 protected:
 	cUIText* m_pUiText;
 	cUIImage* m_pUiImage;
@@ -21,8 +21,10 @@ protected:
 	SYNTHESIZE(eTextBoxState, m_state, State);
 
 	SYNTHESIZE(Event, onEnter, OnEnter);
-	SYNTHESIZE(Event, OnCancle, OnCancle);
+	SYNTHESIZE(Event, onCancle, OnCancle);
+
 	SYNTHESIZE(int, m_eventId, EventID);
+	SYNTHESIZE(std::string, m_eventKey, EventKey);
 
 	float pushTime;
 public:

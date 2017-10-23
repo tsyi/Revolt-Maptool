@@ -36,7 +36,7 @@ public:
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 public:	//EVENT
 	void OnCreateObject(int eventID);
-	void OnLoadMap(int eventID);
+	void OnLoadMap(int eventID, std::string eventKey);
 	void OnSaveMap(int eventID);
 };
 

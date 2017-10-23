@@ -34,6 +34,6 @@ public:
 	{
 		m_vecObject.push_back(obj);
 	}
-	void OnChangeValue(int eventID);
+	void OnChangeValue(int eventID, std::string eventKey);
 };
 

@@ -127,7 +127,8 @@ void cScene::LoadScene(std::string FileName)
 	}
 	else //파일 열기 실패
 	{
-		MessageBoxA(g_hWnd, "파일을 찾을 수 없습니다.", "오류", MB_OK);
+		std::string pritfOut(FileName + ": 파일을 찾을 수 없습니다");
+		MessageBoxA(g_hWnd, pritfOut.c_str(), "오류", MB_OK);
 	}
 
 	Load.close();
@@ -296,7 +297,7 @@ void cScene::LastUpdate()
 			//PhysX
 
 			NxVec3 NxPos = pObj->GetPhysXData()->m_localPose.t;
-			NxMat33 NxMat = pObj->GetPhysXData()->m_localPose.M;
+			NxVec3 NxDir = pObj->GetPhysXData()->m_dirValue;
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_POS_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
@@ -318,26 +319,26 @@ void cScene::LastUpdate()
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.z));
 
-			NxF32 mat9[9] = { 1,0,0,0,1,0,0,0,1 };
-			NxMat.getColumnMajor(mat9);
-			D3DXMATRIXA16 mat;
-			D3DXMatrixIdentity(&mat);
-			mat._11 = mat9[0];	mat._12 = mat9[1];	mat._13 = mat9[2];
-			mat._21 = mat9[3];	mat._22 = mat9[4];	mat._23 = mat9[5];
-			mat._31 = mat9[6];	mat._32 = mat9[7];	mat._33 = mat9[8];
-
-			D3DXVECTOR3 dir(0, 0, 1);
-			D3DXVec3TransformNormal(&dir, &dir, &mat);
+			//	NxF32 mat9[9] = { 1,0,0,0,1,0,0,0,1 };
+			//	NxMat.getColumnMajor(mat9);
+			//	D3DXMATRIXA16 mat;
+			//	D3DXMatrixIdentity(&mat);
+			//	mat._11 = mat9[0];	mat._12 = mat9[1];	mat._13 = mat9[2];
+			//	mat._21 = mat9[3];	mat._22 = mat9[4];	mat._23 = mat9[5];
+			//	mat._31 = mat9[6];	mat._32 = mat9[7];	mat._33 = mat9[8];
+			//
+			//	D3DXVECTOR3 dir(0, 0, 1);
+			//	D3DXVec3TransformNormal(&dir, &dir, &mat);
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetUIText()->SetText(cStringUtil::ToString(dir.x));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(NxDir.x));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Y);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetUIText()->SetText(cStringUtil::ToString(dir.y));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(NxDir.y));
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Z);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetUIText()->SetText(cStringUtil::ToString(dir.z));
+				pTextBox->GetUIText()->SetText(cStringUtil::ToString(NxDir.z));
 		}
 	}
 }
@@ -351,7 +352,7 @@ void cScene::Render()
 	}
 }
 
-void cScene::OnChangeValue(int eventID)
+void cScene::OnChangeValue(int eventID, std::string eventKey)
 {
 	if (eventID != VK_RETURN) return;
 	if (!m_selectobj) return;
@@ -396,6 +397,7 @@ void cScene::OnChangeValue(int eventID)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
 
 		{
+			pPhysX->m_dirValue = NxVec3(vec3.x, vec3.y, vec3.z);
 			cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
 			MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
 			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
@@ -405,7 +407,7 @@ void cScene::OnChangeValue(int eventID)
 		{
 			pPhysX->m_worldPose.t = MgrPhysX->D3DVecToNxVec(m_selectobj->GetPosition());
 			NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
-			MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false,true,false));
+			MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false, true, false));
 			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
 			pPhysX->m_worldPose.M = nxMat;
 		}

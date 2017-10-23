@@ -73,7 +73,7 @@ void cUITextBox::Update()
 			m_state = eTextBoxState::E_TEXT_BOX_STATE_NONE;
 			m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
 			if (onEnter) 
-				GetOnEnter()(VK_RETURN);
+				GetOnEnter()(VK_RETURN , GetUIText()->GetTextData()->text);
 		}
 		if (MgrInput->IsMouseDown(MOUSE_BUTTON::MOUSE_LEFT))
 		{
@@ -82,7 +82,7 @@ void cUITextBox::Update()
 			{
 				m_state = eTextBoxState::E_TEXT_BOX_STATE_NONE;
 				m_pUiImage->SetBassColor(D3DCOLOR_ARGB(255, 255, 255, 255));
-				if (onEnter) GetOnEnter()(VK_ESCAPE);
+				if (onEnter) GetOnEnter()(VK_ESCAPE, GetUIText()->GetTextData()->text);
 			}
 		}
 		if (m_state == eTextBoxState::E_TEXT_BOX_STATE_SELECT)
