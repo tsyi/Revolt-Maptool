@@ -30,77 +30,85 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 
 	std::string sMtlName;
 
-	while (true)
+	if (fp)
 	{
-		if (feof(fp)) break;
+		while (true)
+		{
+			if (feof(fp)) break;
 
-		char szTemp[1024];
-		fgets(szTemp, 1024, fp);
-		if (szTemp[0] == '#')
-		{
-			continue;
-		}
-		else if (szTemp[0] == 'm')
-		{
-			char szMtlFile[1024];
-			sscanf_s(szTemp, "%*s %s", szMtlFile, 1024);
-			LoadMtlLib(&(mapMtlTex), szFolder, szMtlFile);
-		}
-		else if (szTemp[0] == 'g')
-		{
-			//	if (!vecVertex.empty())
-			//	{
-			//		// 삭제
-			//	}
-		}
-		else if (szTemp[0] == 'v')
-		{
-			if (szTemp[1] == ' ')
+			char szTemp[1024];
+			fgets(szTemp, 1024, fp);
+			if (szTemp[0] == '#')
 			{
-				float x, y, z;
-				sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
-				vecV.push_back(D3DXVECTOR3(-x, y, z));
+				continue;
 			}
-			else if (szTemp[1] == 't')
+			else if (szTemp[0] == 'm')
 			{
-				float u, v;
-				sscanf_s(szTemp, "%*s %f %f %*f", &u, &v);
-				vecVT.push_back(D3DXVECTOR2(u, 1.0f - v));
+				char szMtlFile[1024];
+				sscanf_s(szTemp, "%*s %s", szMtlFile, 1024);
+				LoadMtlLib(&(mapMtlTex), szFolder, szMtlFile);
 			}
-			else if (szTemp[1] == 'n')
+			else if (szTemp[0] == 'g')
 			{
-				float x, y, z;
-				sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
-				vecVN.push_back(D3DXVECTOR3(x, y, z));
+				//	if (!vecVertex.empty())
+				//	{
+				//		// 삭제
+				//	}
 			}
-		}
-		else if (szTemp[0] == 'u')
-		{
-			char szMtlName[1024];
-			sscanf_s(szTemp, "%*s %s", szMtlName, 1024);
-			sMtlName = std::string(szMtlName);
+			else if (szTemp[0] == 'v')
+			{
+				if (szTemp[1] == ' ')
+				{
+					float x, y, z;
+					sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
+					vecV.push_back(D3DXVECTOR3(-x, y, z));
+				}
+				else if (szTemp[1] == 't')
+				{
+					float u, v;
+					sscanf_s(szTemp, "%*s %f %f %*f", &u, &v);
+					vecVT.push_back(D3DXVECTOR2(u, 1.0f - v));
+				}
+				else if (szTemp[1] == 'n')
+				{
+					float x, y, z;
+					sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
+					vecVN.push_back(D3DXVECTOR3(x, y, z));
+				}
+			}
+			else if (szTemp[0] == 'u')
+			{
+				char szMtlName[1024];
+				sscanf_s(szTemp, "%*s %s", szMtlName, 1024);
+				sMtlName = std::string(szMtlName);
 
-		}
-		else if (szTemp[0] == 'f')
-		{
-			int nIndex[3][3];
-			sscanf_s(szTemp, "%*s %d/%d/%d %d/%d/%d %d/%d/%d",
-				&nIndex[0][0], &nIndex[0][1], &nIndex[0][2],
-				&nIndex[1][0], &nIndex[1][1], &nIndex[1][2],
-				&nIndex[2][0], &nIndex[2][1], &nIndex[2][2]);
-
-			for (int i = 2; i >= 0; i--)
-			{
-				ST_PNT_VERTEX v;
-				v.p = vecV[nIndex[i][0] - 1];
-				v.t = vecVT[nIndex[i][1] - 1];
-				v.n = vecVN[nIndex[i][2] - 1];
-				vecVertex.push_back(v);
 			}
+			else if (szTemp[0] == 'f')
+			{
+				int nIndex[3][3];
+				sscanf_s(szTemp, "%*s %d/%d/%d %d/%d/%d %d/%d/%d",
+					&nIndex[0][0], &nIndex[0][1], &nIndex[0][2],
+					&nIndex[1][0], &nIndex[1][1], &nIndex[1][2],
+					&nIndex[2][0], &nIndex[2][1], &nIndex[2][2]);
 
-			vecAttribute.push_back((mapMtlTex)[sMtlName]->GetMtlTexID());
-		}
-	} // : << while 끝
+				for (int i = 2; i >= 0; i--)
+				{
+					ST_PNT_VERTEX v;
+					v.p = vecV[nIndex[i][0] - 1];
+					v.t = vecVT[nIndex[i][1] - 1];
+					v.n = vecVN[nIndex[i][2] - 1];
+					vecVertex.push_back(v);
+				}
+
+				vecAttribute.push_back((mapMtlTex)[sMtlName]->GetMtlTexID());
+			}
+		} // : << while 끝
+	}
+	else
+	{
+		MessageBoxA(g_hWnd, "Stuff 경로를 찾을 수 없습니다.", "", MB_OK);
+	}
+	
 
 	fclose(fp);
 

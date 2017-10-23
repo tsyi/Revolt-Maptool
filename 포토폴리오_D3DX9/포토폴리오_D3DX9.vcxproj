@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Asciitok.h" />
     <ClInclude Include="cCamera.h" />
+    <ClInclude Include="cCheckBox.h" />
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cEvent.h" />
     <ClInclude Include="cFontManager.h" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cCamera.cpp" />
+    <ClCompile Include="cCheckBox.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cEvent.cpp" />
     <ClCompile Include="cFontManager.cpp" />

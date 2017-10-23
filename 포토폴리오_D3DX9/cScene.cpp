@@ -4,6 +4,7 @@
 #include "cMap.h"
 #include "cLight.h"
 #include "cStuff.h"
+#include "cCheckBox.h"
 #include <fstream>
 #include <time.h>
 
@@ -58,11 +59,19 @@ void cScene::LoadScene(std::string FileName)
 				}
 				cMap* newMap = new cMap;
 				newMap->SetName(szMapFile);
+				std::string Folder = "Object/Maps/" + FileName;
+				std::string Name = FileName + ".obj";
+				newMap->GetMeshData()->LoadMesh(Folder, Name);
+				newMap->SetupPhyX();
 				m_pMap = newMap;
 			}
 			else if (szTemp[0] == 'O') //Object Load
 			{
-				cObject* Obj;
+				cObject* Obj = NULL;
+				// 이름
+				char szName[1024];
+				sscanf_s(szTemp, "%*s %d", &szName);
+				Obj->SetName(szName);
 
 				eOBJECT_TAG tag;
 				Load.getline(szTemp, 1024);
@@ -76,6 +85,7 @@ void cScene::LoadScene(std::string FileName)
 				case E_OBJECT_LIGHT:	Obj = new cLight; break;
 				case E_OBJECT_STUFF:	Obj = new cStuff; break;
 				case E_OBJECT_CAMERA:	break;
+				case E_OBJECT_CHECKBOX: Obj = new cCheckBox; break;
 				case E_OBJECT_END:		break;
 				default: break;
 				}
@@ -132,6 +142,7 @@ void cScene::LoadScene(std::string FileName)
 	}
 
 	Load.close();
+
 	//
 //	return E_NOTIMPL;
 }
@@ -164,23 +175,23 @@ void cScene::SaveScene(std::string FileName)
 		//Object
 		for (int i = 0; i < m_vecObject.size(); i++)
 		{
-			Save << "Object" << std::endl;
+			Save << "Object " << m_vecObject[i]->GetName() << std::endl;
 
-			Save << "Tag " << m_vecObject[i]->GetTag() << std::endl;
+			//Save << "Tag " << m_vecObject[i]->GetTag() << std::endl;
 
 			Save << "Attribute " << m_vecObject[i]->GetAttribute() << std::endl;
 
-			Save << "Position"
+			Save << "Position "
 				<< m_vecObject[i]->GetPosition().x << " "
 				<< m_vecObject[i]->GetPosition().y << " "
 				<< m_vecObject[i]->GetPosition().z << std::endl;
 
-			Save << "Scale"
+			Save << "Scale "
 				<< m_vecObject[i]->GetSize().x << " "
 				<< m_vecObject[i]->GetSize().y << " "
 				<< m_vecObject[i]->GetSize().z << std::endl;
 
-			Save << "Rotation"
+			Save << "Rotation "
 				<< m_vecObject[i]->GetDirection().x << " "
 				<< m_vecObject[i]->GetDirection().y << " "
 				<< m_vecObject[i]->GetDirection().z << std::endl;
@@ -191,6 +202,8 @@ void cScene::SaveScene(std::string FileName)
 
 			Save << std::endl;
 		}
+
+		MessageBoxA(g_hWnd, "저장완료", "", MB_OK);
 	}
 	else
 	{
@@ -238,6 +251,7 @@ void cScene::Update()
 	//계산 시작
 	for each (cObject* pObj in m_vecObject)
 	{
+		pObj->SetMapData(m_pMap->GetPhysXData()->m_pUserData);
 		pObj->Update();
 	}
 }
@@ -245,7 +259,7 @@ void cScene::Update()
 void cScene::LastUpdate()
 {
 	//계산 종료
-	if (m_pMap) m_pMap->LastUpdate();
+	//if (m_pMap) m_pMap->LastUpdate();
 	for each (cObject* pObj in m_vecObject)
 	{
 		//물리정보 동기화

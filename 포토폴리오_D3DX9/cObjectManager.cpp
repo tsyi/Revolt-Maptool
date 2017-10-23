@@ -67,7 +67,7 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 	std::string strFolder;
 	std::string strFileName;
 
-	strFolder = "Object/Objects/" + objectName;
+	strFolder = "Object/Stuffs/" + objectName;
 	strFileName = objectName + ".obj";
 
 	cObject*	pObject = new cObject;

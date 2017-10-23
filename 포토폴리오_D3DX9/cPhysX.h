@@ -284,7 +284,7 @@ public:
 
 		if (SAVE.is_open())
 		{
-			SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;
+			//SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;
 
 			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
 

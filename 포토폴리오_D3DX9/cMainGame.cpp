@@ -14,7 +14,7 @@
 #include "DEBUG_RENDERER.h"
 static DEBUG_RENDERER* m_pDebugRenderer = NULL;
 
-#define DEFAULT_MAPNAME "MapName"
+#define DEFAULT_MAPNAME "Market2"
 
 
 
