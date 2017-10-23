@@ -319,7 +319,7 @@ void cScene::LastUpdate()
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.z));
 
 			NxF32 mat9[9] = { 1,0,0,0,1,0,0,0,1 };
-			NxMat.setColumnMajor(mat9);
+			NxMat.getColumnMajor(mat9);
 			D3DXMATRIXA16 mat;
 			D3DXMatrixIdentity(&mat);
 			mat._11 = mat9[0];	mat._12 = mat9[1];	mat._13 = mat9[2];
