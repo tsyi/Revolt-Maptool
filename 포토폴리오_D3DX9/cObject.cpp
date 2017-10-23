@@ -55,14 +55,6 @@ void cObject::Update()
 		break;
 		case E_OBJECT_STATE_SELECT:
 		{
-			if (MgrInput->IsKeyDown('Q'))
-			{
-				GetPhysXData()->m_pActor->putToSleep();
-			}
-			if (MgrInput->IsKeyUp('Q'))
-			{
-				GetPhysXData()->m_pActor->wakeUp();
-			}
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0)

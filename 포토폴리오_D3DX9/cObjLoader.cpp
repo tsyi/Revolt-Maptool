@@ -29,6 +29,7 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	fopen_s(&fp, sFullPath.c_str(), "r");
 
 	std::string sMtlName;
+
 	if (fp)
 	{
 		while (true)
@@ -102,64 +103,66 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 				vecAttribute.push_back((mapMtlTex)[sMtlName]->GetMtlTexID());
 			}
 		} // : << while 끝
-
-		pMesh->m_vecMtlTex.resize(mapMtlTex.size());
-		for each(auto it in mapMtlTex)
-		{
-			pMesh->m_vecMtlTex[it.second->GetMtlTexID()] = it.second;
-		}
-
-		/*vecMtlTex.resize((pMesh->m_mapMtlTex).size());
-
-		for each(auto it in (pMesh->m_mapMtlTex))
-		{
-			vecMtlTex[it.second->GetMtlTexID()] = it.second;
-		}*/
-
-		//	LPD3DXMESH newMesh = NULL;
-		D3DXCreateMeshFVF(vecAttribute.size(),
-			vecVertex.size(),
-			D3DXMESH_MANAGED,
-			ST_PNT_VERTEX::FVF,
-			g_pD3DDevice,
-			&(pMesh->m_pMesh));
-
-
-		ST_PNT_VERTEX* pV = NULL;
-		pMesh->m_pMesh->LockVertexBuffer(0, (LPVOID*)&pV);
-		memcpy(pV, &vecVertex[0], sizeof(ST_PNT_VERTEX) * vecVertex.size());
-		pMesh->m_pMesh->UnlockVertexBuffer();
-
-		WORD* pI = NULL;
-		pMesh->m_pMesh->LockIndexBuffer(0, (LPVOID*)&pI);
-
-		for (size_t i = 0; i < vecVertex.size(); i++)
-		{
-			pI[i] = i;
-		}
-
-		pMesh->m_pMesh->UnlockIndexBuffer();
-
-		DWORD* pA = NULL;
-		pMesh->m_pMesh->LockAttributeBuffer(0, &pA);
-		memcpy(pA, &vecAttribute[0], sizeof(DWORD) * vecAttribute.size());
-		pMesh->m_pMesh->UnlockAttributeBuffer();
-
-		std::vector<DWORD> vecAdj(vecVertex.size());
-		pMesh->m_pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
-		pMesh->m_pMesh->OptimizeInplace(D3DXMESHOPT_ATTRSORT |
-			D3DXMESHOPT_COMPACT |
-			D3DXMESHOPT_VERTEXCACHE,
-			&vecAdj[0],
-			0, 0, 0);
 	}
 	else
 	{
-		pMesh = NULL;
-		//파일이 열리지 않음.
+		MessageBoxA(g_hWnd, "Stuff 경로를 찾을 수 없습니다.", "", MB_OK);
 	}
+
+
 	fclose(fp);
+
+	pMesh->m_vecMtlTex.resize(mapMtlTex.size());
+	for each(auto it in mapMtlTex)
+	{
+		pMesh->m_vecMtlTex[it.second->GetMtlTexID()] = it.second;
+	}
+
+	/*vecMtlTex.resize((pMesh->m_mapMtlTex).size());
+
+	for each(auto it in (pMesh->m_mapMtlTex))
+	{
+		vecMtlTex[it.second->GetMtlTexID()] = it.second;
+	}*/
+
+	//	LPD3DXMESH newMesh = NULL;
+	D3DXCreateMeshFVF(vecAttribute.size(),
+		vecVertex.size(),
+		D3DXMESH_MANAGED,
+		ST_PNT_VERTEX::FVF,
+		g_pD3DDevice,
+		&(pMesh->m_pMesh));
+
+
+	ST_PNT_VERTEX* pV = NULL;
+	pMesh->m_pMesh->LockVertexBuffer(0, (LPVOID*)&pV);
+	memcpy(pV, &vecVertex[0], sizeof(ST_PNT_VERTEX) * vecVertex.size());
+	pMesh->m_pMesh->UnlockVertexBuffer();
+
+	WORD* pI = NULL;
+	pMesh->m_pMesh->LockIndexBuffer(0, (LPVOID*)&pI);
+
+	for (size_t i = 0; i < vecVertex.size(); i++)
+	{
+		pI[i] = i;
+	}
+
+	pMesh->m_pMesh->UnlockIndexBuffer();
+
+	DWORD* pA = NULL;
+	pMesh->m_pMesh->LockAttributeBuffer(0, &pA);
+	memcpy(pA, &vecAttribute[0], sizeof(DWORD) * vecAttribute.size());
+	pMesh->m_pMesh->UnlockAttributeBuffer();
+
+	std::vector<DWORD> vecAdj(vecVertex.size());
+	pMesh->m_pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+	pMesh->m_pMesh->OptimizeInplace(D3DXMESHOPT_ATTRSORT |
+		D3DXMESHOPT_COMPACT |
+		D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0],
+		0, 0, 0);
 }
+
 
 // >> : vertexbuffer
 // >> : indexbuffer

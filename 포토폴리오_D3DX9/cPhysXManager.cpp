@@ -186,6 +186,7 @@ void cPhysXManager::RaycastClosestShape(D3DXVECTOR3 start, D3DXVECTOR3 dir)
 	if (raycastHit.shape)
 	{
 		USERDATA* userData = (USERDATA*)raycastHit.shape->getActor().userData;
+		if (!userData) return;
 		userData->RaycastClosestShape = NX_TRUE;
 		userData->RayHitPos = raycastHit.worldImpact;
 		MgrPhysXData->RaycastClosestShapePosition = raycastHit.worldImpact;
@@ -214,6 +215,7 @@ bool RaycastCallBack::onHit(const NxRaycastHit & hit)
 		userData->RaycastAllShape = NX_TRUE;
 		userData->RayHitPos = hit.worldImpact;
 		MgrPhysXData->RaycastAllShapeHitCount++;
+		std::cout << MgrPhysXData->RaycastAllShapeHitCount << std::endl;
 	}
 	return true;
 }

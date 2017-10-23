@@ -11,97 +11,37 @@ cMap::~cMap()
 {
 }
 
-void cMap::Destroy()
+void cMap::SetupPhyX()
 {
-//	for each(cMesh* mesh in m_vecObj)
-//	{
-//		mesh->Destory();
-//	}
-//	m_vecObj.clear();
-//
-//	m_mapCamera.clear();
-//	m_mapCheckBox.clear();
-//	m_mapFollowPoint.clear();
-}
-
-HRESULT cMap::MapLoad(std::string loadName)
-{
-	std::string folder = "Object/Maps/" + std::string(loadName);
-	std::string objName = loadName + std::string(".obj");
-	std::string rvlName = loadName + std::string(".rvl");
-	GetMeshData()->LoadMesh(folder, objName);
-
-	//맵 물리정보 로드
 	if (GetMeshData()->m_pMesh)	//맵은 특별한 인자값을 주고 받지 않는다. (굳이 있다면 재질값 정도)
 	{
+		cPhysX* physx = new cPhysX;
+		physx->m_pUserData = new USERDATA;
 		NxActorDesc actorDesc;	actorDesc.setToDefault();
 		NxBodyDesc  bodyDesc;	bodyDesc.setToDefault();
 
-		bodyDesc.flags |= NX_BF_KINEMATIC;
+		//bodyDesc.flags |= NX_BF_KINEMATIC;
 
 		NxTriangleMeshShapeDesc shapeDesc = MgrPhysX->CreateTringleMesh(GetMeshData()->m_pMesh);
 		shapeDesc.materialIndex = 0; // 재질 : 0 (default)값
 		shapeDesc.localPose.t = NxVec3(0, 0, 0);
 
 		actorDesc.shapes.pushBack(&shapeDesc);
-		actorDesc.body = &bodyDesc;
-		actorDesc.name = loadName.c_str();
+		//actorDesc.body = &bodyDesc;
 
 		actorDesc.globalPose.t = NxVec3(0, 0, 0);
-
-		MgrPhysXScene->createActor(actorDesc);
-		cObject::GetPhysXData()->m_pActor = NULL;
+		actorDesc.userData = (physx->m_pUserData);
+		
+		physx->m_pActor = MgrPhysXScene->createActor(actorDesc);
+		
+		cObject::SetPhysXData(physx);
 		//맵의 물리 정보를 주고 받지 않기 때문에  SetActor(NULL) 이다.
 	}
-	return E_NOTIMPL;
 }
 
-HRESULT cMap::MapSave(std::string rvlName)
+void cMap::Destroy()
 {
-	return E_NOTIMPL;
-}
 
-HRESULT cMap::PhxLoad(std::string phxName, cMesh * dest)
-{
-	std::fstream Load;
-	Load.open(phxName);
-
-	char szTemp[1024];
-
-	if (Load.is_open())
-	{
-		while (1)
-		{
-			if (Load.eof()) break;
-
-			Load.getline(szTemp, 1024);
-			if (szTemp[0] == ' ' || szTemp[0] == '\t') continue;
-			if (szTemp[0] == 'A')
-			{
-				
-			}
-			else if (szTemp[0] == 'M')
-			{
-
-			}
-			else if (szTemp[0] == 'B')
-			{
-
-			}
-			else if (szTemp[0] == 'S')
-			{
-
-			}
-			else if (szTemp[0] == 'U')
-			{
-
-			}
-		} // << : while 파일
-	}
-
-	Load.close();
-	
-	return E_NOTIMPL;
 }
 
 void cMap::Update()
@@ -113,6 +53,3 @@ void cMap::Render()
 {
 	cObject::Render();
 }
-
-
-

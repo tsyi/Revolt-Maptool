@@ -294,19 +294,26 @@ public:
 		std::ofstream SAVE(fullpath);
 		if (SAVE.is_open())
 		{
-			SAVE << "DATA_NAME" << TAB << "SHAPE_TYPE" << TAB
-				<< "IsTrigger" << TAB << "isStatic_" << TAB << "isGravaty" << TAB
-				<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
-				<< "SIZE_X" << TAB << "SIZE_Y" << TAB << "SIZE_Z" << TAB
-				<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
-				<< "FXU32_[0]" << TAB << "FXU32_[1]" << TAB << "FXU32_[2]" << TAB
-				<< "FXU32_[3]" << TAB << "FXU32_[4]" << TAB << "FXU32_[5]" << TAB
-				<< "FXU32_[6]" << TAB << "FXU32_[7]" << TAB << "FXU32_[8]" << std::endl;
+			//SAVE << "OBJECT_NAME" << TAB << fileName << std::endl;
 
-			SAVE << fileName << TAB << (int)m_type << TAB
-				<< m_IsTrigger << TAB << m_isStatic_ << TAB << m_isGravaty << TAB
-				<< m_position.x << TAB << m_position.y << TAB << m_position.z << TAB
-				<< m_sizeValue.x << TAB << m_sizeValue.y << TAB << m_sizeValue.z << TAB
+			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
+
+			SAVE << "OPTION" << std::endl;
+			SAVE << TAB << "IsTrigger" << TAB << m_IsTrigger << std::endl;
+			SAVE << TAB << "isStatic_" << TAB << m_isStatic_ << std::endl;
+			SAVE << TAB << "isGravaty" << TAB << m_isGravaty << std::endl;
+
+			SAVE << "POS_XYZ" << TAB
+				<< m_position.x << TAB
+				<< m_position.y << TAB
+				<< m_position.z << std::endl;
+
+			SAVE << "SIZE_XYZ" << TAB
+				<< m_sizeValue.x << TAB
+				<< m_sizeValue.y << TAB
+				<< m_sizeValue.z << std::endl;
+
+			SAVE << "FXU32_[9]" << TAB
 				<< m_matR[0] << TAB << m_matR[1] << TAB << m_matR[2] << TAB
 				<< m_matR[3] << TAB << m_matR[4] << TAB << m_matR[5] << TAB
 				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8] << std::endl;
