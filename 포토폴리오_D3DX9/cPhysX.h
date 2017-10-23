@@ -309,7 +309,5 @@ public:
 				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8] << std::endl;
 		}
 	}
-
-
 };
 
