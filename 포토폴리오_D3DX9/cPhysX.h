@@ -21,6 +21,7 @@ public:
 	std::string actorName;						//save/load
 	NxVec3 m_position;							//save/load
 	NxVec3 m_sizeValue;							//save/load
+	NxVec3 m_dirValue;							//save/load
 	NxF32 m_matR[9] = { 1,0,0,0,1,0,0,0,1 };	//save/load
 
 
