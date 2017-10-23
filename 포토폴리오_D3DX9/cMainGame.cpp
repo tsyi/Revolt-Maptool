@@ -134,7 +134,7 @@ void cMainGame::SetUI()
 		cUIText* UITextBox_TextV = new cUIText;
 		cUIImage* UITextBox_Image = new cUIImage;
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_OBJNAME);
-		UITextBox->SetPosition(0, 50, 0);
+		UITextBox->SetPosition(0, 60, 0);
 		UITextBox->SetSize(200, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ObjName", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
@@ -348,39 +348,68 @@ void cMainGame::SetUI()
 		ui->AddChild(UITextBox);
 	}
 
-	//List
 	{
+		cUITextBox* UITextBox = new cUITextBox;
+		cUIText* UITextBox_TextV = new cUIText;
+		cUIImage* UITextBox_Image = new cUIImage;
+
+		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_PHYSX_KEY);
+		UITextBox->SetPosition(50, 340, 0);
+		UITextBox->SetSize(150, 20);
+		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "PhsyXKey", "Image/UI_TEXTBOX.png");
+		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, std::placeholders::_1));
+
 		cUIText* UITextBox_TextT = new cUIText;
-
-		UITextBox_TextT->SetTag(eUITag::E_UI_OBJLIST_TITLE);
-		UITextBox_TextT->SetPosition(APIWidth - 215, 0, 0);
-		UITextBox_TextT->SetSize(200, 20);
-		UITextBox_TextT->SetText("오브젝트 리스트");
+		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+		UITextBox_TextT->SetSize(50, 20);
+		UITextBox_TextT->SetText("PhsX");
 		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		UITextBox->AddChild(UITextBox_TextT);
 
-		MgrUI->RegisteredUI(UITextBox_TextT);
-	}
-	{
-		cUIListView* UIListView = new cUIListView;
-		cUIImage* pBackgroundImage = new cUIImage;
-		pBackgroundImage->SetTexture("Image/UI_LIST.png");
-		UIListView->SetTag(eUITag::E_UI_OBJLIST_VIEW);
-		UIListView->SetPosition(0, 30, 0);
-		UIListView->SetSize(200, 1000);
-		UIListView->SetBackgroundUI(pBackgroundImage);
-		UIListView->SetEvent_OnCilck_List(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_TITLE);
-		ui->AddChild(UIListView);
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+		ui->AddChild(UITextBox);
 	}
 	//PhysX 관련 UI
+	//PhysX 적용버튼
+	{
+		cUIButton* UIButton = new cUIButton;
+		cUIText* UIButton_TextV = new cUIText;
+		cUIImage* UIButton_Image = new cUIImage;
+
+		MgrUI->RegisteredUI(UIButton);
+
+		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+		UIButton->SetPosition(0, 360, 0);
+		UIButton->SetSize(100, 20);
+		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "적용", "Image/UI_BUTTON.png");
+		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnLoadPhysX, m_pScene, std::placeholders::_1));
+		UIButton->SetEventID(1);
+	}
+	{
+		cUIButton* UIButton = new cUIButton;
+		cUIText* UIButton_TextV = new cUIText;
+		cUIImage* UIButton_Image = new cUIImage;
+
+		MgrUI->RegisteredUI(UIButton);
+
+		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+		UIButton->SetPosition(100, 360, 0);
+		UIButton->SetSize(100, 20);
+		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "취소", "Image/UI_BUTTON.png");
+		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnLoadPhysX, m_pScene, std::placeholders::_1));
+		UIButton->SetEventID(2);
+	}
+
 	// NxShapeType
 	{ 
 		cUITextBox* UITextBox = new cUITextBox;
 		cUIText* UITextBox_TextV = new cUIText;
 		cUIImage* UITextBox_Image = new cUIImage;
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_SHAPETYPE);
-		UITextBox->SetPosition(0, 340, 0);
+		UITextBox->SetPosition(0, 380, 0);
 		UITextBox->SetSize(200, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ShapeType", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
@@ -397,7 +426,7 @@ void cMainGame::SetUI()
 		cUIImage* UIButton_Image = new cUIImage;
 
 		UIButton->SetTag(eUITag::E_UI_BUTTON_TRIGGER);
-		UIButton->SetPosition(0, 380, 0);
+		UIButton->SetPosition(0, 400, 0);
 		UIButton->SetSize(120, 20);
 		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "TRIGGER", "Image/UI_BUTTON.png");
 		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
@@ -411,7 +440,7 @@ void cMainGame::SetUI()
 		cUIImage* UITextBox_Image = new cUIImage;
 		
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_TRIGGER);
-		UITextBox->SetPosition(130, 380, 0);
+		UITextBox->SetPosition(130, 400, 0);
 		UITextBox->SetSize(70, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
@@ -436,7 +465,7 @@ void cMainGame::SetUI()
 		MgrUI->RegisteredUI(UIButton);
 
 		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
-		UIButton->SetPosition(0, 410, 0);
+		UIButton->SetPosition(0, 420, 0);
 		UIButton->SetSize(120, 20);
 		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "STATIC", "Image/UI_BUTTON.png");
 		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
@@ -448,7 +477,7 @@ void cMainGame::SetUI()
 		cUIImage* UITextBox_Image = new cUIImage;
 
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_STATIC);
-		UITextBox->SetPosition(130, 410, 0);
+		UITextBox->SetPosition(130, 420, 0);
 		UITextBox->SetSize(70, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
@@ -705,6 +734,33 @@ void cMainGame::SetUI()
 		ui->AddChild(UITextBox);
 	}
 
+
+
+	//List
+	{
+		cUIText* UITextBox_TextT = new cUIText;
+
+		UITextBox_TextT->SetTag(eUITag::E_UI_OBJLIST_TITLE);
+		UITextBox_TextT->SetPosition(APIWidth - 215, 0, 0);
+		UITextBox_TextT->SetSize(200, 20);
+		UITextBox_TextT->SetText("오브젝트 리스트");
+		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+
+		MgrUI->RegisteredUI(UITextBox_TextT);
+	}
+	{
+		cUIListView* UIListView = new cUIListView;
+		cUIImage* pBackgroundImage = new cUIImage;
+		pBackgroundImage->SetTexture("Image/UI_LIST.png");
+		UIListView->SetTag(eUITag::E_UI_OBJLIST_VIEW);
+		UIListView->SetPosition(0, 30, 0);
+		UIListView->SetSize(200, 1000);
+		UIListView->SetBackgroundUI(pBackgroundImage);
+		UIListView->SetEvent_OnCilck_List(std::bind(&cMainGame::OnCreateObject, this, std::placeholders::_1));
+
+		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_OBJLIST_TITLE);
+		ui->AddChild(UIListView);
+	}
 
 }
 void cMainGame::SetLight()

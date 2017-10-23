@@ -28,6 +28,8 @@ public:
 	void LoadScene(std::string FileName);
 	void SaveScene(std::string FileName);
 
+	void OnLoadPhysX(int eventID);
+
 	void PushObject(cObject* obj)
 	{
 		m_vecObject.push_back(obj);

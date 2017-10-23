@@ -71,6 +71,8 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 	strFileName = objectName + ".obj";
 
 	cObject*	pObject = new cObject;
+	pObject->SetName(objectName);
+
 	cMesh*		mesh = new cMesh; // 매쉬 생성
 	if (objectName == "default_Box" || objectName == "default_Sphere")
 	{
@@ -101,12 +103,17 @@ cObject* cObjectManager::CreateObject(std::string objectName)
 	}
 	else
 	{
-		physX->LoadPhysX(strFileName);
+		physX->LoadPhysX(objectName);
 		//기존에 저장되어있는 정보로 생성
 	}
 
-	pObject->SetMeshData(mesh);
-	pObject->SetPhysXData(physX);
+	if (physX)	//맵툴에서, 맵을 제외한 오브젝트들은 물리 정보가 필수
+	{
+		pObject->SetMeshData(mesh);
+		pObject->SetPhysXData(physX);
+	}
+	else pObject = NULL;
+
 
 	return pObject;
 }

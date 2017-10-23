@@ -201,6 +201,21 @@ void cScene::SaveScene(std::string FileName)
 	//	return E_NOTIMPL;	
 }
 
+void cScene::OnLoadPhysX(int eventID)
+{
+	if (eventID == 1)
+	{
+		for (int i = 0; i < GetObjects().size(); i++)
+		{
+			if (GetObjects()[i]->GetPhysXData()->m_pActor)
+			{
+				MgrPhysXScene->releaseActor(*GetObjects()[i]->GetPhysXData()->m_pActor);
+			}
+			GetObjects()[i]->GetPhysXData()->LoadPhysX(GetObjects()[i]->GetName());
+		}
+	}
+}
+
 void cScene::Setup()
 {
 
@@ -388,18 +403,9 @@ void cScene::OnChangeValue(int eventID)
 		}
 
 		{
-			D3DXMATRIXA16 matS, matR = m_selectobj->GetMatrix(false, true, true);
-			D3DXMatrixIdentity(&matS);
-			D3DXMatrixScaling(&matS, 4, 1, 1);
-			matR *= matS;
-
-//			pPhysX->m_pActor->
-
-		//	pPhysX->m_worldPose.M.
-
 			pPhysX->m_worldPose.t = MgrPhysX->D3DVecToNxVec(m_selectobj->GetPosition());
 			NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
-			MgrPhysX->D3DMatToNxMat(nxF, matR);
+			MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false,true,false));
 			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
 			pPhysX->m_worldPose.M = nxMat;
 		}
