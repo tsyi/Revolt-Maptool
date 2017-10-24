@@ -34,12 +34,10 @@ void cMainGame::Setup()
 //	MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
 //		NULL, true, true, false);
 
-
-	OnLoadMap(VK_RETURN, DEFAULT_MAPNAME); // 최초 디폴트 값을 로드
-
 	MgrUI->Setup();
 	SetUI();	//OnLoadMap(VK_RETURN); 다음에 실행
 
+	MgrObject->Setup();	//SetUI(); 다음에 실행
 	MgrInput->Setup();
 	MgrFont->Setup();
 
@@ -49,6 +47,7 @@ void cMainGame::Setup()
 	m_grid1 = new cGrid; m_grid1->Setup(10, 10);
 	m_grid2 = new cGrid; m_grid2->Setup(10, 100);
 
+	OnLoadMap(VK_RETURN, DEFAULT_MAPNAME); // 최초 디폴트 값을 로드
 
 	//	m_pScene = new cScene; m_pScene->Setup();
 	//
@@ -75,7 +74,7 @@ void cMainGame::Setup()
 	
 	SetLight();
 
-	MgrObject->Setup();	//SetUI(); 다음에 실행
+	
 
 	//trigger 충돌을 위해 필요
 	MgrPhysXScene->setUserTriggerReport(new TriggerCallback());

@@ -21,6 +21,8 @@ enum eOBJECT_TAG
 
 	E_OBJECT_CHECKBOX,
 
+	E_OBJECT_FOLLOWPOINT,
+
 	E_OBJECT_END,
 };
 
@@ -29,6 +31,16 @@ enum eOBJECT_STATE
 	E_OBJECT_STATE_NONE,
 	E_OBJECT_STATE_SELECT,
 	E_OBJECT_STATE_CANSLE,
+};
+
+enum eOBJECT_ID
+{
+	E_OBJ_ID_CEHCKBOX,
+	E_OBJ_ID_FOLLOWPOINT,
+	E_OBJ_ID_STUFF_CHEESE,
+	E_OBJ_ID_STUFF_CHICKEN,
+	E_OBJ_ID_STUFF_FABRIC,
+	E_OBJ_ID_STUFF_KIDRIDE,
 };
 
 class cMesh;
@@ -56,7 +68,7 @@ protected:
 	SYNTHESIZE_VIRTUAL(bool, m_isActor, IsActor);
 protected:
 
-	SYNTHESIZE_VIRTUAL(int, m_nAttribute, Attribute);
+	SYNTHESIZE_VIRTUAL(eOBJECT_ID, m_eID, ID);
 public:
 	cObject();
 	~cObject();

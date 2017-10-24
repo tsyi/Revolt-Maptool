@@ -25,9 +25,9 @@ public:
 	NxF32 m_matR[9] = { 1,0,0,0,1,0,0,0,1 };	//save/load
 
 
-	bool m_IsTrigger = false;	//save/load
+	bool m_isTrigger = false;	//save/load
 	bool m_isStatic_ = false;	//save/load
-	bool m_isGravaty = true;	//save/load
+	bool m_isGravity = true;	//save/load
 
 	NxShapeType m_type;			//save/load
 
@@ -156,6 +156,7 @@ public:
 
 
 #define TAB	'\t'
+#define SPACE ' '
 #define POPDATA Data[sI++]
 	void LoadPhysX(std::string fileName)
 	{
@@ -209,7 +210,7 @@ public:
 				}
 				if (dateTitle == "IsTrigger")
 				{
-					m_IsTrigger = (bool)cStringUtil::ToInt(POPDATA);
+					m_isTrigger = (bool)cStringUtil::ToInt(POPDATA);
 					continue;
 				}
 				if (dateTitle == "isStatic_")
@@ -219,7 +220,7 @@ public:
 				}
 				if (dateTitle == "isGravaty")
 				{
-					m_isGravaty = (bool)cStringUtil::ToInt(POPDATA);
+					m_isGravity = (bool)cStringUtil::ToInt(POPDATA);
 					continue;
 				}
 				if (dateTitle == "POS_XYZ")
@@ -253,7 +254,7 @@ public:
 
 			//creatActor
 
-			NxActor* pActor = MgrPhysX->CreateActor(m_type, m_position, m_matR, m_sizeValue, m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
+			NxActor* pActor = MgrPhysX->CreateActor(m_type, m_position, m_matR, m_sizeValue, m_pUserData, m_isTrigger, m_isStatic_, m_isGravity);
 			if (pActor)
 			{
 				//货 pActor 积己俊 己傍窍搁 
@@ -278,11 +279,11 @@ public:
 			m_position = NxVec3(0, 0, 0);
 			m_sizeValue = NxVec3(0.5, 0, 0);
 			m_type = NX_SHAPE_SPHERE;
-			m_IsTrigger = true;
+			m_isTrigger = true;
 			m_isStatic_ = true;
-			m_isGravaty = false;
+			m_isGravity = false;
 			m_pActor = MgrPhysX->CreateActor(m_type, m_position, NULL, m_sizeValue,
-				m_pUserData, m_IsTrigger, m_isStatic_, m_isGravaty);
+				m_pUserData, m_isTrigger, m_isStatic_, m_isGravity);
 			//	}
 		}
 		LOAD.close();
@@ -299,9 +300,9 @@ public:
 			SAVE << "SHAPE_TYPE" << TAB << (int)m_type << std::endl;
 
 			SAVE << "OPTION" << std::endl;
-			SAVE << TAB << "IsTrigger" << TAB << m_IsTrigger << std::endl;
+			SAVE << TAB << "IsTrigger" << TAB << m_isTrigger << std::endl;
 			SAVE << TAB << "isStatic_" << TAB << m_isStatic_ << std::endl;
-			SAVE << TAB << "isGravaty" << TAB << m_isGravaty << std::endl;
+			SAVE << TAB << "isGravaty" << TAB << m_isGravity << std::endl;
 
 			SAVE << "POS_XYZ" << TAB
 				<< m_position.x << TAB
