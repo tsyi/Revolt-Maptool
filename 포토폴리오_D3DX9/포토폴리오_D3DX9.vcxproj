@@ -158,6 +158,7 @@
     <ClInclude Include="cCheckBox.h" />
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cEvent.h" />
+    <ClInclude Include="cFollowPoint.h" />
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cInputManager.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="cCheckBox.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cEvent.cpp" />
+    <ClCompile Include="cFollowPoint.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cInputManager.cpp" />

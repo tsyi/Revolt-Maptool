@@ -5,6 +5,7 @@
 #include "cLight.h"
 #include "cStuff.h"
 #include "cCheckBox.h"
+#include "cFollowPoint.h"
 #include <fstream>
 #include <time.h>
 
@@ -83,6 +84,7 @@ void cScene::LoadScene(std::string FileName)
 				case E_OBJECT_STUFF:	Obj = new cStuff; break;
 				case E_OBJECT_CAMERA:	break;
 				case E_OBJECT_CHECKBOX: Obj = new cCheckBox; break;
+				case E_OBJECT_FOLLOWPOINT: Obj = new cFollowPoint; break;
 				case E_OBJECT_END:		break;
 				default: break;
 				}
@@ -114,10 +116,18 @@ void cScene::LoadScene(std::string FileName)
 						int nID = 0;
 						sscanf_s(szTemp, "%*s %d", &nID);
 						Obj->SetID((eOBJECT_ID)nID);
-						cMesh* mesh = new cMesh;
-						std::string folder = "Object/Stuffs/" + MgrObject->m_vecObjectKey[nID];
-						std::string fileName = MgrObject->m_vecObjectKey[nID] + ".obj";
-						if(mesh) mesh->LoadMesh(folder, fileName);
+						cMesh* mesh;
+						if (Obj->GetTag() == E_OBJECT_CHECKBOX || nID == E_OBJECT_FOLLOWPOINT)
+						{
+							mesh = NULL;
+						}
+						else
+						{
+							mesh = new cMesh;
+							std::string folder = "Object/Stuffs/" + MgrObject->m_vecObjectKey[nID];
+							std::string fileName = MgrObject->m_vecObjectKey[nID] + ".obj";
+							if (mesh) mesh->LoadMesh(folder, fileName);
+						}
 						Obj->SetMeshData(mesh);
 					}
 					else if (szTemp[0] == 'P') //Position

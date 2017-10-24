@@ -7,6 +7,7 @@
 #include "cLight.h"
 #include "cStuff.h"
 #include "cCheckBox.h"
+#include "cFollowPoint.h"
 
 
 cObjectManager::cObjectManager()
@@ -86,6 +87,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		pObject = new cCheckBox;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_CHECKBOX);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, true, true, false);
@@ -99,9 +101,10 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 1:
 	{
-		pObject = new cCheckBox;
+		pObject = new cFollowPoint;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_FOLLOWPOINT);
+
 		physX->m_sizeValue = NxVec3(0.5, 0, 0);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, true, true, false);
@@ -118,6 +121,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		mesh = new cMesh; // 매쉬 생성
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, false, false, true);
@@ -133,6 +137,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다
 		pObject->SetTag(E_OBJECT_STUFF);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, false, false, true);
@@ -148,6 +153,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, false, false, true);
@@ -163,6 +169,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, false, false, true);
@@ -177,6 +184,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 		pObject = new cStuff;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_NONE);
+
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
 		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_BOX, NxVec3(0, 0, 0), NULL, physX->m_sizeValue,
 			physX->m_pUserData, false, false, true);

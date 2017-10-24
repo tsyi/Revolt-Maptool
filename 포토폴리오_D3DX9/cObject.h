@@ -43,9 +43,11 @@ class cObject : public cTransform
 {
 protected:
 	//오직 멥툴에서만 필요한 protected
-	D3DXCOLOR isSelectColor = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-	D3DXCOLOR unSelectColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	//D3DXCOLOR isSelectColor = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+	//D3DXCOLOR unSelectColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
+	SYNTHESIZE(D3DXCOLOR, isSelectColor, IsSelectColor);
+	SYNTHESIZE(D3DXCOLOR, unSelectColor, UnSelectColor);
 	SYNTHESIZE(eOBJECT_STATE, m_state, State);
 	SYNTHESIZE(USERDATA*, m_pMapData, MapData);
 	SYNTHESIZE(float, m_heigth, Heigth);
@@ -83,8 +85,17 @@ public:
 		if (!GetMeshData())
 		{
 			SetMeshData(new cMesh);
-			D3DXCreateBox(MgrD3DDevice, 1, 1, 1, &(GetMeshData()->m_pMesh), NULL);
-
+			if (GetTag() == E_OBJECT_CHECKBOX)
+			{
+				colorMesh = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				D3DXCreateBox(MgrD3DDevice, 1, 1, 1, &(GetMeshData()->m_pMesh), NULL);
+			}
+			else if (GetTag() == E_OBJECT_FOLLOWPOINT)
+			{
+				colorMesh = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+				D3DXCreateSphere(MgrD3DDevice, 0.5, 20, 20, &(GetMeshData()->m_pMesh), NULL);
+			}
+			
 			D3DMATERIAL9 material;
 			ZeroMemory(&material, sizeof(D3DMATERIAL9));
 			D3DXCOLOR materColor = colorMesh;
