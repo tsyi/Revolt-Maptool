@@ -144,7 +144,7 @@ public:
 		if (m_pActor) MgrPhysXScene->releaseActor(*m_pActor);
 		m_pActor = NULL;
 
-		m_pUserData = NULL;
+		SAFE_DELETE(m_pUserData);
 	}
 	void Update()
 	{

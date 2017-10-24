@@ -34,7 +34,7 @@ struct USERDATA
 		ContactPairFlag = 0;
 		RaycastClosestShape = NX_FALSE;
 		RaycastAllShape = NX_FALSE;
-		RayHitPos = NxVec3(0, 0, 0);
+	//	RayHitPos = NxVec3(0, 0, 0);
 	}
 };
 
@@ -287,12 +287,10 @@ public:
 	//
 	//
 	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxF32* mat, NxVec3 sizeValue, USERDATA* pUserData,
-		bool IsTrigger = false,  bool isStatic = false, bool isGravaty = true)
+		bool IsTrigger = false, bool isStatic = false, bool isGravaty = true)
 	{
 		bool isKinematic = false;
 		// Our trigger is a cube
-		NxBodyDesc triggerBody;
-		triggerBody.setToDefault();
 
 		NxShapeDesc* shapeDesc = NULL;
 
@@ -343,13 +341,22 @@ public:
 			desc.radius = sizeValue.x;
 			desc.height = sizeValue.y;
 			shapeDesc = &desc;
+
+			if (isKinematic)
+			{
+				NxCapsuleShapeDesc dummyShape;
+				dummyShape.setToDefault();
+				desc.radius = sizeValue.x;
+				desc.height = sizeValue.y;
+				ActorDesc.shapes.pushBack(&dummyShape);
+			}
 			break;
 		}
 		case NX_SHAPE_WHEEL: {
 			NxWheelShapeDesc desc; desc.setToDefault();
 			//	desc.materialIndex = materialIndex;
-			desc.radius = 0;
-			shapeDesc = &desc;
+			//desc.radius = 0;
+			//shapeDesc = &desc;
 			break;
 		}
 		case NX_SHAPE_CONVEX: {
@@ -375,15 +382,21 @@ public:
 		}
 		default:break;
 		}
+		if (shapeDesc == NULL) return NULL;
+
+		NxBodyDesc triggerBody;
+		triggerBody.setToDefault();
+
+
 		if (!isGravaty) triggerBody.flags |= NX_BF_DISABLE_GRAVITY;
-	
+
 		if (isKinematic&& IsTrigger)
 		{
 			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
 			triggerBody.flags |= NX_BF_KINEMATIC;
 
 			ActorDesc.body = &triggerBody;
-		//	ActorDesc.body = NULL;
+			//	ActorDesc.body = NULL;
 		}
 		if (isKinematic && !IsTrigger)
 		{
@@ -395,7 +408,7 @@ public:
 		{
 			shapeDesc->shapeFlags |= NX_TRIGGER_ENABLE;
 
-		//	ActorDesc.body = NULL;
+			//	ActorDesc.body = NULL;
 		}
 		if (!isKinematic && !IsTrigger)
 		{
@@ -407,18 +420,18 @@ public:
 		ActorDesc.density = 10.f;
 		ActorDesc.shapes.pushBack(shapeDesc);
 		ActorDesc.globalPose.t = position;
-		
+
 		if (mat == NULL)
 		{
 			NxF32 mat_[9] = { 1,0,0,0,1,0,0,0,1 };
 			mat = mat_;
 		}
-		
+
 		ActorDesc.globalPose.M.setColumnMajor(mat);
 
 		if (pUserData != NULL) ActorDesc.userData = (pUserData);
 
-		NxActor* actor = m_pNxScene->createActor(ActorDesc);	
+		NxActor* actor = m_pNxScene->createActor(ActorDesc);
 		if (actor == NULL)
 		{
 			std::cout << "NULL";

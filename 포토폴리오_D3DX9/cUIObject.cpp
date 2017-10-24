@@ -102,7 +102,7 @@ void cUIObject::Destory()
 
 cUIObject * cUIObject::FindByTag(eUITag tag)
 {
-	if (!m_isShow) return nullptr;
+//	if (!m_isShow) return nullptr;
 	if (m_tag == tag)
 	{
 		return this;
