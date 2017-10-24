@@ -18,5 +18,7 @@ public:
 	~cMesh();
 
 	void LoadMesh(std::string folder, std::string name);
+	void LoadSphere();
+	void LoadBox();
 };
 

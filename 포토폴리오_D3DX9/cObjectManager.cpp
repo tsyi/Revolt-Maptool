@@ -7,6 +7,7 @@
 #include "cLight.h"
 #include "cStuff.h"
 #include "cCheckBox.h"
+#include "cFollowPoint.h"
 
 
 cObjectManager::cObjectManager()
@@ -20,8 +21,8 @@ cObjectManager::~cObjectManager()
 
 void cObjectManager::Setup()
 {
-	m_vecObjectKey.push_back("default_Box");
-	m_vecObjectKey.push_back("default_Sphere");
+	m_vecObjectKey.push_back("Check_Box");
+	m_vecObjectKey.push_back("Follow_Point");
 
 	m_vecObjectKey.push_back("cheese");
 	m_vecObjectKey.push_back("chicken");
@@ -99,7 +100,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 1:
 	{
-		pObject = new cCheckBox;
+		pObject = new cFollowPoint;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_FOLLOWPOINT);
 		physX->m_sizeValue = INITSIZE;

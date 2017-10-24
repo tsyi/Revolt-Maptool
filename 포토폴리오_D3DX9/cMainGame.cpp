@@ -71,12 +71,8 @@ void cMainGame::Setup()
 	defaultMaterial.dynamicFriction = 0.5f;
 	MgrPhysXScene->createMaterial(defaultMaterial);
 
-
-	
 	SetLight();
-
 	
-
 	//trigger 충돌을 위해 필요
 	MgrPhysXScene->setUserTriggerReport(new TriggerCallback());
 }
