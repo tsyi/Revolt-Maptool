@@ -4,7 +4,7 @@
 
 class cObject;
 class cScene;
-
+class NxVec3;
 
 class cObjectManager
 {
@@ -13,7 +13,8 @@ class cObjectManager
 	//	cObjectManager();
 	//	~cObjectManager();
 	const std::string OBJECTS_PACH = "Object/Stuffs/";
-
+	const NxVec3 INITPOSITION = NxVec3(0, 0.5, 0);
+	const NxVec3 INITSIZE = NxVec3(1, 1, 1);
 private:
 	SINGLETONE(cObjectManager);
 

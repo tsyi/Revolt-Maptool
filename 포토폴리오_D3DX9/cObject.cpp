@@ -37,7 +37,7 @@ void cObject::Destory()
 
 void cObject::Update()
 {
-	GetPhysXData()->m_pActor->putToSleep();
+//	GetPhysXData()->m_pActor->putToSleep();
 	SetMeshBox();
 	if (!MgrInput->GetHooking())
 	{
@@ -57,6 +57,7 @@ void cObject::Update()
 		break;
 		case E_OBJECT_STATE_SELECT:
 		{
+		//	GetPhysXData()->m_pActor->putToSleep();
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0)
@@ -102,17 +103,19 @@ void cObject::Update()
 				{
 					switch (GetPhysXData()->m_type)
 					{
-					case NxShapeType::NX_SHAPE_SPHERE: pos.y += (GetPhysXData()->m_sizeValue.x - GetPhysXData()->m_localPose.t.y); break;
-					case NxShapeType::NX_SHAPE_BOX:pos.y += (GetPhysXData()->m_sizeValue.y - GetPhysXData()->m_localPose.t.y);	break;
+					case NxShapeType::NX_SHAPE_SPHERE: pos.y += ((GetPhysXData()->m_sizeValue.x*0.5f) - GetPhysXData()->m_localPose.t.y); break;
+					case NxShapeType::NX_SHAPE_BOX:pos.y += ((GetPhysXData()->m_sizeValue.x*0.5f) - GetPhysXData()->m_localPose.t.y);	break;
 					default:break;
 					}
 				}
 			}
-			GetPhysXData()->m_worldPose.t = pos;
+			GetPhysXData()->m_pActor->setGlobalPosition(pos);
+			//GetPhysXData()->m_worldPose.t = pos;
 		}
 		break;
 		case E_OBJECT_STATE_CANSLE:
 		{
+		//	GetPhysXData()->m_pActor->wakeUp();
 			if (MgrInput->IsMouseDown(MOUSE_LEFT))
 			{
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0) break;
@@ -139,14 +142,19 @@ void cObject::Update()
 void cObject::LastUpdate()
 {
 	if (!GetPhysXData()) return;
-	NxVec3 pos = GetPhysXData()->m_worldPose.t;
+
+
+	NxVec3 pos = GetPhysXData()->m_pActor->getGlobalPose().t;
 	cTransform::SetNxVec3(pos);
-
 	//	cTransform::GetDirection();
-
 	NxF32 mtl[3 * 3];
-	GetPhysXData()->m_worldPose.M.getColumnMajor(mtl);
+	GetPhysXData()->m_pActor->getGlobalPose().M.getColumnMajor(mtl);
 	cTransform::SetNxF32(mtl);
+
+	GetPhysXData()->m_worldPose.t = MgrPhysX->D3DVecToNxVec(cTransform::GetPosition());
+	NxF32 mat_9[9] = { 1,0,0,0,1,0,0,0,1 };
+	MgrPhysX->D3DMatToNxMat(mat_9, cTransform::GetMatrixRotation());
+	GetPhysXData()->m_worldPose.M.setColumnMajor(mat_9);
 
 	NxMat34 NxActorPose;
 	NxActorPose.multiply(GetPhysXData()->m_worldPose, GetPhysXData()->m_localPose);

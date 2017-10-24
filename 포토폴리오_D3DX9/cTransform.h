@@ -98,7 +98,7 @@ public:
 	}
 
 
-	//PhsyX 관련 변환
+	//PhsyX 관련 변환 (불안정)
 	NxVec3 DxVec3ToNxVec3(D3DXVECTOR3 dxVec3);
 	NxF32* DxMatToNxF32(D3DXMATRIX dxMat);
 	D3DXVECTOR3 NxVec3ToDxVec3(NxVec3 nxVec3);
@@ -146,7 +146,7 @@ public:
 			}
 			else
 			{
-				std::cout << "!";
+			//	std::cout << "!";
 				if (abs(vec_y.x) < 0.0001 && abs(vec_y.x) < 0.0001)
 				{
 					//Pass

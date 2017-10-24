@@ -8,7 +8,7 @@ class cScene
 	SYNTHESIZE(cObject*, m_pMap, Map);
 	SYNTHESIZE(std::vector<cObject*>, m_vecObject, Objects);
 
-
+	bool onPhysX = false;
 	//임시변수;
 
 	//const std::string BaseFolder = "Object/Scene";

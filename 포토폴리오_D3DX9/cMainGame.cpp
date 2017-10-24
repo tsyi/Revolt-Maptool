@@ -364,6 +364,29 @@ void cMainGame::SetUI()
 		ui->AddChild(UITextBox);
 	}
 
+	//{
+	//	cUITextBox* UITextBox = new cUITextBox;
+	//	cUIText* UITextBox_TextV = new cUIText;
+	//	cUIImage* UITextBox_Image = new cUIImage;
+	//
+	//	UITextBox->SetTag(eUITag::E_UI_TEXTBOX_ROT_Z);
+	//	UITextBox->SetPosition(50, 300, 0);
+	//	UITextBox->SetSize(150, 20);
+	//	UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "0", "Image/UI_TEXTBOX.png");
+	//	UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+	//	UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1, VAR::_2));
+	//
+	//	cUIText* UITextBox_TextT = new cUIText;
+	//	UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+	//	UITextBox_TextT->SetSize(50, 20);
+	//	UITextBox_TextT->SetText("OBECT_ID");
+	//	UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+	//	UITextBox->AddChild(UITextBox_TextT);
+	//
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+	//	ui->AddChild(UITextBox);
+	//}
+
 	{
 	//	cUITextBox* UITextBox = new cUITextBox;
 	//	cUIText* UITextBox_TextV = new cUIText;

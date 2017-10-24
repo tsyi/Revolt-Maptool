@@ -215,7 +215,7 @@ bool RaycastCallBack::onHit(const NxRaycastHit & hit)
 		userData->RaycastAllShape = NX_TRUE;
 		userData->RayHitPos = hit.worldImpact;
 		MgrPhysXData->RaycastAllShapeHitCount++;
-		std::cout << MgrPhysXData->RaycastAllShapeHitCount << std::endl;
+	//	std::cout << MgrPhysXData->RaycastAllShapeHitCount << std::endl;
 	}
 	return true;
 }
@@ -234,7 +234,7 @@ void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
 		pUserData0->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
 		pUserData1->ContactPairFlag = NX_NOTIFY_ON_START_TOUCH;
 
-		std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
+	//	std::cout << "NX_NOTIFY_ON_START_TOUCH" << std::endl;
 
 	}break;
 	case NX_NOTIFY_ON_END_TOUCH:
@@ -245,7 +245,7 @@ void ContactCallBack::onContactNotify(NxContactPair & pair, NxU32 _event)
 		pUserData0->ContactPairFlag = 0;
 		pUserData1->ContactPairFlag = 0;
 
-		std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
+	//	std::cout << "NX_NOTIFY_ON_END_TOUCH" << std::endl;
 
 	}break;
 	}
@@ -262,21 +262,18 @@ void TriggerCallback::onTrigger(NxShape & triggerShape, NxShape & otherShape, Nx
 	NxI32 triggerNumber = -(NxI32)triggerActor.userData;
 	NxI32 triggerIndex = triggerNumber - 1;
 
-	std::cout << "onTrigger ";
+	//std::cout << "onTrigger ";
 	if (status & NX_TRIGGER_ON_LEAVE)
 	{
-		std::cout << "NX_TRIGGER_ON_LEAVE";
+	//	std::cout << "NX_TRIGGER_ON_LEAVE";
 	}
 	if (status & NX_TRIGGER_ON_ENTER)
 	{
-		std::cout << "NX_TRIGGER_ON_ENTER";
+	//	std::cout << "NX_TRIGGER_ON_ENTER";
 	}
 	if (status & NX_TRIGGER_ON_STAY)
 	{
-		std::cout << "NX_TRIGGER_ON_STAY";
+	//	std::cout << "NX_TRIGGER_ON_STAY";
 	}
-
-
-
 	std::cout << std::endl;
 }

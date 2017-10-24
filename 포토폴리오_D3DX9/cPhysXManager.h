@@ -265,10 +265,10 @@ public:
 	//CreateActor
 	//1
 	//NxShapeType				sizeValue
-	//NX_SHAPE_SPHERE		:	NxVec3(radius, 0, 0);
-	//NX_SHAPE_BOX			:	NxVec3(width/2, height/2, deep/2);
-	//NX_SHAPE_CAPSULE		:	NxVec3(radius, height, 0);
-	//NX_SHAPE_WHEEL		:	NxVec3(radius, 0, 0);
+	//NX_SHAPE_SPHERE		:	NxVec3(지름값, 0, 0);
+	//NX_SHAPE_BOX			:	NxVec3(width, height, deep);
+	//NX_SHAPE_CAPSULE		:	NxVec3(지름값, 지름값, 0);
+	//NX_SHAPE_WHEEL		:	NxVec3(지름값, 0, 0);
 	//2
 	//position 위치 , 회전
 	//3
@@ -289,6 +289,8 @@ public:
 	NxActor* CreateActor(NxShapeType type, NxVec3 position, NxF32* mat, NxVec3 sizeValue, USERDATA* pUserData,
 		bool IsTrigger = false, bool isStatic = false, bool isGravaty = true)
 	{
+		sizeValue *= 0.5f;
+
 		bool isKinematic = false;
 		// Our trigger is a cube
 

@@ -73,7 +73,7 @@ void cScene::LoadScene(std::string FileName)
 				int tag;
 				Load.getline(szTemp, 1024);
 				sscanf_s(szTemp, "%*s %d", &tag);
-				
+
 				switch (tag)
 				{
 				case E_OBJECT_NONE:		break;
@@ -117,7 +117,7 @@ void cScene::LoadScene(std::string FileName)
 						cMesh* mesh = new cMesh;
 						std::string folder = "Object/Stuffs/" + MgrObject->m_vecObjectKey[nID];
 						std::string fileName = MgrObject->m_vecObjectKey[nID] + ".obj";
-						if(mesh) mesh->LoadMesh(folder, fileName);
+						if (mesh) mesh->LoadMesh(folder, fileName);
 						Obj->SetMeshData(mesh);
 					}
 					else if (szTemp[0] == 'P') //Position
@@ -306,14 +306,14 @@ void cScene::SaveScene(std::string FileName)
 				<< m_vecObject[i]->GetPhysXData()->m_sizeValue.z << std::endl;
 
 			Save << "X_FXU32_[9]" << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_matR[0] << SPACE 
-				<< m_vecObject[i]->GetPhysXData()->m_matR[1] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[0] << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[1] << SPACE
 				<< m_vecObject[i]->GetPhysXData()->m_matR[2] << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_matR[3] << SPACE 
-				<< m_vecObject[i]->GetPhysXData()->m_matR[4] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[3] << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[4] << SPACE
 				<< m_vecObject[i]->GetPhysXData()->m_matR[5] << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_matR[6] << SPACE 
-				<< m_vecObject[i]->GetPhysXData()->m_matR[7] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[6] << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[7] << SPACE
 				<< m_vecObject[i]->GetPhysXData()->m_matR[8] << std::endl;
 
 			Save << "#" << std::endl;
@@ -393,13 +393,30 @@ void cScene::Destory()
 
 void cScene::Update()
 {
+	if (MgrInput->IsKeyDown(VK_TAB))
+	{
+		onPhysX = !onPhysX;
+	}
+	
 	if (m_pMap) m_pMap->Update();
 	//계산 시작
 	for each (cObject* pObj in m_vecObject)
 	{
 		pObj->SetMapData(m_pMap->GetPhysXData()->m_pUserData);
 		pObj->Update();
+
+		if (pObj->GetState() == eOBJECT_STATE::E_OBJECT_STATE_SELECT)
+		{
+			pObj->GetPhysXData()->m_pActor->putToSleep();
+		}
+		else
+		{
+			if(onPhysX) pObj->GetPhysXData()->m_pActor->wakeUp();
+			else pObj->GetPhysXData()->m_pActor->putToSleep();
+		}
 	}
+
+
 
 	if (MgrInput->IsKeyDown(VK_DELETE))
 	{
@@ -568,9 +585,9 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		const float MIN_COLLIDER_SIZE = 0.1f;
-		if (vec3.x < MIN_COLLIDER_SIZE ) vec3.x = MIN_COLLIDER_SIZE ;
-		if (vec3.y < MIN_COLLIDER_SIZE ) vec3.y = MIN_COLLIDER_SIZE ;
-		if (vec3.z < MIN_COLLIDER_SIZE ) vec3.z = MIN_COLLIDER_SIZE ;
+		if (vec3.x < MIN_COLLIDER_SIZE) vec3.x = MIN_COLLIDER_SIZE;
+		if (vec3.y < MIN_COLLIDER_SIZE) vec3.y = MIN_COLLIDER_SIZE;
+		if (vec3.z < MIN_COLLIDER_SIZE) vec3.z = MIN_COLLIDER_SIZE;
 		m_selectobj->SetSize(vec3);
 
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
