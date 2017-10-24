@@ -412,18 +412,19 @@ void cScene::Update()
 	//계산 시작
 	for each (cObject* pObj in m_vecObject)
 	{
+		pObj->GetPhysXData()->m_pActor->putToSleep();
 		pObj->SetMapData(m_pMap->GetPhysXData()->m_pUserData);
 		pObj->Update();
 
-		if (pObj->GetState() == eOBJECT_STATE::E_OBJECT_STATE_SELECT)
-		{
-			pObj->GetPhysXData()->m_pActor->putToSleep();
-		}
-		else
-		{
-			if(onPhysX) pObj->GetPhysXData()->m_pActor->wakeUp();
-			else pObj->GetPhysXData()->m_pActor->putToSleep();
-		}
+	//	if (pObj->GetState() == eOBJECT_STATE::E_OBJECT_STATE_SELECT)
+	//	{
+	//		
+	//	}
+	//	else
+	//	{
+	//		if(onPhysX) pObj->GetPhysXData()->m_pActor->wakeUp();
+	//		else pObj->GetPhysXData()->m_pActor->putToSleep();
+	//	}
 	}
 
 
@@ -610,10 +611,10 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		cPhysX* pPhysX = m_selectobj->GetPhysXData();
 		//local
 		{
-			cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
-			MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
-			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
-			pPhysX->SetLocalRotation(nxMat);
+		//	cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
+		//	MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
+		//	NxMat33 nxMat; nxMat.setColumnMajor(nxF);
+		//	pPhysX->SetLocalRotation(nxMat);
 		}
 
 		//world
@@ -624,11 +625,11 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
 			pPhysX->m_worldPose.M = nxMat;
 		}
-		NxMat34 NxActorPose;
-		NxActorPose.multiply(pPhysX->m_worldPose, pPhysX->m_localPose);
-
-		pPhysX->m_pActor->setGlobalPose(NxActorPose);
-	}
+		//NxMat34 NxActorPose;
+		//NxActorPose.multiply(pPhysX->m_worldPose, pPhysX->m_localPose);
+		//
+		//pPhysX->m_pActor->setGlobalPose(NxActorPose);
+	}	
 }
 
 void cScene::OnChangeValueNx(int eventID, std::string eventKey)

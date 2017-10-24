@@ -64,13 +64,6 @@ void cMainGame::Setup()
 
 
 	// 로드되어있는 재질정보
-	NxMaterialDesc defaultMaterial;
-	defaultMaterial.setToDefault();
-	defaultMaterial.restitution = 0.5f;
-	defaultMaterial.staticFriction = 0.5f;
-	defaultMaterial.dynamicFriction = 0.5f;
-	MgrPhysXScene->createMaterial(defaultMaterial);
-
 	SetLight();
 	
 	//trigger 충돌을 위해 필요

@@ -109,8 +109,8 @@ void cObject::Update()
 					}
 				}
 			}
-			GetPhysXData()->m_pActor->setGlobalPosition(pos);
-			//GetPhysXData()->m_worldPose.t = pos;
+			//GetPhysXData()->m_pActor->setGlobalPosition(pos);
+			GetPhysXData()->m_worldPose.t = pos;
 		}
 		break;
 		case E_OBJECT_STATE_CANSLE:
@@ -144,17 +144,17 @@ void cObject::LastUpdate()
 	if (!GetPhysXData()) return;
 
 
-	NxVec3 pos = GetPhysXData()->m_pActor->getGlobalPose().t;
+	NxVec3 pos = GetPhysXData()->m_worldPose.t;
 	cTransform::SetNxVec3(pos);
 	//	cTransform::GetDirection();
 	NxF32 mtl[3 * 3];
-	GetPhysXData()->m_pActor->getGlobalPose().M.getColumnMajor(mtl);
+	GetPhysXData()->m_worldPose.M.getColumnMajor(mtl);
 	cTransform::SetNxF32(mtl);
 
 	GetPhysXData()->m_worldPose.t = MgrPhysX->D3DVecToNxVec(cTransform::GetPosition());
 	NxF32 mat_9[9] = { 1,0,0,0,1,0,0,0,1 };
 	MgrPhysX->D3DMatToNxMat(mat_9, cTransform::GetMatrixRotation());
-	GetPhysXData()->m_worldPose.M.setColumnMajor(mat_9);
+//	GetPhysXData()->m_worldPose.M.setColumnMajor(mat_9);
 
 	NxMat34 NxActorPose;
 	NxActorPose.multiply(GetPhysXData()->m_worldPose, GetPhysXData()->m_localPose);

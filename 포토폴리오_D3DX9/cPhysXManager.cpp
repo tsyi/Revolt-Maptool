@@ -52,6 +52,17 @@ BOOL cPhysXManager::InitNxPhysX(DEBUG_RENDERER** pDebugRenderer)
 	newPhysXUserData->Init();
 	SetPhysXData(newPhysXUserData);
 
+
+
+
+	NxMaterialDesc defaultMaterial;
+	defaultMaterial.setToDefault();
+	defaultMaterial.restitution = 1.0f;
+	defaultMaterial.staticFriction = 10.f;
+	defaultMaterial.dynamicFriction = 8.f;
+	m_pNxScene->createMaterial(defaultMaterial);
+
+
 	return S_OK;
 }
 
