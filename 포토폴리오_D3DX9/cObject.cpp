@@ -99,13 +99,14 @@ void cObject::Update()
 				if (MgrInput->IsKeyPress(VK_LCONTROL))
 					pos.y = GetHeigth();
 				else
+				{
 					switch (GetPhysXData()->m_type)
 					{
-					case NxShapeType::NX_SHAPE_SPHERE: pos.y += GetPhysXData()->m_sizeValue.x;
-					case NxShapeType::NX_SHAPE_BOX:pos.y += GetPhysXData()->m_sizeValue.y;
+					case NxShapeType::NX_SHAPE_SPHERE: pos.y += (GetPhysXData()->m_sizeValue.x - GetPhysXData()->m_localPose.t.y); break;
+					case NxShapeType::NX_SHAPE_BOX:pos.y += (GetPhysXData()->m_sizeValue.y - GetPhysXData()->m_localPose.t.y);	break;
 					default:break;
 					}
-
+				}
 			}
 			GetPhysXData()->m_worldPose.t = pos;
 		}

@@ -16,6 +16,7 @@ cScene::cScene()
 
 cScene::~cScene()
 {
+
 }
 
 void cScene::LoadScene(std::string FileName)

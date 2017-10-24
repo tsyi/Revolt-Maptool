@@ -110,8 +110,8 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	{
 		MessageBoxA(g_hWnd, "Stuff 경로를 찾을 수 없습니다.", "", MB_OK);
 	}
+	if(fp) fclose(fp);
 
-	fclose(fp);
 
 	pMesh->m_vecMtlTex.resize(mapMtlTex.size());
 	for each(auto it in mapMtlTex)
