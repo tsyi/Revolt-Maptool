@@ -18,7 +18,7 @@ private:
 	SINGLETONE(cObjectManager);
 
 private:
-	std::vector<std::string> m_vecObjectKey;	// setup
+	
 //	std::vector<cMesh*> m_vecCreatedObj;		// create
 
 public:
@@ -32,8 +32,10 @@ public:
 	// << : 
 	void Render();
 
+	std::vector<std::string> m_vecObjectKey;	// setup
 
 	cObject* CreateObject(std::string objectName);
+	cObject* CreateObject(int keyID);
 	void CreateButton(std::string objectName);
 };
 

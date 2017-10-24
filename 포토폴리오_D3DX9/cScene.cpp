@@ -68,15 +68,11 @@ void cScene::LoadScene(std::string FileName)
 			else if (szTemp[0] == 'O') //Object Load
 			{
 				cObject* Obj = NULL;
-				// 이름
-				char szName[1024];
-				sscanf_s(szTemp, "%*s %d", &szName);
-				Obj->SetObjName(szName);
 
-				eOBJECT_TAG tag;
+				int tag;
 				Load.getline(szTemp, 1024);
 				sscanf_s(szTemp, "%*s %d", &tag);
-
+				
 				switch (tag)
 				{
 				case E_OBJECT_NONE:		break;
@@ -90,21 +86,47 @@ void cScene::LoadScene(std::string FileName)
 				default: break;
 				}
 
+				Obj->SetTag((eOBJECT_TAG)tag);
+
+				cPhysX* physx = new cPhysX;
+				Obj->SetPhysXData(physx);
+
+				std::string strName;
+				Load >> strName;
+				Load >> strName;
+				Obj->SetObjName(strName);
+
 				while (1)
 				{
 					Load.getline(szTemp, 1024);
 
-					if (szTemp[0] == 'A') // Attribute
+					//if (szTemp[0] == 'N') // Name
+					//{
+					//	//char szName[1024];
+					//	std::string strName;
+					//	Load >> strName;
+					//	//sscanf_s(szTemp, "%*s %s", &strName);
+					//	Obj->SetObjName(strName);
+					//}
+					if (szTemp[0] == 'I') // Attribute
 					{
-						int nAtt = 0;
-						sscanf_s(szTemp, "%*s %d", &nAtt);
-						Obj->SetAttribute(nAtt);
+						int nID = 0;
+						sscanf_s(szTemp, "%*s %d", &nID);
+						Obj->SetID((eOBJECT_ID)nID);
+						cMesh* mesh = new cMesh;
+						std::string folder = "Object/Stuffs/" + MgrObject->m_vecObjectKey[nID];
+						std::string fileName = MgrObject->m_vecObjectKey[nID] + ".obj";
+						if(mesh) mesh->LoadMesh(folder, fileName);
+						Obj->SetMeshData(mesh);
 					}
 					else if (szTemp[0] == 'P') //Position
 					{
 						float x, y, z;
 						sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
 						Obj->SetPosition(D3DXVECTOR3(x, y, z));
+						Obj->GetPhysXData()->m_worldPose.t.x = x;
+						Obj->GetPhysXData()->m_worldPose.t.y = y;
+						Obj->GetPhysXData()->m_worldPose.t.z = z;
 					}
 					else if (szTemp[0] == 'S') //Scale
 					{
@@ -118,16 +140,82 @@ void cScene::LoadScene(std::string FileName)
 						sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
 						Obj->SetQuaternion(D3DXVECTOR3(x, y, z));
 					}
-					else if (szTemp[0] == 'N') //Physics
+					else if (szTemp[0] == 'X') //Physics
 					{
 						//물리정보입력
-						Obj->GetPhysXData()->LoadPhysX(FileName);
-						bool isActor = 0;
-						sscanf_s(szTemp, "%*s %d", &isActor);
-						Obj->SetIsActor(isActor);
+						if (szTemp[2] == 'A')
+						{
+							int isActor = 0;
+							sscanf_s(szTemp, "%*s %d", &isActor);
+							Obj->SetIsActor(isActor);
+						}
+						else if (szTemp[2] == 'T')
+						{
+							int nType = 0;
+							sscanf_s(szTemp, "%*s %d", &nType);
+							Obj->GetPhysXData()->m_type = (NxShapeType)nType;
+						}
+						else if (szTemp[2] == 'O')
+						{
+							int t, s, g;
+							sscanf_s(szTemp, "%*s %d %d %d", &t, &s, &g);
+							Obj->GetPhysXData()->m_isTrigger = t;
+							Obj->GetPhysXData()->m_isStatic_ = s;
+							Obj->GetPhysXData()->m_isGravity = g;
+						}
+						else if (szTemp[2] == 'P')
+						{
+							float x, y, z;
+							sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
+							Obj->GetPhysXData()->m_position.x = x;
+							Obj->GetPhysXData()->m_position.y = y;
+							Obj->GetPhysXData()->m_position.z = z;
+
+							Obj->GetPhysXData()->m_localPose.t.x = x;
+							Obj->GetPhysXData()->m_localPose.t.y = y;
+							Obj->GetPhysXData()->m_localPose.t.z = z;
+
+						}
+						else if (szTemp[2] == 'S')
+						{
+							float x, y, z;
+							sscanf_s(szTemp, "%*s %f %f %f", &x, &y, &z);
+							Obj->GetPhysXData()->m_sizeValue.x = x;
+							Obj->GetPhysXData()->m_sizeValue.y = y;
+							Obj->GetPhysXData()->m_sizeValue.z = z;
+						}
+						else if (szTemp[2] == 'F')
+						{
+							float F[9];
+							sscanf_s(szTemp, "%*s %f %f %f %f %f %f %f %f %f",
+								&F[0], &F[1], &F[2], &F[3], &F[4], &F[5], &F[6], &F[7], &F[8]);
+							for (int i = 0; i < 9; i++)
+							{
+								Obj->GetPhysXData()->m_matR[i] = F[i];
+							}
+						}
 					}
 					else if (szTemp[0] == '#') //Push
 					{
+						NxActor* pActor = MgrPhysX->CreateActor(
+							Obj->GetPhysXData()->m_type,
+							Obj->GetPhysXData()->m_position,
+							Obj->GetPhysXData()->m_matR,
+							Obj->GetPhysXData()->m_sizeValue,
+							Obj->GetPhysXData()->m_pUserData,
+							Obj->GetPhysXData()->m_isTrigger,
+							Obj->GetPhysXData()->m_isStatic_,
+							Obj->GetPhysXData()->m_isGravity);
+						if (pActor)
+						{
+							//새 pActor 생성에 성공하면 
+							//기존에 있던 정보내용 초기화하고
+							//새 pActor 로 등록 
+							MgrPhysXScene->releaseActor(*Obj->GetPhysXData()->m_pActor);
+							Obj->GetPhysXData()->m_pActor = NULL;
+
+							Obj->GetPhysXData()->m_pActor = pActor;
+						}
 						m_vecObject.push_back(Obj);
 						break;
 					}
@@ -174,28 +262,58 @@ void cScene::SaveScene(std::string FileName)
 		//Object
 		for (int i = 0; i < m_vecObject.size(); i++)
 		{
-			Save << "Object " << m_vecObject[i]->GetObjName() << std::endl;
+			Save << "Object" << std::endl;
 
-			//Save << "Tag " << m_vecObject[i]->GetTag() << std::endl;
+			Save << "Tag" << SPACE << m_vecObject[i]->GetTag() << std::endl;
 
-			Save << "Attribute " << m_vecObject[i]->GetAttribute() << std::endl;
+			Save << "Name" << SPACE << m_vecObject[i]->GetObjName() << std::endl;
 
-			Save << "Position "
+			Save << "ID" << SPACE << m_vecObject[i]->GetID() << std::endl;
+
+			Save << "Position" << SPACE
 				<< m_vecObject[i]->GetPosition().x << " "
 				<< m_vecObject[i]->GetPosition().y << " "
 				<< m_vecObject[i]->GetPosition().z << std::endl;
 
-			Save << "Scale "
+			Save << "Scale" << SPACE
 				<< m_vecObject[i]->GetSize().x << " "
 				<< m_vecObject[i]->GetSize().y << " "
 				<< m_vecObject[i]->GetSize().z << std::endl;
 
-			Save << "Rotation "
+			Save << "Rotation" << SPACE
 				<< m_vecObject[i]->GetDirection().x << " "
 				<< m_vecObject[i]->GetDirection().y << " "
 				<< m_vecObject[i]->GetDirection().z << std::endl;
 
-			Save << "N " << m_vecObject[i]->GetIsActor() << std::endl;
+			Save << "X_Actor" << SPACE << m_vecObject[i]->GetIsActor() << std::endl;
+
+			Save << "X_Type" << SPACE << (int)m_vecObject[i]->GetPhysXData()->m_type << std::endl;
+
+			Save << "X_Option" << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_isTrigger << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_isStatic_ << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_isGravity << std::endl;
+
+			Save << "X_Pos" << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_position.x << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_position.y << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_position.z << std::endl;
+
+			Save << "X_Size" << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_sizeValue.x << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_sizeValue.y << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_sizeValue.z << std::endl;
+
+			Save << "X_FXU32_[9]" << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[0] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[1] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[2] << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[3] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[4] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[5] << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_matR[6] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[7] << SPACE 
+				<< m_vecObject[i]->GetPhysXData()->m_matR[8] << std::endl;
 
 			Save << "#" << std::endl;
 
@@ -210,30 +328,30 @@ void cScene::SaveScene(std::string FileName)
 	}
 	Save.close();
 
-	fullpath = "Object/PhysXData/PhysXData.phx";
-	std::ofstream SAVE(fullpath);
-	if (SAVE.is_open())
-	{
-		SAVE << "DATA_NAME" << TAB << "SHAPE_TYPE" << TAB
-			<< "IsTrigger" << TAB << "isStatic_" << TAB << "isGravaty" << TAB
-			<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
-			<< "SIZE_X" << TAB << "SIZE_Y" << TAB << "SIZE_Z" << TAB
-			<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
-			<< "FXU32_[0]" << TAB << "FXU32_[1]" << TAB << "FXU32_[2]" << TAB
-			<< "FXU32_[3]" << TAB << "FXU32_[4]" << TAB << "FXU32_[5]" << TAB
-			<< "FXU32_[6]" << TAB << "FXU32_[7]" << TAB << "FXU32_[8]" << std::endl;
-		for each (cObject* pObj in m_vecObject)
-		{
-			cPhysX* p = pObj->GetPhysXData();
-			SAVE << p->m_pActor->getName() << TAB << p->m_type << TAB
-				<< p->m_IsTrigger << TAB << p->m_isStatic_ << TAB << p->m_isGravaty << TAB
-				<< p->m_position.x << TAB << p->m_position.y << TAB << p->m_position.z << TAB
-				<< p->m_sizeValue.x << TAB << p->m_sizeValue.y << TAB << p->m_sizeValue.z << TAB
-				<< p->m_matR[0] << TAB << p->m_matR[1] << TAB << p->m_matR[2] << TAB
-				<< p->m_matR[3] << TAB << p->m_matR[4] << TAB << p->m_matR[5] << TAB
-				<< p->m_matR[6] << TAB << p->m_matR[7] << TAB << p->m_matR[8] << std::endl;
-		}
-	}
+	//fullpath = "Object/PhysXData/PhysXData.phx";
+	//std::ofstream SAVE(fullpath);
+	//if (SAVE.is_open())
+	//{
+	//	SAVE << "DATA_NAME" << TAB << "SHAPE_TYPE" << TAB
+	//		<< "IsTrigger" << TAB << "isStatic_" << TAB << "isGravaty" << TAB
+	//		<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+	//		<< "SIZE_X" << TAB << "SIZE_Y" << TAB << "SIZE_Z" << TAB
+	//		<< "POS_X" << TAB << "POS_Y" << TAB << "POS_Z" << TAB
+	//		<< "FXU32_[0]" << TAB << "FXU32_[1]" << TAB << "FXU32_[2]" << TAB
+	//		<< "FXU32_[3]" << TAB << "FXU32_[4]" << TAB << "FXU32_[5]" << TAB
+	//		<< "FXU32_[6]" << TAB << "FXU32_[7]" << TAB << "FXU32_[8]" << std::endl;
+	//	for each (cObject* pObj in m_vecObject)
+	//	{
+	//		cPhysX* p = pObj->GetPhysXData();
+	//		SAVE << p->m_pActor->getName() << TAB << p->m_type << TAB
+	//			<< p->m_isTrigger << TAB << p->m_isStatic_ << TAB << p->m_isGravity << TAB
+	//			<< p->m_position.x << TAB << p->m_position.y << TAB << p->m_position.z << TAB
+	//			<< p->m_sizeValue.x << TAB << p->m_sizeValue.y << TAB << p->m_sizeValue.z << TAB
+	//			<< p->m_matR[0] << TAB << p->m_matR[1] << TAB << p->m_matR[2] << TAB
+	//			<< p->m_matR[3] << TAB << p->m_matR[4] << TAB << p->m_matR[5] << TAB
+	//			<< p->m_matR[6] << TAB << p->m_matR[7] << TAB << p->m_matR[8] << std::endl;
+	//	}
+	//}
 
 	//	return E_NOTIMPL;	
 }
