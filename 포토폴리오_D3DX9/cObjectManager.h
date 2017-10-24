@@ -18,24 +18,22 @@ private:
 	SINGLETONE(cObjectManager);
 
 private:
-	
-//	std::vector<cMesh*> m_vecCreatedObj;		// create
+	//	std::vector<cMesh*> m_vecCreatedObj;		// create
 
 public:
+	std::vector<std::string> m_vecObjectKey;	// setup
 	void Setup();
 	void AddObj(cScene* AddScene, int keyID);
 	void DeleteObj();
-//	cMesh* LoadObj(eOBJ_TAG fileName);
-	//void AddObject(cObject* pObject);
-	//void RemoveObject(cObject* pObject);
+	//	cMesh* LoadObj(eOBJ_TAG fileName);
+		//void AddObject(cObject* pObject);
+		//void RemoveObject(cObject* pObject);
 	void Destroy();
 	// << : 
 	void Render();
 
-	std::vector<std::string> m_vecObjectKey;	// setup
 
 	cObject* CreateObject(std::string objectName);
-	cObject* CreateObject(int keyID);
 	void CreateButton(std::string objectName);
 };
 

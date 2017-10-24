@@ -578,6 +578,28 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 
 		if (D3DXVec3LengthSq(&vec3) < 0.000001f) vec3 = D3DXVECTOR3(0, 0, 1);
 		m_selectobj->SetQuaternion(vec3);
+
+		cPhysX* pPhysX = m_selectobj->GetPhysXData();
+		//local
+		{
+			cTransform tr; tr.SetQuaternion(vec3);	NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
+			MgrPhysX->D3DMatToNxMat(nxF, tr.GetMatrix(false, true, true));
+			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
+			pPhysX->SetLocalRotation(nxMat);
+		}
+
+		//world
+		{
+			pPhysX->m_worldPose.t = MgrPhysX->D3DVecToNxVec(m_selectobj->GetPosition());
+			NxF32 nxF[9] = { 1,0,0,0,1,0,0,0,1 };
+			MgrPhysX->D3DMatToNxMat(nxF, m_selectobj->GetMatrix(false, true, false));
+			NxMat33 nxMat; nxMat.setColumnMajor(nxF);
+			pPhysX->m_worldPose.M = nxMat;
+		}
+		NxMat34 NxActorPose;
+		NxActorPose.multiply(pPhysX->m_worldPose, pPhysX->m_localPose);
+
+		pPhysX->m_pActor->setGlobalPose(NxActorPose);
 	}
 }
 
@@ -643,14 +665,14 @@ void cScene::OnChangeValueNx(int eventID, std::string eventKey)
 		pPhysX->m_sizeValue = pPhysX->m_sizeValue;
 		pPhysX->m_type = pPhysX->m_type;
 
-		pPhysX->m_IsTrigger = pPhysX->m_IsTrigger;
+		pPhysX->m_isTrigger = pPhysX->m_isTrigger;
 		pPhysX->m_isStatic_ = pPhysX->m_isStatic_;
-		pPhysX->m_isGravaty = pPhysX->m_isGravaty;
+		pPhysX->m_isGravity = pPhysX->m_isGravity;
 
 		pPhysX->Destory();
 
 		USERDATA* pUserData = new USERDATA;
 		pPhysX->m_pUserData = pUserData;
-		pPhysX->m_pActor = MgrPhysX->CreateActor(pPhysX->m_type, pPhysX->m_position, pPhysX->m_matR, pPhysX->m_sizeValue, pPhysX->m_pUserData, pPhysX->m_IsTrigger, pPhysX->m_isStatic_, pPhysX->m_isGravaty);
+		pPhysX->m_pActor = MgrPhysX->CreateActor(pPhysX->m_type, pPhysX->m_position, pPhysX->m_matR, pPhysX->m_sizeValue, pPhysX->m_pUserData, pPhysX->m_isTrigger, pPhysX->m_isStatic_, pPhysX->m_isGravity);
 	}
 }

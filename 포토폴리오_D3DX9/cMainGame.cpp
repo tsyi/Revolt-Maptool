@@ -33,6 +33,7 @@ void cMainGame::Setup()
 
 //	MgrPhysX->CreateActor(NX_SHAPE_SPHERE, NxVec3(0, 0, 0), NULL, NxVec3(0.5, 0, 0),
 //		NULL, true, true, false);
+	m_pScene = new cScene; m_pScene->Setup();
 
 	MgrUI->Setup();
 	SetUI();	//OnLoadMap(VK_RETURN); 다음에 실행
@@ -41,13 +42,13 @@ void cMainGame::Setup()
 	MgrInput->Setup();
 	MgrFont->Setup();
 
+	OnLoadMap(VK_RETURN, DEFAULT_MAPNAME); // 최초 디폴트 값을 로드
+
 	m_camera = new cCamera; m_camera->Setup();
 
 	m_grid0 = new cGrid; m_grid0->Setup(20, 1);
 	m_grid1 = new cGrid; m_grid1->Setup(10, 10);
 	m_grid2 = new cGrid; m_grid2->Setup(10, 100);
-
-	OnLoadMap(VK_RETURN, DEFAULT_MAPNAME); // 최초 디폴트 값을 로드
 
 	//	m_pScene = new cScene; m_pScene->Setup();
 	//
