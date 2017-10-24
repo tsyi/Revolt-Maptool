@@ -7,23 +7,15 @@
 
 enum eOBJECT_TAG
 {
-	E_OBJECT_NONE,
-
-	E_OBJECT_CAR,
-
-	E_OBJECT_MAP,
-
-	E_OBJECT_LIGHT,
-
-	E_OBJECT_STUFF,
-
-	E_OBJECT_CAMERA,
-
 	E_OBJECT_CHECKBOX,
-
 	E_OBJECT_FOLLOWPOINT,
-
+	E_OBJECT_CAR,
+	E_OBJECT_MAP,
+	E_OBJECT_LIGHT,
+	E_OBJECT_STUFF,
+	E_OBJECT_CAMERA,
 	E_OBJECT_END,
+	E_OBJECT_NONE,
 };
 
 enum eOBJECT_STATE
@@ -79,13 +71,34 @@ public:
 	virtual void Update();
 	virtual void LastUpdate();
 	virtual void Render();
-	virtual void SetMeshBox() {}
-
 
 	virtual void SetActor()
 	{
-//		MgrPhysX->CreateActor()
+		//		MgrPhysX->CreateActor()
 	}
 
+	D3DXCOLOR colorMesh = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	virtual void SetMeshBox()
+	{
+		if (!GetMeshData())
+		{
+			SetMeshData(new cMesh);
+			D3DXCreateBox(MgrD3DDevice, 1, 1, 1, &(GetMeshData()->m_pMesh), NULL);
+
+			D3DMATERIAL9 material;
+			ZeroMemory(&material, sizeof(D3DMATERIAL9));
+			D3DXCOLOR materColor = colorMesh;
+			material.Ambient = materColor;
+			material.Diffuse = materColor;
+			material.Specular = materColor;
+
+			cMtlTex* mtlText = new cMtlTex;
+
+			mtlText->SetMaterial(material);
+			mtlText->SetMtlTexID(0);
+
+			GetMeshData()->m_vecMtlTex.push_back(mtlText);
+		}
+	}
 };
 

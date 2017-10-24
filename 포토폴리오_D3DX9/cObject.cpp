@@ -38,7 +38,7 @@ void cObject::Destory()
 void cObject::Update()
 {
 	GetPhysXData()->m_pActor->putToSleep();
-
+	SetMeshBox();
 	if (!MgrInput->GetHooking())
 	{
 		switch (m_state)

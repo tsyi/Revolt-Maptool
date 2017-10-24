@@ -3,6 +3,11 @@
 #include "cObjLoader.h"
 #include "cScene.h"
 
+#include "cMap.h"
+#include "cLight.h"
+#include "cStuff.h"
+#include "cCheckBox.h"
+
 
 cObjectManager::cObjectManager()
 {
@@ -70,17 +75,15 @@ cObject * cObjectManager::CreateObject(int keyID)
 	strFolder = "Object/Stuffs/" + m_vecObjectKey[keyID];
 	strFileName = m_vecObjectKey[keyID] + ".obj";
 
-	cObject* pObject = new cObject;
-	pObject->SetObjName(m_vecObjectKey[keyID]);
-	pObject->SetID((eOBJECT_ID)keyID);
-
-	cMesh*	mesh;
+	cObject* pObject = NULL;
+	cMesh*	mesh = NULL;
 	cPhysX*	physX = new cPhysX;
 
 	switch (keyID)
 	{
 	case 0:
 	{
+		pObject = new cCheckBox;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_CHECKBOX);
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
@@ -96,6 +99,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 1:
 	{
+		pObject = new cCheckBox;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_FOLLOWPOINT);
 		physX->m_sizeValue = NxVec3(0.5, 0, 0);
@@ -110,6 +114,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 2:
 	{
+		pObject = new cStuff;
 		mesh = new cMesh; // 매쉬 생성
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
@@ -124,6 +129,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 3:
 	{
+		pObject = new cStuff;
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다
 		pObject->SetTag(E_OBJECT_STUFF);
@@ -138,6 +144,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 4:
 	{
+		pObject = new cStuff;
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
@@ -152,6 +159,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	case 5:
 	{
+		pObject = new cStuff;
 		mesh = new cMesh; // 매쉬 생성	
 		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
 		pObject->SetTag(E_OBJECT_STUFF);
@@ -166,6 +174,7 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	default:
 	{
+		pObject = new cStuff;
 		mesh = NULL;
 		pObject->SetTag(E_OBJECT_NONE);
 		physX->m_sizeValue = NxVec3(0.5, 0.5, 0.5);
@@ -179,16 +188,26 @@ cObject * cObjectManager::CreateObject(int keyID)
 	break;
 	}
 
-	if (physX)	//맵툴에서, 맵을 제외한 오브젝트들은 물리 정보가 필수
+	if (pObject)
 	{
-		pObject->SetMeshData(mesh);
-		pObject->SetPhysXData(physX);
+		pObject->SetObjName(m_vecObjectKey[keyID]);
+		pObject->SetID((eOBJECT_ID)keyID);
+
+
+		if (physX)	//맵툴에서, 맵을 제외한 오브젝트들은 물리 정보가 필수
+		{
+			pObject->SetMeshData(mesh);
+			pObject->SetPhysXData(physX);
+		}
+		else
+		{
+			MessageBoxA(g_hWnd, "physx 가 null", "심각한 문제", MB_OK);
+		}
 	}
 	else
 	{
-		MessageBoxA(g_hWnd, "physx 가 null", "", MB_OK);
+		MessageBoxA(g_hWnd, "object 가 null", "심각한 문제", MB_OK);
 	}
-
 	return pObject;
 }
 
