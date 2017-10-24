@@ -21,6 +21,16 @@ void cMesh::LoadMesh(std::string folder, std::string name)
 	cObjLoader::LoadMesh(this, folder, name);
 }
 
+void cMesh::LoadSphere()
+{
+	D3DXCreateSphere(MgrD3DDevice, 1, 20, 20, &m_pMesh, NULL);
+}
+
+void cMesh::LoadBox()
+{
+	D3DXCreateBox(MgrD3DDevice, 1, 1, 1, &m_pMesh, NULL);
+}
+
 void cMesh::Destory()
 {
 	//m_mapMtlTex.clear();

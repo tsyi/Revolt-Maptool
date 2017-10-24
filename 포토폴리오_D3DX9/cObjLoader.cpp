@@ -2,6 +2,7 @@
 #include "cObjLoader.h"
 #include "cMtlTex.h"
 #include "cMesh.h"
+#include <fstream>
 
 cObjLoader::cObjLoader()
 {
@@ -24,6 +25,7 @@ void cObjLoader::LoadMesh(OUT cMesh * pMesh, IN std::string szFolder, IN std::st
 	std::map<std::string, cMtlTex*> mapMtlTex;
 
 	std::string sFullPath = szFolder + std::string("/") + szFile;
+
 
 	FILE* fp;
 	fopen_s(&fp, sFullPath.c_str(), "r");

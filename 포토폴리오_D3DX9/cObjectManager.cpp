@@ -15,8 +15,8 @@ cObjectManager::~cObjectManager()
 
 void cObjectManager::Setup()
 {
-	m_vecObjectKey.push_back("default_Box");
-	m_vecObjectKey.push_back("default_Sphere");
+	m_vecObjectKey.push_back("Check_Box");
+	m_vecObjectKey.push_back("Follow_Point");
 
 	m_vecObjectKey.push_back("cheese");
 	m_vecObjectKey.push_back("chicken");
