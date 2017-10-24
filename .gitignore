@@ -300,3 +300,12 @@ __pycache__/
 # End of https://www.gitignore.io/api/visualstudio
 포토폴리오_D3DX9/fmodex.dll
 포토폴리오_D3DX9/fmodexL.dll
+포토폴리오_D3DX9/Object/Stuffs/fabric/fabric.mtl
+포토폴리오_D3DX9/Object/Stuffs/cheese/cheese.mtl
+포토폴리오_D3DX9/Object/Stuffs/fabric/fabric.png
+포토폴리오_D3DX9/Object/Scene/Market2.scn
+포토폴리오_D3DX9/Object/Stuffs/kidride/kidride.mtl
+포토폴리오_D3DX9/Object/Stuffs/cheese/chesse.png
+포토폴리오_D3DX9/Object/Stuffs/kidride/kidride.png
+포토폴리오_D3DX9/Object/Stuffs/chicken/chicken.mtl
+포토폴리오_D3DX9/Object/Stuffs/chicken/chicken.png
