@@ -350,10 +350,9 @@ void cScene::LastUpdate()
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetDirection().z));
 
-	
+
 
 			//PhysX
-
 			NxVec3 NxPos = pObj->GetPhysXData()->m_localPose.t;
 			NxVec3 NxDir = pObj->GetPhysXData()->m_dirValue;
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SHAPET_TYPE);
@@ -373,13 +372,37 @@ void cScene::LastUpdate()
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
+			{
 				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.x));
+			}
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Y);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.y));
+			{
+				if (pObj->GetPhysXData()->m_type == NX_SHAPE_SPHERE)
+				{
+					pTextBox->SetShow(false);
+					pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.x));
+				}
+				else
+				{
+					pTextBox->SetShow(true);
+					pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.y));
+				}
+			}
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Z);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
-				pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.z));
+			{
+				if (pObj->GetPhysXData()->m_type == NX_SHAPE_SPHERE)
+				{
+					pTextBox->SetShow(false);
+					pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.x));
+				}
+				else
+				{
+					pTextBox->SetShow(true);
+					pTextBox->GetUIText()->SetText(cStringUtil::ToString(pObj->GetPhysXData()->m_sizeValue.z));
+				}
+			}
 
 			pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);
 			if (pTextBox->GetState() == eTextBoxState::E_TEXT_BOX_STATE_NONE)
@@ -425,6 +448,10 @@ void cScene::OnChangeValue(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_SIZE_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
+		const float MIN_COLLIDER_SIZE = 0.1f;
+		if (vec3.x < MIN_COLLIDER_SIZE ) vec3.x = MIN_COLLIDER_SIZE ;
+		if (vec3.y < MIN_COLLIDER_SIZE ) vec3.y = MIN_COLLIDER_SIZE ;
+		if (vec3.z < MIN_COLLIDER_SIZE ) vec3.z = MIN_COLLIDER_SIZE ;
 		m_selectobj->SetSize(vec3);
 
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
@@ -458,6 +485,10 @@ void cScene::OnChangeValueNx(int eventID, std::string eventKey)
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Y);		vec3.y = pTextBox->GetUIText()->GetTextData()->GetFloat();
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_SIZE_Z);		vec3.z = pTextBox->GetUIText()->GetTextData()->GetFloat();
+		const float MIN_COLLIDER_SIZE = 0.1f;
+		if (vec3.x < MIN_COLLIDER_SIZE) vec3.x = MIN_COLLIDER_SIZE;
+		if (vec3.y < MIN_COLLIDER_SIZE) vec3.y = MIN_COLLIDER_SIZE;
+		if (vec3.z < MIN_COLLIDER_SIZE) vec3.z = MIN_COLLIDER_SIZE;
 		pPhysX->m_sizeValue = NxVec3(vec3.x, vec3.y, vec3.z);
 
 		pTextBox = (cUITextBox*)MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_NX_ROT_X);		vec3.x = pTextBox->GetUIText()->GetTextData()->GetFloat();
@@ -494,9 +525,9 @@ void cScene::OnChangeValueNx(int eventID, std::string eventKey)
 		pPhysX->m_sizeValue = pPhysX->m_sizeValue;
 		pPhysX->m_type = pPhysX->m_type;
 
-		pPhysX->m_IsTrigger = pPhysX->m_IsTrigger ;
-		pPhysX->m_isStatic_ = pPhysX->m_isStatic_ ;
-		pPhysX->m_isGravaty = pPhysX->m_isGravaty ;
+		pPhysX->m_IsTrigger = pPhysX->m_IsTrigger;
+		pPhysX->m_isStatic_ = pPhysX->m_isStatic_;
+		pPhysX->m_isGravaty = pPhysX->m_isGravaty;
 
 		pPhysX->Destory();
 

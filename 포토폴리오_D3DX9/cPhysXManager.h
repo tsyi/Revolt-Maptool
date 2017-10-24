@@ -34,7 +34,7 @@ struct USERDATA
 		ContactPairFlag = 0;
 		RaycastClosestShape = NX_FALSE;
 		RaycastAllShape = NX_FALSE;
-		RayHitPos = NxVec3(0, 0, 0);
+	//	RayHitPos = NxVec3(0, 0, 0);
 	}
 };
 
@@ -341,13 +341,22 @@ public:
 			desc.radius = sizeValue.x;
 			desc.height = sizeValue.y;
 			shapeDesc = &desc;
+
+			if (isKinematic)
+			{
+				NxCapsuleShapeDesc dummyShape;
+				dummyShape.setToDefault();
+				desc.radius = sizeValue.x;
+				desc.height = sizeValue.y;
+				ActorDesc.shapes.pushBack(&dummyShape);
+			}
 			break;
 		}
 		case NX_SHAPE_WHEEL: {
 			NxWheelShapeDesc desc; desc.setToDefault();
 			//	desc.materialIndex = materialIndex;
-			desc.radius = 0;
-			shapeDesc = &desc;
+			//desc.radius = 0;
+			//shapeDesc = &desc;
 			break;
 		}
 		case NX_SHAPE_CONVEX: {

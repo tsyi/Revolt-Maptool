@@ -51,5 +51,10 @@ void cMap::Update()
 
 void cMap::Render()
 {
+	D3DXCOLOR materColor = D3DCOLOR_XRGB(255,255,255);
+	GetMeshData()->m_vecMtlTex[0]->GetMaterial().Ambient = materColor;
+	GetMeshData()->m_vecMtlTex[0]->GetMaterial().Diffuse = materColor;
+	GetMeshData()->m_vecMtlTex[0]->GetMaterial().Specular = materColor;
+
 	cObject::Render();
 }

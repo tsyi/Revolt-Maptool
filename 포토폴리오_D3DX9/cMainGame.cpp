@@ -148,6 +148,16 @@ void cMainGame::SetUI()
 		ui->AddChild(UITextBox);
 
 	}
+	{
+		cUIText* UIText = new cUIText;
+		UIText->SetTag(eUITag::E_UI_TEXT_PHYSX_TITLE);
+		UIText->SetPosition(15, 80, 0);
+		UIText->SetSize(100, 20);
+		UIText->SetText("Transform Data");
+		UIText->SetFont(eFontType::E_DEFAULT);
+		UIText->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		MgrUI->RegisteredUI(UIText);
+	}
 	//POS
 	{
 		cUITextBox* UITextBox = new cUITextBox;
@@ -379,34 +389,42 @@ void cMainGame::SetUI()
 	//PhysX 관련 UI
 	//PhysX 적용버튼
 	{
-		cUIButton* UIButton = new cUIButton;
-		cUIText* UIButton_TextV = new cUIText;
-		cUIImage* UIButton_Image = new cUIImage;
-
-		MgrUI->RegisteredUI(UIButton);
-
-		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
-		UIButton->SetPosition(0, 360, 0);
-		UIButton->SetSize(100, 20);
-		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "적용", "Image/UI_BUTTON.png");
-		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
-		UIButton->SetEventID(1);
-	}
-	{
-		cUIButton* UIButton = new cUIButton;
-		cUIText* UIButton_TextV = new cUIText;
-		cUIImage* UIButton_Image = new cUIImage;
-
-		MgrUI->RegisteredUI(UIButton);
-
-		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
-		UIButton->SetPosition(100, 360, 0);
-		UIButton->SetSize(100, 20);
-		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "취소", "Image/UI_BUTTON.png");
-		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
-		UIButton->SetEventID(0);
+	//	cUIButton* UIButton = new cUIButton;
+	//	cUIText* UIButton_TextV = new cUIText;
+	//	cUIImage* UIButton_Image = new cUIImage;
+	//
+	//	MgrUI->RegisteredUI(UIButton);
+	//
+	//	UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+	//	UIButton->SetPosition(0, 360, 0);
+	//	UIButton->SetSize(100, 20);
+	//	UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "적용", "Image/UI_BUTTON.png");
+	//	UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+	//	UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
+	//	UIButton->SetEventID(1);
+	//}
+	//{
+	//	cUIButton* UIButton = new cUIButton;
+	//	cUIText* UIButton_TextV = new cUIText;
+	//	cUIImage* UIButton_Image = new cUIImage;
+	//
+	//	MgrUI->RegisteredUI(UIButton);
+	//
+	//	UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+	//	UIButton->SetPosition(100, 360, 0);
+	//	UIButton->SetSize(100, 20);
+	//	UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "취소", "Image/UI_BUTTON.png");
+	//	UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+	//	UIButton->SetEvent_OnCilck_Up(std::bind(&cScene::OnChangePhysX, m_pScene, std::placeholders::_1));
+	//	UIButton->SetEventID(0);
+		cUIText* UIText= new cUIText;
+		UIText->SetTag(eUITag::E_UI_TEXT_PHYSX_TITLE);
+		UIText->SetPosition(0, 420, 0);
+		UIText->SetSize(100, 20);
+		UIText->SetText("PhysX Data");
+		UIText->SetFont(eFontType::E_DEFAULT);
+		UIText->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+		MgrUI->RegisteredUI(UIText);
 	}
 	
 	// NxShapeType
@@ -415,7 +433,7 @@ void cMainGame::SetUI()
 		cUIText* UITextBox_TextV = new cUIText;
 		cUIImage* UITextBox_Image = new cUIImage;
 		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_SHAPET_TYPE);
-		UITextBox->SetPosition(0, 380, 0);
+		UITextBox->SetPosition(0, 440, 0);
 		UITextBox->SetSize(200, 20);
 		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ShapeType", "Image/UI_TEXTBOX.png");
 		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
@@ -423,120 +441,120 @@ void cMainGame::SetUI()
 		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
 		ui->AddChild(UITextBox);
 	}
-	{
-
-	}
-	// Trigger
-	{
-		cUIButton* UIButton = new cUIButton;
-		cUIText* UIButton_TextV = new cUIText;
-		cUIImage* UIButton_Image = new cUIImage;
-
-		UIButton->SetTag(eUITag::E_UI_BUTTON_TRIGGER);
-		UIButton->SetPosition(0, 400, 0);
-		UIButton->SetSize(120, 20);
-		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "TRIGGER", "Image/UI_BUTTON.png");
-		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
-
-		MgrUI->RegisteredUI(UIButton);
-	}
-	{ 
-		cUITextBox* UITextBox = new cUITextBox;
-		cUIText* UITextBox_TextV = new cUIText;
-		cUIImage* UITextBox_Image = new cUIImage;
-		
-		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_TRIGGER);
-		UITextBox->SetPosition(130, 400, 0);
-		UITextBox->SetSize(70, 20);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
-		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
-
-		cUIText* UITextBox_TextT = new cUIText;
-		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
-		UITextBox_TextT->SetSize(50, 20);
-		UITextBox_TextT->SetText("");
-		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
-		UITextBox->AddChild(UITextBox_TextT);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
-		ui->AddChild(UITextBox);
-	}
-	// Static
-	{
-		cUIButton* UIButton = new cUIButton;
-		cUIText* UIButton_TextV = new cUIText;
-		cUIImage* UIButton_Image = new cUIImage;
-
-		MgrUI->RegisteredUI(UIButton);
-
-		UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
-		UIButton->SetPosition(0, 420, 0);
-		UIButton->SetSize(120, 20);
-		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "STATIC", "Image/UI_BUTTON.png");
-		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
-	}
-	{ 
-		cUITextBox* UITextBox = new cUITextBox;
-		cUIText* UITextBox_TextV = new cUIText;
-		cUIImage* UITextBox_Image = new cUIImage;
-
-		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_STATIC);
-		UITextBox->SetPosition(130, 420, 0);
-		UITextBox->SetSize(70, 20);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
-		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
-
-		cUIText* UITextBox_TextT = new cUIText;
-		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
-		UITextBox_TextT->SetSize(50, 20);
-		UITextBox_TextT->SetText("");
-		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
-		UITextBox->AddChild(UITextBox_TextT);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
-		ui->AddChild(UITextBox);
-	}
-	// Gravity
-	{
-		cUIButton* UIButton = new cUIButton;
-		cUIText* UIButton_TextV = new cUIText;
-		cUIImage* UIButton_Image = new cUIImage;
-
-		MgrUI->RegisteredUI(UIButton);
-
-		UIButton->SetTag(eUITag::E_UI_BUTTON_GRAVITY);
-		UIButton->SetPosition(0, 440, 0);
-		UIButton->SetSize(120, 20);
-		UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "GRAVITY", "Image/UI_BUTTON.png");
-		UIButton_TextV->SetFont(eFontType::E_DEFAULT);
-		UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
-	}
-	{
-		cUITextBox* UITextBox = new cUITextBox;
-		cUIText* UITextBox_TextV = new cUIText;
-		cUIImage* UITextBox_Image = new cUIImage;
-
-		UITextBox->SetTag(eUITag::E_UI_TEXTBOX_GRAVITY);
-		UITextBox->SetPosition(130, 440, 0);
-		UITextBox->SetSize(70, 20);
-		UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
-		UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
-		UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
-
-		cUIText* UITextBox_TextT = new cUIText;
-		UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
-		UITextBox_TextT->SetSize(50, 20);
-		UITextBox_TextT->SetText("");
-		UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
-		UITextBox->AddChild(UITextBox_TextT);
-
-		cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
-		ui->AddChild(UITextBox);
-	}
+	//{
+	//
+	//}
+	//// Trigger
+	//{
+	//	cUIButton* UIButton = new cUIButton;
+	//	cUIText* UIButton_TextV = new cUIText;
+	//	cUIImage* UIButton_Image = new cUIImage;
+	//
+	//	UIButton->SetTag(eUITag::E_UI_BUTTON_TRIGGER);
+	//	UIButton->SetPosition(0, 400, 0);
+	//	UIButton->SetSize(120, 20);
+	//	UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "TRIGGER", "Image/UI_BUTTON.png");
+	//	UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+	////	UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+	//
+	//	MgrUI->RegisteredUI(UIButton);
+	//}
+	//{ 
+	//	cUITextBox* UITextBox = new cUITextBox;
+	//	cUIText* UITextBox_TextV = new cUIText;
+	//	cUIImage* UITextBox_Image = new cUIImage;
+	//	
+	//	UITextBox->SetTag(eUITag::E_UI_TEXTBOX_TRIGGER);
+	//	UITextBox->SetPosition(130, 400, 0);
+	//	UITextBox->SetSize(70, 20);
+	//	UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+	//	UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+	//	UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValueNx, m_pScene, VAR::_1,VAR::_2));
+	//
+	//	cUIText* UITextBox_TextT = new cUIText;
+	//	UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+	//	UITextBox_TextT->SetSize(50, 20);
+	//	UITextBox_TextT->SetText("");
+	//	UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+	//	UITextBox->AddChild(UITextBox_TextT);
+	//
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+	//	ui->AddChild(UITextBox);
+	//}
+	//// Static
+	//{
+	//	cUIButton* UIButton = new cUIButton;
+	//	cUIText* UIButton_TextV = new cUIText;
+	//	cUIImage* UIButton_Image = new cUIImage;
+	//
+	//	MgrUI->RegisteredUI(UIButton);
+	//
+	//	UIButton->SetTag(eUITag::E_UI_BUTTON_STATIC);
+	//	UIButton->SetPosition(0, 420, 0);
+	//	UIButton->SetSize(120, 20);
+	//	UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "STATIC", "Image/UI_BUTTON.png");
+	//	UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+	//	UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+	//}
+	//{ 
+	//	cUITextBox* UITextBox = new cUITextBox;
+	//	cUIText* UITextBox_TextV = new cUIText;
+	//	cUIImage* UITextBox_Image = new cUIImage;
+	//
+	//	UITextBox->SetTag(eUITag::E_UI_TEXTBOX_STATIC);
+	//	UITextBox->SetPosition(130, 420, 0);
+	//	UITextBox->SetSize(70, 20);
+	//	UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+	//	UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+	//	UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+	//
+	//	cUIText* UITextBox_TextT = new cUIText;
+	//	UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+	//	UITextBox_TextT->SetSize(50, 20);
+	//	UITextBox_TextT->SetText("");
+	//	UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+	//	UITextBox->AddChild(UITextBox_TextT);
+	//
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+	//	ui->AddChild(UITextBox);
+	//}
+	//// Gravity
+	//{
+	//	cUIButton* UIButton = new cUIButton;
+	//	cUIText* UIButton_TextV = new cUIText;
+	//	cUIImage* UIButton_Image = new cUIImage;
+	//
+	//	MgrUI->RegisteredUI(UIButton);
+	//
+	//	UIButton->SetTag(eUITag::E_UI_BUTTON_GRAVITY);
+	//	UIButton->SetPosition(0, 440, 0);
+	//	UIButton->SetSize(120, 20);
+	//	UIButton->RegistButtonUI(UIButton_TextV, UIButton_Image, "GRAVITY", "Image/UI_BUTTON.png");
+	//	UIButton_TextV->SetFont(eFontType::E_DEFAULT);
+	//	UIButton->SetEvent_OnCilck_Up(std::bind(&cMainGame::OnSaveMap, this, std::placeholders::_1));
+	//}
+	//{
+	//	cUITextBox* UITextBox = new cUITextBox;
+	//	cUIText* UITextBox_TextV = new cUIText;
+	//	cUIImage* UITextBox_Image = new cUIImage;
+	//
+	//	UITextBox->SetTag(eUITag::E_UI_TEXTBOX_GRAVITY);
+	//	UITextBox->SetPosition(130, 440, 0);
+	//	UITextBox->SetSize(70, 20);
+	//	UITextBox->RegistTextBoxUI(UITextBox_TextV, UITextBox_Image, "ON", "Image/UI_TEXTBOX.png");
+	//	UITextBox->GetUIText()->SetFont(eFontType::E_TEXTBOX);
+	//	UITextBox->SetEvent_OnEnter(std::bind(&cScene::OnChangeValue, m_pScene, VAR::_1,VAR::_2));
+	//
+	//	cUIText* UITextBox_TextT = new cUIText;
+	//	UITextBox_TextT->SetPosition(D3DXVECTOR3(-50, 0, 0));
+	//	UITextBox_TextT->SetSize(50, 20);
+	//	UITextBox_TextT->SetText("");
+	//	UITextBox_TextT->GetTextData()->color = D3DCOLOR_XRGB(0, 0, 0);
+	//	UITextBox->AddChild(UITextBox_TextT);
+	//
+	//	cUIObject* ui = MgrUI->FindByTag(eUITag::E_UI_TEXTBOX_MAPNAME);
+	//	ui->AddChild(UITextBox);
+	//}
 	// Position
 	{
 		cUITextBox* UITextBox = new cUITextBox;
