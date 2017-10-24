@@ -158,7 +158,7 @@ public:
 #define TAB	'\t'
 #define SPACE ' '
 #define POPDATA Data[sI++]
-	void LoadPhysX(std::string fileName)
+/*	void LoadPhysX(std::string fileName)
 	{
 		std::string fullpath = "Object/Objects/PhysXData/PhysXData.phx";
 		std::ifstream LOAD(fullpath);
@@ -320,5 +320,6 @@ public:
 				<< m_matR[6] << TAB << m_matR[7] << TAB << m_matR[8] << std::endl;
 		}
 	}
+	*/
 };
 

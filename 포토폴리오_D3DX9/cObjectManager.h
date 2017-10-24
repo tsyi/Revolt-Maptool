@@ -33,7 +33,7 @@ public:
 	void Render();
 
 
-	cObject* CreateObject(std::string objectName);
+	cObject* CreateObject(int keyID);
 	void CreateButton(std::string objectName);
 };
 
