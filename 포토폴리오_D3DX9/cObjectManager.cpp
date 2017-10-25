@@ -8,6 +8,7 @@
 #include "cStuff.h"
 #include "cCheckBox.h"
 #include "cFollowPoint.h"
+#include "cPickUp.h"
 
 
 cObjectManager::cObjectManager()
@@ -28,6 +29,8 @@ void cObjectManager::Setup()
 	m_vecObjectKey.push_back("chicken");
 	m_vecObjectKey.push_back("fabric");
 	m_vecObjectKey.push_back("kidride");
+	m_vecObjectKey.push_back("pickup");
+	m_vecObjectKey.push_back("cone");
 
 	for (int i = 0; i < m_vecObjectKey.size(); i++)
 	{
@@ -171,6 +174,38 @@ cObject * cObjectManager::CreateObject(int keyID)
 		physX->m_isTrigger = false;
 		physX->m_isStatic_ = false;
 		physX->m_isGravity = true;
+	}
+	break;
+	case 6:
+	{
+		pObject = new cPickUp;
+		mesh = new cMesh; // 매쉬 생성	
+		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		pObject->SetTag(E_OBJECT_PICKUP);
+		physX->m_sizeValue = INITSIZE;
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, INITPOSITION, NULL, physX->m_sizeValue,
+			physX->m_pUserData, true, true, false);
+		//trigger / 정적 / 무중력 상태의 객체 생성
+		physX->m_type = NX_SHAPE_SPHERE;
+		physX->m_isTrigger = true;
+		physX->m_isStatic_ = true;
+		physX->m_isGravity = false;
+	}
+	break;
+	case 7:
+	{
+		pObject = new cLight;
+		mesh = new cMesh; // 매쉬 생성	
+		mesh->LoadMesh(strFolder, strFileName); // 오브젝트 불러와서 매쉬에 넣는다.
+		pObject->SetTag(E_OBJECT_LIGHT);
+		physX->m_sizeValue = INITSIZE;
+		physX->m_pActor = MgrPhysX->CreateActor(NX_SHAPE_SPHERE, INITPOSITION, NULL, physX->m_sizeValue,
+			physX->m_pUserData, true, true, false);
+		//trigger / 정적 / 무중력 상태의 객체 생성
+		physX->m_type = NX_SHAPE_SPHERE;
+		physX->m_isTrigger = true;
+		physX->m_isStatic_ = true;
+		physX->m_isGravity = false;
 	}
 	break;
 	default:

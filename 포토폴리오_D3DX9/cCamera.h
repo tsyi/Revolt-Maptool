@@ -1,4 +1,6 @@
 #pragma once
+
+class cObject;
 //#include "cObject.h"
 
 #define CAMERA_MOVE_DETAIL 0.005
@@ -23,6 +25,7 @@ class cCamera : public cTransform
 	D3DXVECTOR3		m_freePos;
 	bool m_posFree;
 
+	cObject* m_pObjTarget;
 
 	RECT rc;
 public:
@@ -39,5 +42,6 @@ public:
 		}
 		m_posFree = isFree;
 	}
+	void Render();
 };
 

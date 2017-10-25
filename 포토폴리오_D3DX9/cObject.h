@@ -14,6 +14,7 @@ enum eOBJECT_TAG
 	E_OBJECT_LIGHT,
 	E_OBJECT_STUFF,
 	E_OBJECT_CAMERA,
+	E_OBJECT_PICKUP,
 	E_OBJECT_END,
 	E_OBJECT_NONE,
 };
@@ -34,6 +35,7 @@ enum eOBJECT_ID
 	E_OBJ_ID_STUFF_CHICKEN,
 	E_OBJ_ID_STUFF_FABRIC,
 	E_OBJ_ID_STUFF_KIDRIDE,
+	E_OBJ_ID_PICKUP,
 };
 
 class cMesh;
@@ -94,6 +96,11 @@ public:
 			{
 				colorMesh = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 				D3DXCreateSphere(MgrD3DDevice, 0.5, 20, 20, &(GetMeshData()->m_pMesh), NULL);
+			}
+			else if (GetTag() == E_OBJECT_CAMERA)
+			{
+				colorMesh = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				D3DXCreateSphere(MgrD3DDevice, 0.1, 20, 20, &(GetMeshData()->m_pMesh), NULL);
 			}
 			
 			D3DMATERIAL9 material;

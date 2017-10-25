@@ -64,6 +64,9 @@
     <Filter Include="Object\FollowPoint">
       <UniqueIdentifier>{b61899cf-c4a3-4118-ab80-8fc8c933771b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\cPickUp">
+      <UniqueIdentifier>{2f2c6d49-8b5c-4ecc-b770-c38ce08ce276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -213,6 +216,9 @@
     <ClInclude Include="cFollowPoint.h">
       <Filter>Object\FollowPoint</Filter>
     </ClInclude>
+    <ClInclude Include="cPickUp.h">
+      <Filter>Object\cPickUp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="포토폴리오_D3DX9.cpp">
@@ -328,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="cFollowPoint.cpp">
       <Filter>Object\FollowPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="cPickUp.cpp">
+      <Filter>Object\cPickUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

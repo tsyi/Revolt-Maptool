@@ -96,7 +96,8 @@ void cObject::Update()
 				if (MgrInput->IsKeyDown(VK_LCONTROL))
 					SetHeigth(cTransform::GetPosition().y);
 
-				pos = GetMapData()->RayHitPos;
+				pos = GetMapData()->RayHitPos - GetPhysXData()->m_localPose.t;
+			
 				if (MgrInput->IsKeyPress(VK_LCONTROL))
 					pos.y = GetHeigth();
 				else
@@ -121,7 +122,16 @@ void cObject::Update()
 				if (MgrPhysXData->RaycastAllShapeHitCount == 0) break;
 				if (GetPhysXData()->m_pUserData->RaycastClosestShape == NX_TRUE)
 				{
-					SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
+					//SetMouseDistance(cTransform::GetPosition() - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
+					
+					NxVec3 nxvec3 = GetPhysXData()->m_localPose.t;
+					D3DXVECTOR3 vec3 = {
+						GetPhysXData()->m_pActor->getGlobalPose().t.x,
+						GetPhysXData()->m_pActor->getGlobalPose().t.y,
+						GetPhysXData()->m_pActor->getGlobalPose().t.z };
+
+					SetMouseDistance(vec3 - cTransform::NxVec3ToDxVec3(GetPhysXData()->m_pUserData->RayHitPos));
+					
 					//	SetHeigth(cTransform::GetPosition().y);
 					SetState(E_OBJECT_STATE_SELECT);
 

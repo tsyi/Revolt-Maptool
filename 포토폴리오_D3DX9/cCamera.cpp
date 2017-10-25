@@ -16,6 +16,8 @@ cCamera::cCamera(void)
 
 cCamera::~cCamera(void)
 {
+	m_pObjTarget->Destory();
+	SAFE_DELETE(m_pObjTarget);
 }
 
 void cCamera::Setup()
@@ -33,6 +35,10 @@ void cCamera::Setup()
 		rc.right / (float)rc.bottom, 1.0f, 10000.0f);
 
 	MgrD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+
+	m_pObjTarget = new cObject;
+	m_pObjTarget->SetTag(E_OBJECT_CAMERA);
+	m_pObjTarget->SetMeshData(NULL);
 }
 
 void cCamera::Update(D3DXVECTOR3 target)
@@ -119,4 +125,12 @@ void cCamera::Update(D3DXVECTOR3 target)
 	D3DXMatrixLookAtLH(&matCamera, &(cTransform::GetPosition()), &m_target, &(D3DXVECTOR3(0,1,0)));
 
 	MgrD3DDevice->SetTransform(D3DTS_VIEW, &matCamera);
+
+	m_pObjTarget->SetPosition(m_target);
+}
+
+void cCamera::Render()
+{
+	m_pObjTarget->SetMeshBox();
+	m_pObjTarget->Render();
 }

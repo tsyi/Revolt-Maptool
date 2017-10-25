@@ -824,6 +824,7 @@ void cMainGame::Destory()
 	SAFE_DELETE(m_grid1);
 	SAFE_DELETE(m_grid2);
 
+	SAFE_DELETE(m_camera);
 	//	MgrObject->Destroy();
 	MgrFont->Destory();
 	MgrTexture->Destroy();
@@ -882,6 +883,8 @@ void cMainGame::Render()
 
 	if (m_pScene) m_pScene->Render();
 
+	// Camera
+	if (m_camera) m_camera->Render();
 
 	//	MgrObject->Render();
 

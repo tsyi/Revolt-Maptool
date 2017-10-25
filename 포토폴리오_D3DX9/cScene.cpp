@@ -6,6 +6,7 @@
 #include "cStuff.h"
 #include "cCheckBox.h"
 #include "cFollowPoint.h"
+#include "cPickUp.h"
 #include <fstream>
 #include <time.h>
 
@@ -77,15 +78,16 @@ void cScene::LoadScene(std::string FileName)
 
 				switch (tag)
 				{
-				case E_OBJECT_NONE:		break;
-				case E_OBJECT_CAR:		break;
-				case E_OBJECT_MAP:		break;
-				case E_OBJECT_LIGHT:	Obj = new cLight; break;
-				case E_OBJECT_STUFF:	Obj = new cStuff; break;
-				case E_OBJECT_CAMERA:	break;
-				case E_OBJECT_CHECKBOX: Obj = new cCheckBox; break;
-				case E_OBJECT_FOLLOWPOINT: Obj = new cFollowPoint; break;
-				case E_OBJECT_END:		break;
+				case E_OBJECT_CHECKBOX:		Obj = new cCheckBox; break;
+				case E_OBJECT_FOLLOWPOINT:	Obj = new cFollowPoint; break;
+				case E_OBJECT_CAR: break;
+				case E_OBJECT_MAP: break;
+				case E_OBJECT_LIGHT:		Obj = new cLight; break;
+				case E_OBJECT_STUFF:		Obj = new cStuff; break;
+				case E_OBJECT_CAMERA: break;
+				case E_OBJECT_PICKUP:		Obj = new cPickUp; break;
+				case E_OBJECT_END: break;
+				case E_OBJECT_NONE:	break;
 				default: break;
 				}
 
@@ -306,9 +308,9 @@ void cScene::SaveScene(std::string FileName)
 				<< m_vecObject[i]->GetPhysXData()->m_isGravity << std::endl;
 
 			Save << "X_Pos" << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_position.x << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_position.y << SPACE
-				<< m_vecObject[i]->GetPhysXData()->m_position.z << std::endl;
+				<< m_vecObject[i]->GetPhysXData()->m_localPose.t.x << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_localPose.t.y << SPACE
+				<< m_vecObject[i]->GetPhysXData()->m_localPose.t.z << std::endl;
 
 			Save << "X_Size" << SPACE
 				<< m_vecObject[i]->GetPhysXData()->m_sizeValue.x << SPACE
