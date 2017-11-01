@@ -43,5 +43,7 @@ public:
 		m_posFree = isFree;
 	}
 	void Render();
+
+	//D3DXVECTOR3 GetCamTarget() { return m_target; }
 };
 

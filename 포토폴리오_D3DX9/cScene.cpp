@@ -105,14 +105,7 @@ void cScene::LoadScene(std::string FileName)
 				{
 					Load.getline(szTemp, 1024);
 
-					//if (szTemp[0] == 'N') // Name
-					//{
-					//	//char szName[1024];
-					//	std::string strName;
-					//	Load >> strName;
-					//	//sscanf_s(szTemp, "%*s %s", &strName);
-					//	Obj->SetObjName(strName);
-					//}
+
 					if (szTemp[0] == 'I') // Attribute
 					{
 						int nID = 0;

@@ -39,6 +39,8 @@ void cCamera::Setup()
 	m_pObjTarget = new cObject;
 	m_pObjTarget->SetTag(E_OBJECT_CAMERA);
 	m_pObjTarget->SetMeshData(NULL);
+
+	MgrObject->LinkCamTarget(&m_target);
 }
 
 void cCamera::Update(D3DXVECTOR3 target)
@@ -81,11 +83,19 @@ void cCamera::Update(D3DXVECTOR3 target)
 	}
 	if (MgrInput->IsKeyOn(VK_UP))
 	{
-		m_freePos += cTransform::GetDirection() * 1;
+		//m_freePos += cTransform::GetDirection() * 1;
+		D3DXVECTOR3 vec = { cTransform::GetDirection() };
+		vec.y = 0;
+		D3DXVec3Normalize(&vec, &vec);
+		m_freePos += vec;
 	}
 	if (MgrInput->IsKeyOn(VK_DOWN))
 	{
-		m_freePos -= cTransform::GetDirection() * 1;
+		//m_freePos -= cTransform::GetDirection() * 1;
+		D3DXVECTOR3 vec = { cTransform::GetDirection() };
+		vec.y = 0;
+		D3DXVec3Normalize(&vec, &vec);
+		m_freePos -= vec;
 	}
 	if (MgrInput->IsKeyOn(VK_LEFT))
 	{

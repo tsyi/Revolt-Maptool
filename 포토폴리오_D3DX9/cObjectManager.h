@@ -15,6 +15,9 @@ class cObjectManager
 	const std::string OBJECTS_PACH = "Object/Stuffs/";
 	const NxVec3 INITPOSITION = NxVec3(0, 0.5, 0);
 	const NxVec3 INITSIZE = NxVec3(1, 1, 1);
+
+	D3DXVECTOR3* m_vecCamTarget;
+
 private:
 	SINGLETONE(cObjectManager);
 
@@ -33,7 +36,8 @@ public:
 	// << : 
 	void Render();
 
-
+	void LinkCamTarget(D3DXVECTOR3* camtarget) { m_vecCamTarget = camtarget; }
+	
 	cObject* CreateObject(int keyID);
 	void CreateButton(std::string objectName);
 };
